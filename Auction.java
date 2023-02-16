@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -125,9 +126,8 @@ implements ActionListener{
 		backBtn.setFont(new Font("µ¸¿òÃ¼", 0, 15));
 		backBtn.addActionListener(this);
 		//
-		logo = new JLabel("DaBID");
-	     logo.setBounds(20,20,100,30);
-	     logo.setFont(new Font("µ¸¿òÃ¼", 1, 25));
+		logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
+	    logo.setBounds(20,20,130,40);
 	    //
 	     c.add(logo);
 	    c.add(itemPanel);
@@ -155,6 +155,11 @@ implements ActionListener{
 	
 	
 	public static void main(String[] args) {
-		
+		try {
+			Auction ac = new Auction();
+			ac.setVisible(true);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 }

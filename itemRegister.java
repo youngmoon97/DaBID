@@ -1,11 +1,19 @@
 package project1;
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FileDialog;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -16,17 +24,25 @@ import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+
 public class itemRegister extends JFrame implements ActionListener {
 
    JPanel itemPanel;
-   JLabel memberId, itemName, itemPhoto, itemCategory, itemprice, won, endtime;
+   JLabel logo,memberId, itemName, itemPhoto, itemCategory, itemprice, won, endtime;
    JTextArea taName, taMemo, taPrice;
-   JButton registerBtn, backBtn;
+   JButton registerBtn, backBtn, imageBtn;
    JComboBox<String> categoryCombobox, timeCombobox;
    TitledBorder registerTb;
    JOptionPane alarm = new JOptionPane();
    String[] categoryName = {"디지털기기","취미/게임/음반","가구/인테리어","스포츠/레저","생활가전","의류","반려동물용품","뷰티/미용","중고차","도서"};
-   String[] timelist = {"24시간", "48시간", "120시간"};
+   String[] timelist = {"5분", "10분"};
+   FileDialog read;
+   Image img;
+   String filename;
+   String dirfile;
+   File file;
+   ImageCanvas canvas; 
+   FileReader reader;
    
    public itemRegister() {
       setTitle("DaBID 상품등록 페이지");
@@ -55,11 +71,12 @@ public class itemRegister extends JFrame implements ActionListener {
       itemName.setBounds(60 ,60, 100, 30);
       itemName.setFont(new Font("돋움체", 0, 15));
       
-      itemPhoto = new JLabel("이미지 등록");
-      itemPhoto.setBorder(new LineBorder(Color.black, 1, true));
-      itemPhoto.setBounds(50, 120, 550, 470);
-      itemPhoto.setHorizontalAlignment(JLabel.CENTER);
-      itemPhoto.setFont(new Font("돋움체", 0, 20));
+      canvas = new ImageCanvas();
+      canvas.setBounds(50, 120, 550, 470);
+//      itemPhoto = new JLabel("이미지 등록");
+//      itemPhoto.setBorder(new LineBorder(Color.black, 1, true));
+//      itemPhoto.setBounds(50, 120, 550, 470);
+//      itemPhoto.setFont(new Font("돋움체", 0, 20));
       
       itemCategory = new JLabel("카테고리 :");
       itemCategory.setBounds(650, 410, 100, 30);
@@ -96,7 +113,10 @@ public class itemRegister extends JFrame implements ActionListener {
       backBtn.setBounds(1150, 800, 120, 30);
       backBtn.setFont(new Font("돋움체",0,15));
       backBtn.addActionListener(this);
-      
+      imageBtn = new JButton("이미지등록");
+      imageBtn.setBounds(510, 95, 90, 20);
+      imageBtn.setFont(new Font("돋움체",0,10));
+      imageBtn.addActionListener(this);
       //JComboBox
       categoryCombobox = new JComboBox<>(categoryName);
       categoryCombobox.setBounds(750, 410, 270, 30);
@@ -104,9 +124,12 @@ public class itemRegister extends JFrame implements ActionListener {
       timeCombobox = new JComboBox<>(timelist);
       timeCombobox.setBounds(750, 510, 100, 30);
       
+//      logo = new JLabel(new ImageIcon(Login.class.getResource("./img/logo.png")));
+//     logo.setBounds(20,20,130,40);
+//     c.add(logo);
       //패널에 추가
       itemPanel.add(itemName);
-      itemPanel.add(itemPhoto);
+//      itemPanel.add(itemPhoto);
       itemPanel.add(itemCategory);
       itemPanel.add(itemprice);
       itemPanel.add(won);
@@ -117,7 +140,8 @@ public class itemRegister extends JFrame implements ActionListener {
       itemPanel.add(registerBtn);
       itemPanel.add(categoryCombobox);
       itemPanel.add(timeCombobox);
-      
+      itemPanel.add(imageBtn);
+      itemPanel.add(canvas);
       //출력
       c.add(memberId);
       c.add(itemPanel);
@@ -129,31 +153,59 @@ public class itemRegister extends JFrame implements ActionListener {
    public void actionPerformed(ActionEvent e) {
       Object obj = e.getSource();
       if(obj==backBtn) {
-    	  //TODO
-    	  try {
-    		  dispose();
-    		  Main main = new Main();
-    		  main.setVisible(true);
-    	  } catch (Exception e2) {
-    		  e2.printStackTrace();
-    	  }
+         //TODO
+         try {
+            dispose();
+//            Main main = new Main();
+//            main.setVisible(true);
+         } catch (Exception e2) {
+            e2.printStackTrace();
+         }
       }else if(obj==registerBtn) {
-    	  //TODO
-    	  alarm.showMessageDialog(null, "등록완료");
-    	  try {
-    		  dispose();
-    		  Main main = new Main();
-    		  main.setVisible(true);
-    	  } catch (Exception e2) {
-    		  e2.printStackTrace();
-    	  }
-    	  
+         //TODO
+         alarm.showMessageDialog(null, "등록완료");
+         try {
+            dispose();
+//            Main main = new Main();
+//            main.setVisible(true);
+         } catch (Exception e2) {
+            e2.printStackTrace();
+         }
+      }else if(obj==imageBtn){
+         if(read ==null) {
+            read=new FileDialog(this,"이미지열기", FileDialog.LOAD);
+         }
+         read.setVisible(true);
+         try {
+            filename = read.getFile();
+            dirfile = read.getDirectory() + File.separator + filename;
+            file = new File(dirfile);
+            img = ImageIO.read(file);
+            canvas.repaint();
+         } catch (IOException e1) {
+            e1.printStackTrace();
+         }
+         
       }
+      
       
    }
    
-   
+   //이미지 넣기
+   class ImageCanvas extends Canvas{
+      @Override
+      public void paint(Graphics g) {
+         g.drawImage(img, 0, 0, this);
+         
+      }
+
+   }
    public static void main(String[] args) {
-     
+     try {
+      itemRegister ir = new itemRegister();
+      ir.setVisible(true);
+   } catch (Exception e) {
+      e.printStackTrace();
+   }
    }
 }

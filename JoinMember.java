@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -24,7 +25,7 @@ implements ActionListener{
    private JFrame frame = new JFrame();
    
    JPanel joinPanel;
-   JLabel joinId, joinPw, joinPwCheck, joinEmail, joinAt, joinUseIdlbl, joinUsePwlbl;
+   JLabel logo,joinId, joinPw, joinPwCheck, joinEmail, joinAt, joinUseIdlbl, joinUsePwlbl;
    JTextField joinIdtxt, joinEmailtxt;
    JPasswordField joinPwtxt, joinPwChecktxt;
    JButton joinBtn, idCheckBtn, pwCheckBtn;
@@ -136,6 +137,8 @@ implements ActionListener{
         pwCheckBtn.setBackground(new Color(255, 255, 255));
         pwCheckBtn.setBounds(480,315,80,30);
         pwCheckBtn.setFont(new Font("µ¸¿òÃ¼", 0, 10));
+        logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
+	    logo.setBounds(280,20,130,40);
         //add
         joinPanel.add(joinId);
         joinPanel.add(joinPw);
@@ -152,6 +155,7 @@ implements ActionListener{
         joinPanel.add(joinUsePwlbl);
         joinPanel.add(idCheckBtn);
         joinPanel.add(pwCheckBtn);
+        c.add(logo);
         c.add(joinPanel);
         validate();
    }
@@ -176,6 +180,12 @@ implements ActionListener{
    }
    
    public static void main(String[] args) {
+     try {
+    	 JoinMember jm = new JoinMember();
+    	 jm.setVisible(true);
+	} catch (Exception e) {
+		// TODO: handle exception
+	} 
      
       
    }

@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -140,10 +141,11 @@ implements ActionListener{
 
         // 기본
         // logo
-        logo = new JLabel("DaBID");
-        logo.setBounds(20,10, 50, 30);
-        logo.setFont(new Font("돋움체", 0, 20));
-        
+        logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
+  	  	logo.setBounds(20,20,130,40);
+  	  	c.add(logo);
+  	  
+ 
         //id
         memberId = new JLabel("아이디 : aaa");
         memberId.setBounds(1150, 20, 100, 30);
@@ -154,9 +156,10 @@ implements ActionListener{
         backBtn.setBounds(1150,800, 100, 30);
         backBtn.setFont(new Font("돋움체", 0, 15));
         backBtn.addActionListener(this);
+       
         //add
         c.add(myPagePanel);
-        c.add(logo);
+       
         c.add(myPageCb);
         c.add(memberId);
         c.add(backBtn);
@@ -221,7 +224,12 @@ implements ActionListener{
    }
 
    public static void main(String[] args) {
-     
+     try {
+		Mypage mp = new Mypage();
+		mp.setVisible(true);
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
    }
 
 }

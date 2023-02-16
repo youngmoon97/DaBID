@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,7 +21,7 @@ implements ActionListener{
    private JFrame frame = new JFrame();
    
    JPanel findIdPanel, findPwPanel;
-   JLabel idFindName, idFindEmail, pwFindName,pwFindId, pwFindEmail;
+   JLabel logo,idFindName, idFindEmail, pwFindName,pwFindId, pwFindEmail;
    JTextField idFindNametxt, idFindEmailtxt, pwFindIdtxt,pwFindNametxt,pwFindEmailtxt;
    JButton findIdBtn, findPwBtn, backBtn;
    TitledBorder idTb, pwTb;
@@ -104,6 +105,9 @@ implements ActionListener{
       findPwPanel.add(pwFindEmailtxt);
       findPwPanel.add(findPwBtn);
       
+      logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
+	  logo.setBounds(270,10,130,40);
+	  c.add(logo);
       c.add(findIdPanel);
       c.add(findPwPanel);
       c.add(backBtn);
@@ -129,7 +133,12 @@ implements ActionListener{
    }
    
    public static void main(String[] args) {
-      
+      try {
+		FindIdPassword fip = new FindIdPassword();
+		fip.setVisible(true);
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
    }
 
 }

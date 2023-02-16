@@ -2,9 +2,12 @@ package project1;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FileDialog;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,10 +22,11 @@ implements ActionListener{
 
    private JFrame frame = new JFrame();
    
-   JLabel memberId, memberPw, logolbl;
+   JLabel logo, memberId, memberPw, logolbl;
    JTextField memberIdtxt;
    JButton loginBtn, joinMemberBtn,findIdPwBtn;
    JPasswordField memberPwtxt;
+
    
    public Login() {
         setTitle("DaBID 로그인 페이지");

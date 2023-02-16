@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -57,7 +58,7 @@ public class Admin extends JFrame implements ActionListener {
 		// JComboBox
 		// adminCb (관리자 콤보박스)
 		adminCb = new JComboBox<>(cbList);
-		adminCb.setBounds(60, 53, 200, 34);
+		adminCb.setBounds(60, 60, 200, 34);
 		adminCb.setFont(new Font("돋움체", 0, 17));
 		adminCb.addActionListener(this);
 		
@@ -77,9 +78,9 @@ public class Admin extends JFrame implements ActionListener {
 	    bidendLb.setBounds(790, 25, 221, 27);
 	    bidendLb.setFont(new Font("돋움체", 0, 19));
 	    // logo (메인 로고)
-	    logo = new JLabel("DaBID");
-	    logo.setBounds(12, 14, 192, 41);
-	    logo.setFont(new Font("돋움체", 0, 20));
+	    logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
+		logo.setBounds(20,20,130,40);
+		 
 	    
 	    // JButton
 	    // backBtn (뒤로가기)
