@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -26,8 +27,9 @@ implements ActionListener{
    JTextField memberIdtxt;
    JButton loginBtn, joinMemberBtn,findIdPwBtn;
    JPasswordField memberPwtxt;
-
-   
+   JOptionPane alarm = new JOptionPane();
+   AuctionMgr mgr = new AuctionMgr();
+   String logId;
    public Login() {
         setTitle("DaBID 로그인 페이지");
         setSize(700, 600);
@@ -88,15 +90,32 @@ implements ActionListener{
    @Override
    public void actionPerformed(ActionEvent e) {
       Object obj = e.getSource();
+      
       if(obj==loginBtn) {
-         //TODO
-         try {
-            dispose();
-            Main main = new Main();
-            main.setVisible(true);
-         } catch (Exception e2) {
-        	 e2.printStackTrace();
-         }
+    	  if(memberIdtxt.getText().equals("") || new String(memberPwtxt.getPassword()).equals("")) {
+    		  alarm.showMessageDialog(this, "아이디와 비밀번호를 입력하세요.");
+    		  memberIdtxt.requestFocus();
+    	  }else {
+    		  if(mgr.loginChk(memberIdtxt.getText(), new String(memberPwtxt.getPassword()))) {
+        		  //로그인성공
+    			  logId = memberIdtxt.getText();
+        		  try {
+        			  	alarm.showMessageDialog(this, "로그인 성공");
+        			  	logId=memberIdtxt.getText().trim();
+        	            dispose();
+        	            Main main = new Main(logId);
+        	            main.setVisible(true);
+        	         } catch (Exception e2) {
+        	        	 e2.printStackTrace();
+        	         }
+        	  }else {
+        		  //실패
+        		  memberPwtxt.setText("");
+        		  alarm.showMessageDialog(this, "로그인 실패");
+        	  }
+    	  }
+    	  
+         
       }else if(obj==findIdPwBtn) {
     	  try {
               dispose();

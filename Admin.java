@@ -25,7 +25,7 @@ public class Admin extends JFrame implements ActionListener {
 	JProgressBar categoryJpb, priceJpb;
 	JScrollPane biddingJsp, bidendJsp;
 	JTable biddingTb, bidendTb;
-	
+	String logId;
 	String[] cbList = {"카테고리 별 통계", "금액 별 통계", "경매 log"};
 	String[] categoryNames = {"디지털기기","취미/게임/음반","가구/인테리어","스포츠/레저","생활가전","의류","반려동물용품","뷰티/미용","중고차","도서"};
 	
@@ -186,6 +186,10 @@ public class Admin extends JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+
+		logId = memberId.getText();
+		logId = logId.substring(logId.lastIndexOf(":")+1).trim();
+		
 		Object obj = e.getSource();
 		if (obj == adminCb) {
 			int index = adminCb.getSelectedIndex();
@@ -194,7 +198,7 @@ public class Admin extends JFrame implements ActionListener {
 		}else if(obj == backBtn) {
 			try {
 				dispose();
-				Main main = new Main();
+				Main main = new Main(logId);
 				main.setVisible(true);
 			} catch (Exception e2) {
 				e2.printStackTrace();

@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
@@ -25,6 +26,9 @@ implements ActionListener{
    JTextField idFindNametxt, idFindEmailtxt, pwFindIdtxt,pwFindNametxt,pwFindEmailtxt;
    JButton findIdBtn, findPwBtn, backBtn;
    TitledBorder idTb, pwTb;
+   JOptionPane alarm = new JOptionPane();
+   AuctionMgr mgr = new AuctionMgr();
+   DBConnectionMgr con;
    
    public FindIdPassword() {
       setTitle("DaBID 아이디/비밀번호 찾기");
@@ -64,6 +68,7 @@ implements ActionListener{
       //아이디찾기버튼
       findIdBtn = new JButton("아이디찾기");
       findIdBtn.setBounds(300,70,120,60);
+      findIdBtn.addActionListener(this);
       //이름 아이디 이메일 -->비밀번호찾기 
       pwFindName = new JLabel("이 름");
       pwFindName.setBounds(120, 60, 50, 50);
@@ -84,6 +89,7 @@ implements ActionListener{
       //비밀번호찾기 버튼
       findPwBtn = new JButton("비밀번호 찾기");
       findPwBtn.setBounds(300,70,120,100);
+      findPwBtn.addActionListener(this);
       //뒤로가기btn
       backBtn = new JButton("뒤로가기");
       backBtn.setBackground(new Color(255, 255, 255));
@@ -126,17 +132,41 @@ implements ActionListener{
 			e2.printStackTrace();
 		}
       }else if(obj==findIdBtn) {
-    	  
+    	  if(idFindNametxt.getText().isEmpty()||idFindEmailtxt.getText().equals("")) {
+    		  alarm.showMessageDialog(null, "이름과 이메일을 확인하세요","경고",JOptionPane.ERROR_MESSAGE);
+    		  idFindName.requestFocus();
+    	  }else {
+    		  String memName , memEmail;
+    		  memName = idFindNametxt.getText();
+    		  memEmail = idFindEmailtxt.getText();
+    		  MemberBean mbean = mgr.getMemberId(memName, memEmail);
+    		  String memId = mbean.getMemberId();
+    		  alarm.showMessageDialog(this, "아이디 : "+memId);
+    	  }
+
       }else if(obj==findPwBtn) {
-    	  
+    	  if(pwFindIdtxt.getText().isEmpty()||pwFindNametxt.getText().equals("")||pwFindEmailtxt.getText().equals("")) {
+    		  alarm.showMessageDialog(null, "이름 또는 아이디, 이메일을 확인하세요");
+    		  pwFindIdtxt.requestFocus();
+    	  }else {
+    		  String memName , memId,memEmail;
+    		  memName = pwFindNametxt.getText();
+    		  memId = pwFindIdtxt.getText();
+    		  memEmail = pwFindEmailtxt.getText();
+    		  MemberBean mbean = mgr.getMemberPw(memName, memId, memEmail);
+    		  String memPw = mbean.getMemberPwd();
+    		  alarm.showMessageDialog(null, memPw);
+    	  }
       }
    }
+   
    
    public static void main(String[] args) {
       try {
 		FindIdPassword fip = new FindIdPassword();
 		fip.setVisible(true);
 	} catch (Exception e) {
+		e.printStackTrace();
 		// TODO: handle exception
 	}
    }

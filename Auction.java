@@ -26,6 +26,7 @@ implements ActionListener{
 	JTextField comment, bidpriceTf;
 	JButton commentBtn, auctionBtn,backBtn; 
 	TitledBorder itemTb, commentTb;
+	String logId;
 	Font f = new Font("µ¸¿òÃ¼",0,15);
 	
 	public Auction() {
@@ -137,6 +138,9 @@ implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		logId = memberId.getText();
+		logId = logId.substring(logId.lastIndexOf(":")+1).trim();
+		
 		Object obj = e.getSource();
 		if(obj==commentBtn/*´ñ±Û´Þ±â*/) {
 			 //
@@ -145,7 +149,7 @@ implements ActionListener{
 		}else if(obj==backBtn) {
 			dispose();
 			try {
-				Main main = new Main();
+				Main main = new Main(logId);
 				main.setVisible(true);
 			} catch (Exception e2) {
 				e2.printStackTrace();

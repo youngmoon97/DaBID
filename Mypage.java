@@ -30,7 +30,7 @@ implements ActionListener{
    JButton saveBtn, itemDeleteBtn, backBtn;
    TitledBorder soonTb, buyTb, sellTb, pwTb;
    JScrollPane particScroll;
-   
+   String logId;
    String myPageCt[] = {"경매 참여 상품", "구매한 상품", "판매한 상품", "비밀번호 변경"};
    JComboBox<String> myPageCb = new JComboBox<String>(myPageCt);
    
@@ -206,6 +206,10 @@ implements ActionListener{
    
    @Override
    public void actionPerformed(ActionEvent e) {
+
+		logId = memberId.getText();
+		logId = logId.substring(logId.lastIndexOf(":")+1).trim();
+		
 	   Object obj = e.getSource();
 	   if (obj == myPageCb) {
 			int index = myPageCb.getSelectedIndex();
@@ -215,7 +219,7 @@ implements ActionListener{
 	   else if(obj==backBtn) {
 		   try {
 			   dispose();
-			   Main main = new Main();
+			   Main main = new Main(logId);
 			   main.setVisible(true);
 		   } catch (Exception e2) {
 				e2.printStackTrace();
