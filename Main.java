@@ -58,7 +58,7 @@ implements ActionListener{
 	     //상품명레이블
 	     itemName = new JLabel("상품명 : " + ibean.getItemName());
 	     itemName.setBounds(60, 60, 200, 30);
-	     itemName.setFont(new Font("돋움체", 0, 15));
+	     itemName.setFont(new Font("돋움체", 0, 17));
 
 	     //상품이미지
 	     itemPhoto = new JLabel("이미지");
@@ -72,12 +72,12 @@ implements ActionListener{
 	     currentPrice= new JLabel(" 현재 가격 : " + ibean.getItemPrice()+" 원");
 	     currentPrice.setBorder(new LineBorder(Color.black,1,true));
 	     currentPrice.setBounds(60, 610, 200, 50);
-	     currentPrice.setFont(new Font("돋움체", 0, 15));
+	     currentPrice.setFont(new Font("돋움체", 0, 17));
 	     // 현재참여인원 
-	     purchaserCount= new JLabel(" 현재 참여 인원 : " + ibean.getPurchaserCount());
+	     purchaserCount= new JLabel(" 현재 참여 인원 : " + ibean.getPurchaserCount()+"명");
 	     purchaserCount.setBorder(new LineBorder(Color.black,1,true));
 	     purchaserCount.setBounds(300, 610, 200, 50);
-	     purchaserCount.setFont(new Font("돋움체", 0, 15));
+	     purchaserCount.setFont(new Font("돋움체", 0, 17));
 
 	     ////
 	     itemPanel.add(itemName);
@@ -181,7 +181,7 @@ implements ActionListener{
 		}else if(obj==myPageBtn) {//마이페이지
 			try {
 				dispose();
-				Mypage mp = new Mypage();
+				Mypage mp = new Mypage(logId);
 				mp.setVisible(true);
 			} catch (Exception e2) {
 				e2.printStackTrace();

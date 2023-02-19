@@ -194,7 +194,6 @@ public class AuctionMgr {
                ibean.setItemPrice(rs.getInt("item_price"));
                ibean.setPurchaserCount(rs.getInt("purchaser_count"));
             }
-            System.out.println(ibean.getItemName());
          } catch (Exception e) {
             e.printStackTrace();
          }finally {

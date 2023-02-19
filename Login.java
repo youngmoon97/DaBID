@@ -30,6 +30,7 @@ implements ActionListener{
    JOptionPane alarm = new JOptionPane();
    AuctionMgr mgr = new AuctionMgr();
    String logId;
+  
    public Login() {
         setTitle("DaBID 로그인 페이지");
         setSize(700, 600);
@@ -37,11 +38,14 @@ implements ActionListener{
         setLocationRelativeTo(null);//가운데 출력
         getContentPane().setLayout(null);
         Container c = getContentPane();
+        
       //logo이미지
       logolbl = new JLabel(new ImageIcon(Login.class.getResource("./image/fullshot.png")));
       //logolbl.setIcon(new ImageIcon(Login.class.getResource("/dabid/dabid.jpg")));
       logolbl.setHorizontalAlignment(SwingConstants.CENTER);
       logolbl.setBounds(15, 30,300,500);
+      
+      
       //아이디 label
       memberId = new JLabel("아이디");
       memberId.setFont(new Font("돋움체", 0, 20));
@@ -78,6 +82,7 @@ implements ActionListener{
       //add      
       c.add(loginBtn);
       c.add(logolbl);
+
       c.add(memberId);
       c.add(memberPw);
       c.add(memberIdtxt);

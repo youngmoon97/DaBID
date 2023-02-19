@@ -33,8 +33,9 @@ implements ActionListener{
    String logId;
    String myPageCt[] = {"경매 참여 상품", "구매한 상품", "판매한 상품", "비밀번호 변경"};
    JComboBox<String> myPageCb = new JComboBox<String>(myPageCt);
+
    
-   public Mypage() {
+   public Mypage(String logId) {
       setTitle("DaBID 마이페이지");
       setSize(1300, 900);
         setResizable(false);
@@ -147,8 +148,8 @@ implements ActionListener{
   	  
  
         //id
-        memberId = new JLabel("아이디 : aaa");
-        memberId.setBounds(1150, 20, 100, 30);
+        memberId = new JLabel("아이디 : "+ logId);
+        memberId.setBounds(1150, 20, 150, 30);
         memberId.setFont(new Font("돋움체", 0, 15));
         
         // back버튼
@@ -228,12 +229,7 @@ implements ActionListener{
    }
 
    public static void main(String[] args) {
-     try {
-		Mypage mp = new Mypage();
-		mp.setVisible(true);
-	} catch (Exception e) {
-		// TODO: handle exception
-	}
+   
    }
 
 }
