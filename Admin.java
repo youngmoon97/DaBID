@@ -48,6 +48,7 @@ public class Admin extends JFrame implements ActionListener {
 		setSize(1300, 900);
 		setResizable(false);
 		setLayout(null);
+		setLocationRelativeTo(null); //가운데 출력
 		
 		Container c = getContentPane();
 		

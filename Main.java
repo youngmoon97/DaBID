@@ -33,7 +33,7 @@ implements ActionListener{
 	TitledBorder hotbidTb, commentTb;
 	JOptionPane alarm = new JOptionPane();
 	String logId;
-	
+	String cateName[];
 	Button categoryNameBtn[] = new Button[10];
 	AuctionMgr mgr = new AuctionMgr();
 	
@@ -41,6 +41,7 @@ implements ActionListener{
 	     setTitle("DaBID 메인페이지");
 	     setSize(1300,900);
 	     setResizable(false);
+	     setLocationRelativeTo(null); //가운데 출력
 	     setLayout(null);
 	     Container c = getContentPane();
 	     hotbidTb = new TitledBorder(new LineBorder(Color.black,1,true),"HOT BID");
@@ -91,7 +92,9 @@ implements ActionListener{
 	     categoryPanel.setBounds(660, 80, 550, 350);
 	     categoryPanel.setBorder(commentTb);
 	     //카테고리 넣기
+	     
 	    Vector<CategoryBean> clist = mgr.getCategory();
+	   
 	    for (int i = 0; i < clist.size(); i++) {
 			CategoryBean cbean = clist.get(i);
 			categoryNameBtn[i] = new Button(cbean.getCategoryName());
@@ -187,7 +190,7 @@ implements ActionListener{
 			//TODO
 			try {
 				dispose();
-				CategoryList cl = new CategoryList();
+				CategoryList cl = new CategoryList(logId);
 				cl.setVisible(true);
 			} catch (Exception e2) {
 				e2.printStackTrace();

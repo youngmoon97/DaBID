@@ -18,6 +18,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import ch06.ThisEx1;
+
 public class CategoryList extends JFrame
 implements ActionListener{
    
@@ -28,42 +30,28 @@ implements ActionListener{
    TitledBorder catagoryListTb;
    JScrollPane scroll;
    Font f = new Font("돋움체",0,15);
-   
-   public CategoryList() {
+   String logId;
+   String cateName;
+   public CategoryList(String logId) {
       Container c = getContentPane();
       setTitle("DaBID 카테고리 리스트 페이지");
        setSize(1300,900);
        setResizable(false);
+       setLocationRelativeTo(null); //가운데 출력
        setLayout(null);
        
        listPanel = new JPanel();
        listPanel.setLayout(new GridLayout(0,1, 10, 10));
-//       listPanel.setBounds(60, 80, 1150, 700);
-       catagoryListTb = new TitledBorder(new LineBorder(Color.black,1,true),"카테고리 리스트");
-       catagoryListTb.setTitleFont(new Font("돋움체",0,25));
-//       listPanel.setBorder(catagoryListTb);   
-       //itempanel을 listpanel에 넣기
-       
+
        int x=50;
        int y=50;
        int w=1050;
        int h=200;
-       
-       
+
        //
        scroll = new JScrollPane(listPanel);
        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-//       scroll.setBounds(1127,16,20,682); 
        scroll.setBounds(60, 80, 1150, 700);
-       
-       
-       
-       
-       
-       // 1150, 700
-//       listPanel.add(scroll);
-//       listPanel.add(itemPanel);
-       
        		for (int i = 0; i < 10; i++) {
        			itemPanel = new JPanel();
        			itemPanel.setLayout(null);
@@ -100,10 +88,8 @@ implements ActionListener{
        			partBtn.setBounds(900, 50, 100, 100);
        			partBtn.setFont(new Font("돋움체", 0, 15));
        			partBtn.setBorder(new LineBorder(Color.black,1,true));
-       			partBtn.addActionListener(this);
-           
+       			partBtn.addActionListener(this);       
            //
-           
        			itemPanel.add(itemName);
            		itemPanel.add(itemPhoto);
            		itemPanel.add(auctionPrice);
@@ -114,16 +100,16 @@ implements ActionListener{
           		listPanel.add(itemPanel);
        		}
        //
-
-      categoryName = new JLabel("카테코리 이름");
+      categoryName = new JLabel(cateName);
       categoryName.setBounds(550,30,150,30);
       categoryName.setFont(new Font("돋움체", 0, 20));
-      memberId = new JLabel("아이디 : aaa");
-      memberId.setBounds(1150,20,100,30);
+      memberId = new JLabel("아이디 : " + logId);
+      memberId.setBounds(1150,20,150,30);
       memberId.setFont(new Font("돋움체", 0, 15));
       backBtn = new JButton("뒤로가기");
       backBtn.setBounds(1150, 820, 120, 30);
       backBtn.setFont(new Font("돋움체", 0, 15));
+      backBtn.addActionListener(this);
       //
       logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
       logo.setBounds(20,20,130,40);
@@ -140,15 +126,23 @@ implements ActionListener{
    
    @Override
    public void actionPerformed(ActionEvent e) {
-      Object obj = new Object();
+      Object obj = e.getSource();
+      
+      logId = memberId.getText();
+      logId = logId.substring(logId.lastIndexOf(":")+1).trim();
+      
+      if(obj == backBtn) {
+    	  try {
+    		  dispose();
+    		  Main main = new Main(logId);
+    		  main.setVisible(true);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+      }
       
    }
    public static void main(String[] args) {
-      try {
-         CategoryList cl = new CategoryList();
-         cl.setVisible(true);
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
+	 
    }
 }

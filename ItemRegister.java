@@ -53,6 +53,7 @@ public class ItemRegister extends JFrame implements ActionListener {
       setTitle("DaBID 상품등록 페이지");
       setSize(1300, 900);
       setResizable(false);
+      setLocationRelativeTo(null); //가운데 출력
       setLayout(null);
       Container c = getContentPane();
       
@@ -68,9 +69,8 @@ public class ItemRegister extends JFrame implements ActionListener {
       
       //JLabel
       memberId = new JLabel("아이디 : " + logId);
-      memberId.setBounds(1150, 20, 100, 30);
+      memberId.setBounds(1150, 20, 150, 30);
       memberId.setFont(new Font("돋움체", 0, 15));
-      memberId.setBorder(new LineBorder(Color.black, 1, true));
       
       itemName = new JLabel("상품명 :");
       itemName.setBounds(60 ,60, 100, 30);

@@ -34,6 +34,7 @@ implements ActionListener{
 	    setSize(1300,900);
 	    setResizable(false);
 	    setLayout(null);
+	    setLocationRelativeTo(null); //가운데 출력
 	    Container c = getContentPane();
 	    
 	    itemTb = new TitledBorder(new LineBorder(Color.black,1,true),"상품설명");
