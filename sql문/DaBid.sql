@@ -19,7 +19,7 @@ create table item (
 	item_categorynum int(10) not null,
 	item_name varchar(10) not null,
 	item_price int(10) not null default '0',
-	item_photo blob null,
+	item_photo LONGBLOB null,
 	item_memo varchar(150) null,
 	item_status int(10) not null default '2',
 	item_starttime datetime not null,

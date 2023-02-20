@@ -5,6 +5,9 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,13 +26,17 @@ implements ActionListener{
 	JPanel itemPanel,commentPanel;
 	JLabel logo, memberId, itemName, itemPhoto, itemMemo, currentPrice, purchaserCount, auctionPriceLbl, auctionTime;
 	JTextArea commentArea;
-	JTextField comment, bidpriceTf;
-	JButton commentBtn, auctionBtn,backBtn; 
+	JTextField commentTf, bidpriceTf;
+	JButton commentBtn, auctionBtn, backBtn; 
 	TitledBorder itemTb, commentTb;
+	JOptionPane alarm = new JOptionPane();
 	String logId;
+	AuctionMgr mgr = new AuctionMgr();
+    ItemBean ibean = mgr.getHotItem();
+    
 	Font f = new Font("돋움체",0,15);
 	
-	public Auction() {
+	public Auction(String logId) {
 		setTitle("DaBID 경매페이지");
 	    setSize(1300,900);
 	    setResizable(false);
@@ -46,25 +53,31 @@ implements ActionListener{
 	    itemPanel.setLayout(null);
 	    itemPanel.setBounds(60, 80, 550, 700);
 	    itemPanel.setBorder(itemTb);	
+	    
+	    //memberid
+	    memberId = new JLabel("아이디 : "+logId);
+	    memberId.setBounds(1150,20,150,30);
+        memberId.setFont(new Font("돋움체", 0, 15));
 	     //상품명레이블
-	    itemName = new JLabel("상품명 : ");
+	    itemName = new JLabel("상품명 : " + ibean.getItemName());
 	    itemName.setBounds(60, 60, 100, 30);
 	    itemName.setFont(new Font("돋움체", 0, 15));
+	    System.out.println(ibean.getItemName());
 	    //상품이미지
-	    itemPhoto = new JLabel("이미지");
+	    itemPhoto = new JLabel(new ImageIcon(Login.class.getResource("./image/"+ibean.getItemName()+".jpg")));
 	    itemPhoto.setBorder(new LineBorder(Color.black,1,true));
 	    itemPhoto.setBounds(60, 90, 450, 400);
 	     //상품설명
-	    itemMemo= new JLabel("상품설명");
+	    itemMemo= new JLabel(ibean.getItemMemo());
 	    itemMemo.setBorder(new LineBorder(Color.black,1,true));
 	    itemMemo.setBounds(60, 500, 450, 100);
 	     //상품현재입찰가
-	    currentPrice= new JLabel("현재 입찰가 : ");
+	    currentPrice= new JLabel("현재 입찰가 : " + ibean.getItemPrice()+"원");
 	    currentPrice.setBorder(new LineBorder(Color.black,1,true));
 	    currentPrice.setBounds(60, 610, 200, 50);
 	    currentPrice.setFont(new Font("돋움체", 0, 15));
 	     //현재참여인원 
-	    purchaserCount= new JLabel("현재 참여 인원 :  ");	     
+	    purchaserCount= new JLabel("현재 참여 인원 :  "+ibean.getPurchaserCount()+"명");	     
 	    purchaserCount.setBorder(new LineBorder(Color.black,1,true));
 	    purchaserCount.setBounds(300, 610, 200, 50);
 	    purchaserCount.setFont(new Font("돋움체", 0, 15));
@@ -84,16 +97,18 @@ implements ActionListener{
 	    commentArea = new JTextArea();
 	    commentArea.setBounds(60, 90, 450, 450);
 	    commentArea.setBorder(new LineBorder(Color.black,1,true));
+	    commentArea.setEnabled(false);
 	    //남은시간
 	    auctionTime = new JLabel("남은 시간 : ");
 	    auctionTime.setBounds(400,30,130,30);
 	    auctionTime.setBorder(new LineBorder(Color.black,1,true));
 	    auctionTime.setFont(f);
 	    //comment댓글입력
-	    comment = new JTextField("댓글을 입력하세요.");
-	    comment.setBounds(60, 540, 380, 30);
-	    comment.setBorder(new LineBorder(Color.black,1,true));
-	    comment.setFont(f);
+	    commentTf = new JTextField();
+	    commentTf.setBounds(60, 540, 380, 30);
+	    commentTf.setBorder(new LineBorder(Color.black,1,true));
+	    commentTf.setFont(f);
+	    commentTf.requestFocus();
 	    //comment버튼전송
 	    commentBtn = new JButton("전송");
 	    commentBtn.setBounds(440, 540, 70, 30);
@@ -111,27 +126,30 @@ implements ActionListener{
 	    bidpriceTf.setBorder(new LineBorder(Color.black,1,true));
 	    //입찰버튼
 	    auctionBtn = new JButton("입찰하기");
-	    auctionBtn.setBounds(400, 600, 70, 30);
+	    auctionBtn.setBounds(420, 600, 70, 30);
 	    auctionBtn.setBorder(new LineBorder(Color.black,1,true));
 	    auctionBtn.setFont(f);
 	    auctionBtn.addActionListener(this);
 	    //
 	    commentPanel.add(commentArea);
 	    commentPanel.add(auctionTime);
-	    commentPanel.add(comment);
+	    commentPanel.add(commentTf);
 		commentPanel.add(commentBtn); 
 		commentPanel.add(auctionBtn);
 		commentPanel.add(auctionPriceLbl); 
 		commentPanel.add(bidpriceTf);
-		backBtn = new JButton("뒤로가기");
-		backBtn.setBounds(1150, 820, 120, 30);
-		backBtn.setFont(new Font("돋움체", 0, 15));
-		backBtn.addActionListener(this);
 		//
 		logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
 	    logo.setBounds(20,20,130,40);
 	    //
-	     c.add(logo);
+	    backBtn = new JButton("뒤로가기");
+		backBtn.setBounds(1150, 820, 120, 30);
+	    backBtn.setBorder(new LineBorder(Color.black,1,true));
+		backBtn.setFont(f);
+		backBtn.addActionListener(this);
+	    //
+		c.add(memberId);
+	    c.add(logo);
 	    c.add(itemPanel);
 	    c.add(commentPanel);
 	    c.add(backBtn);
@@ -143,13 +161,44 @@ implements ActionListener{
 		logId = logId.substring(logId.lastIndexOf(":")+1).trim();
 		
 		Object obj = e.getSource();
+		
 		if(obj==commentBtn/*댓글달기*/) {
-			 //
+			 if(commentTf.getText().isEmpty()) {
+				 alarm.showMessageDialog(this, "댓글을 입력하세요.");
+			 }else {
+				 String comment = commentTf.getText();
+				 LocalDate now = LocalDate.now();
+				 commentArea.append(now+"\n"+logId +" : "+comment+"\n");
+				 //댓글 저장
+				 String seller = ibean.getItemSeller();
+				 int itemNum = ibean.getItemNum();
+				 System.out.println(seller+logId+itemNum+comment);
+				 mgr.insertComment(seller, logId, itemNum, comment);
+				
+				 commentTf.setText(" ");
+			 }
+			 
 		}else if(obj==auctionBtn/*입찰하기*/){
-			//
+			if(bidpriceTf.getText()==null) {
+				alarm.showMessageDialog(this, "가격을 입력하세요.");
+			}else {
+				int itemNum = ibean.getItemNum();
+				int itemPrice = Integer.parseInt(bidpriceTf.getText());
+				
+				System.out.println(itemNum+itemPrice+logId);
+				mgr.insertAuction(itemNum, itemPrice, logId);
+				alarm.showMessageDialog(this, "입찰 성공!");
+				try {
+					Main main = new Main(logId);
+					main.setVisible(true);
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
+				
+			}
 		}else if(obj==backBtn) {
-			dispose();
 			try {
+				dispose();
 				Main main = new Main(logId);
 				main.setVisible(true);
 			} catch (Exception e2) {
@@ -161,8 +210,8 @@ implements ActionListener{
 	
 	public static void main(String[] args) {
 		try {
-			Auction ac = new Auction();
-			ac.setVisible(true);
+			Auction a= new Auction("a");
+			a.setVisible(true);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

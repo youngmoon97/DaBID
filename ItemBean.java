@@ -1,8 +1,9 @@
 package project1;
 
 import java.io.File;
-import java.sql.Blob;
-import java.sql.Date;
+import java.sql.Timestamp;
+
+import javax.swing.JButton;
 
 public class ItemBean {
    private int itemNum;
@@ -13,9 +14,10 @@ public class ItemBean {
    private String itemPhoto;
    private String itemMemo;
    private int itemStatus;
-   private Date itemStartTime;
-   private Date itemEndTime;
+   private int itemStartTime;
+   private int itemEndTime;
    private int purchaserCount;
+   private JButton partBtn;
    
    public int getItemNum() {
       return itemNum;
@@ -65,16 +67,16 @@ public class ItemBean {
    public void setItemStatus(int itemStatus) {
       this.itemStatus = itemStatus;
    }
-   public Date getItemStartTime() {
+   public int getItemStartTime() {
       return itemStartTime;
    }
-   public void setItemStartTime(Date itemStartTime) {
+   public void setItemStartTime(int itemStartTime) {
       this.itemStartTime = itemStartTime;
    }
-   public Date getItemEndTime() {
+   public int getItemEndTime() {
       return itemEndTime;
    }
-   public void setItemEndTime(Date itemEndTime) {
+   public void setItemEndTime(int itemEndTime) {
       this.itemEndTime = itemEndTime;
    }
    public int getPurchaserCount() {
@@ -83,4 +85,12 @@ public class ItemBean {
    public void setPurchaserCount(int purchaserCount) {
       this.purchaserCount = purchaserCount;
    }
+   public JButton getPartBtn() {
+      return partBtn;
+   }
+   public void setPartBtn(JButton partBtn) {
+      this.partBtn = partBtn;
+   }
+   
+   
 }

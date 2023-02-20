@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -32,13 +34,14 @@ public class ItemRegister extends JFrame implements ActionListener {
 
    JPanel itemPanel;
    JLabel logo,memberId, itemName, itemPhoto, itemCategory,itemmemo, itemprice, won, endtime;
-   JTextField taName, taMemo, taPrice;
+   JTextField taName, taPrice;
+   JTextArea taMemo;
    JButton registerBtn, backBtn, imageBtn;
    JComboBox<String> categoryCombobox, timeCombobox;
    TitledBorder registerTb;
    JOptionPane alarm = new JOptionPane();
    String[] categoryName = {"디지털기기","취미/게임/음반","가구/인테리어","스포츠/레저","생활가전","의류","반려동물용품","뷰티/미용","차량","도서"};
-   String[] timelist = {"5분", "10분"};
+   String[] timelist = {"60분", "10분"};
    FileDialog read;
    Image img;
    String filename;
@@ -107,7 +110,7 @@ public class ItemRegister extends JFrame implements ActionListener {
       taName = new JTextField(); //상품명
       taName.setBounds(140, 65, 430, 20);
       
-      taMemo = new JTextField(); //상품설명
+      taMemo = new JTextArea(); //상품설명
       taMemo.setBounds(650, 120, 450, 260);
       
       taPrice = new JTextField(); //시작 가격
@@ -132,10 +135,7 @@ public class ItemRegister extends JFrame implements ActionListener {
       
       timeCombobox = new JComboBox<>(timelist);
       timeCombobox.setBounds(750, 510, 100, 30);
-      
-//      logo = new JLabel(new ImageIcon(Login.class.getResource("./img/logo.png")));
-//     logo.setBounds(20,20,130,40);
-//     c.add(logo);
+
       //패널에 추가
       itemPanel.add(itemmemo);
       itemPanel.add(itemName);
@@ -167,7 +167,6 @@ public class ItemRegister extends JFrame implements ActionListener {
      
       Object obj = e.getSource();
       if(obj==backBtn) {
-         //TODO
          try {
             dispose();
             Main main = new Main(logId);
@@ -175,36 +174,37 @@ public class ItemRegister extends JFrame implements ActionListener {
          } catch (Exception e2) {
             e2.printStackTrace();
          }
-      }else if(obj==registerBtn) { //상품 등록 버튼 
-         String itname = taName.getText(); //상품명
-         String itmemo = taMemo.getText(); //상품 설명
-         Integer itprice = Integer.parseInt(taPrice.getText()); //시작 가격
-         Integer categoryidx = categoryCombobox.getSelectedIndex() + 1; //카테고리 인덱스                
-         Integer timeidx = timeCombobox.getSelectedIndex(); //종료 시간 인덱스
-         Integer time=0; //종료 시간 설정 변수
-         if (timeidx == 0) {
-            time = 5;
-            mgr.insertItem(logId, categoryidx, itname, itprice, itmemo, time);
-         }else if (timeidx == 1) {
-            time = 10;
-            mgr.insertItem(logId, categoryidx, itname, itprice, itmemo, time);
-         }
-        
-         //이미지 저장
-//        mgr.insertImg(file);
-//         img = null;
-//         canvas.repaint();
-         
-        
-         alarm.showMessageDialog(null, "등록완료");
-         try {
-            dispose();
-            Main main = new Main(logId);
-            main.setVisible(true);
-         } catch (Exception e2) {
-            e2.printStackTrace();
-         }
-      }else if(obj==imageBtn){ //이미지 등록 버튼
+      }
+      
+      else if(obj==registerBtn) { //상품 등록 버튼 
+    	  if(taName.getText()==null || taPrice.getText()==null) {
+    		  alarm.showMessageDialog(this, "상품 이름 / 상품 가격을 입력하세요!");
+    	  }else {
+          String itName = taName.getText(); //상품명
+          String itMemo = taMemo.getText(); //상품 설명
+          Integer itPrice = Integer.parseInt(taPrice.getText()); //시작 가격
+          Integer categoryIdx = categoryCombobox.getSelectedIndex() + 1; //카테고리 인덱스                
+          Integer timeIdx = timeCombobox.getSelectedIndex(); //종료 시간 인덱스
+          Integer time=0; //종료 시간 설정 변수
+          if (timeIdx == 0) {
+             time = 60;
+             mgr.insertItem(logId, categoryIdx, itName, itPrice, file, itMemo, time);
+          }else if (timeIdx == 1) {
+             time = 10;
+             mgr.insertItem(logId, categoryIdx, itName, itPrice, file, itMemo, time);
+          }       
+          alarm.showMessageDialog(null, "등록완료");
+          try {
+             dispose();
+             Main main = new Main(logId);
+             main.setVisible(true);
+          } catch (Exception e2) {
+             e2.printStackTrace();
+          }
+       }
+      }
+      
+      else if(obj==imageBtn){ //이미지 등록 버튼
          if(read ==null) {
             read=new FileDialog(this,"이미지열기", FileDialog.LOAD);
          }
@@ -218,11 +218,9 @@ public class ItemRegister extends JFrame implements ActionListener {
          } catch (IOException e1) {
             e1.printStackTrace();
          }
-         
-      }
-      
-      
-   }
+       }
+ }
+   
    
    //이미지 넣기
    class ImageCanvas extends Canvas{

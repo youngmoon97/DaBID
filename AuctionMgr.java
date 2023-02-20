@@ -1,6 +1,7 @@
 package project1;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Member;
@@ -181,18 +182,20 @@ public class AuctionMgr {
          ItemBean ibean = new ItemBean();
          try {
             con = pool.getConnection();
-            sql = "select item_name, item_photo, item_memo, item_price, purchaser_count "
+            sql = "select item_seller, item_num, item_name, item_photo, item_memo, item_price, purchaser_count, item_endtime "
             		+ "from item "
-            		+ "where item_status = 2 and purchaser_count = (select max(purchaser_count) from item) "
+            		+ "where purchaser_count = (select max(purchaser_count) from item where item_status=2) "
             		+ "order by item_price desc limit 1";
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
             if(rs.next()) {
-               ibean.setItemName(rs.getString("item_name"));
-               //ibean.getItemPhoto(rs.getBlob("item_photo"));
-               ibean.setItemMemo(rs.getString("item_memo"));
-               ibean.setItemPrice(rs.getInt("item_price"));
-               ibean.setPurchaserCount(rs.getInt("purchaser_count"));
+            	ibean.setItemSeller(rs.getString("item_seller"));
+            	ibean.setItemNum(rs.getInt("item_num"));
+            	ibean.setItemName(rs.getString("item_name"));
+            	ibean.setItemMemo(rs.getString("item_memo"));
+            	ibean.setItemPrice(rs.getInt("item_price"));
+            	ibean.setPurchaserCount(rs.getInt("purchaser_count"));
+            	ibean.setItemEndTime(rs.getInt("item_endtime"));
             }
          } catch (Exception e) {
             e.printStackTrace();
@@ -201,23 +204,58 @@ public class AuctionMgr {
          }
          return ibean;
       }
+      //이미지가져오기
+      public File selectImg(String itemName) {
+  		Connection con = null;
+  		PreparedStatement pstmt = null;
+  		ResultSet rs = null;
+  		String sql = null;
+  		File file = null;
+  		InputStream is = null;
+  		FileOutputStream fos = null;
+  		try {
+  			con = pool.getConnection();
+  			sql = "select item_photo from item where item_name = ?";
+  			pstmt = con.prepareStatement(sql);
+  			pstmt.setString(1, itemName);
+  			rs = pstmt.executeQuery();
+  			
+  			if(rs.next()) {
+  				file =  new File("./image/"+rs.getString("item_name")+".jpg");
+  				fos = new FileOutputStream(file);
+  				is = rs.getBinaryStream("img");
+  				int i;
+  				while((i=is.read())!=-1) {
+  					fos.write(i);
+  				}
+  			}
+  			if(fos!=null) fos.close();
+  			if(is!=null) is.close();
+  		} catch (Exception e) {
+  			e.printStackTrace();
+  		} finally {
+  			pool.freeConnection(con, pstmt, rs);
+  		}
+  		return file;
+  	}
     //아이템 등록
-      public void insertItem(String sellid, int categorynum, String itemname,int itemprice, String itemmemo,int time) {
+      public void insertItem(String sellId, int categoryNum, String itemname,int itemprice, File itemphoto, String itemmemo,int time) {
          Connection con = null;
          PreparedStatement pstmt = null;
-         String sql = null;
-         
+         String sql = null;   
          try {
             con = pool.getConnection();//카테고리번호 인덱스로 받기 즉, 카테고리인덱스랑 카테고리이름이랑 일치해야함
-            sql = "insert into item (item_seller, item_categorynum, item_name, item_price, item_memo, item_starttime, item_endtime) "
-                  + "values (?,?,?,?,?, now(), date_add(now(), interval ? minute))";
+            sql = "insert into item (item_seller, item_categorynum, item_name, item_price, item_photo, item_memo, item_starttime, item_endtime) "
+                  + "values (?,?,?,?,?,?, now(), date_add(now(), interval ? minute))";
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, sellid);
-            pstmt.setInt(2, categorynum); 
+            InputStream is = new FileInputStream(itemphoto);
+            pstmt.setString(1, sellId);
+            pstmt.setInt(2, categoryNum); 
             pstmt.setString(3, itemname);
             pstmt.setInt(4, itemprice);
-            pstmt.setString(5, itemmemo);
-            pstmt.setInt(6, time);
+            pstmt.setBinaryStream(5, is);
+            pstmt.setString(6, itemmemo);
+            pstmt.setInt(7, time);
             pstmt.executeUpdate();
          } catch (Exception e) {
             e.printStackTrace();
@@ -225,51 +263,38 @@ public class AuctionMgr {
             pool.freeConnection(con, pstmt);
          }
       }
-   
-   //아이템 list(카테고리별)
-   public Vector<ItemBean> getItemList(Integer ItemCategoryNum){
-      Connection con = null;
-      PreparedStatement pstmt = null;
-      ResultSet rs = null;
-      String sql = null;
-      File file = null;
-      InputStream is = null;
-      FileOutputStream fos = null;
-      Vector<ItemBean> ilist = new Vector<ItemBean>();
-      try {
-         con = pool.getConnection();
-         sql = "select  item_photo, item_name, item_price, item_endtime, purchaser_count"
-               + "from item i"
-               + "where item_status = 2 and item_categorynum = ? ";
-         pstmt = con.prepareStatement(sql);
-         pstmt.setInt(1, ItemCategoryNum);
-         rs = pstmt.executeQuery();
-         while(rs.next()) {
-            file =  new File("img/"+rs.getString("name"));
-            fos = new FileOutputStream(file);
-            is = rs.getBinaryStream("img");
-            int i;
-            while((i=is.read())!=-1) {
-               fos.write(i);
-            }
-            ItemBean bean = new ItemBean();
-            bean.setItemPhoto(file.getPath()+file.getName());
-            bean.setItemName(rs.getString("item_name"));
-            bean.setItemPrice(rs.getInt("item_price"));
-            bean.setItemEndTime(rs.getDate("item_endtime"));
-            bean.setPurchaserCount(rs.getInt("purchaser_count"));
-            ilist.addElement(bean);
-            if(fos!=null) fos.close();
-            if(is!=null) is.close();
-         }         
-      } catch (Exception e) {
-         e.printStackTrace();
-      }finally {
-         pool.freeConnection(con, pstmt, rs);
-      }
-      return ilist;
-   }
-   
+      //아이템 list(카테고리별)
+      public Vector<ItemBean> getItemList(String ItemCategoryName){
+         Connection con = null;
+         PreparedStatement pstmt = null;
+         ResultSet rs = null;
+         String sql = null;
+         Vector<ItemBean> ilist = new Vector<ItemBean>();
+         try {
+            con = pool.getConnection();
+            sql = "select item_name, item_price, purchaser_count,timestampdiff(second, now(), item_endtime) "
+            		+ "from item i , category c "
+            		+ "where i.item_categorynum = c.category_num "
+            		+ "	and c.category_name  = ? ";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, ItemCategoryName);
+            rs = pstmt.executeQuery();
+            while(rs.next()) {
+               ItemBean bean = new ItemBean();
+               bean.setItemName(rs.getString("item_name"));
+               System.out.println("111"+bean.getItemName());
+               bean.setItemPrice(rs.getInt("item_price"));
+               bean.setPurchaserCount(rs.getInt("purchaser_count"));
+               bean.setItemEndTime(rs.getInt("timestampdiff(second, now(), item_endtime)"));
+               ilist.addElement(bean);
+            }         
+         } catch (Exception e) {
+            e.printStackTrace();
+         }finally {
+            pool.freeConnection(con, pstmt, rs);
+         }
+         return ilist;
+      }   
    //아이템 리스트(마이페이지 판매한 상품 - member_id = item_seller)
    public Vector<ItemBean> getSellItemList(String itemSeller){
       Connection con = null;
@@ -291,7 +316,7 @@ public class AuctionMgr {
 //            bean.setItemPhoto(rs.getBlob("item_photo"));
             bean.setItemPrice(rs.getInt("item_price"));            
             bean.setPurchaserCount(rs.getInt("purchaser_count"));
-            bean.setItemEndTime(rs.getDate("item_endtime"));
+            bean.setItemEndTime(rs.getInt("item_endtime"));
             SIlist.addElement(bean);
          }
       } catch (Exception e) {
@@ -322,7 +347,7 @@ public class AuctionMgr {
             bean.setItemName(rs.getString("item_name"));
             bean.setItemPrice(rs.getInt("item_price"));
 //            bean.setItemPhoto(rs.getBlob("item_photo"));
-            bean.setItemEndTime(rs.getDate("item_endtime"));
+            bean.setItemEndTime(rs.getInt("item_endtime"));
             BIlist.addElement(bean);
          }
       } catch (Exception e) {
@@ -342,20 +367,19 @@ public class AuctionMgr {
       Vector<ItemBean> SIlist = new Vector<ItemBean>();
       try {
          con = pool.getConnection();
-         sql = "select  i.item_name, i.item_price, i.item_photo,i.item_endtime "
-               + "from item i, auction a "
-               + "where i.item_num = a.auction_itemnum "
-               + "and item_status = 2 and auction_purchaser = ?";
+         sql = "select item_name, item_photo, item_memo, item_price, purchaser_count,timestampdiff(second, now(), item_endtime) "
+         		+ "from item "
+         		+ "where purchaser_count = (select max(purchaser_count) from item where item_status=2) "
+         		+ "order by item_price desc limit 1";
          pstmt = con.prepareStatement(sql);
          pstmt.setString(1, itemPurchaser);
          rs = pstmt.executeQuery();
          while(rs.next()) {
             ItemBean bean = new ItemBean();
             bean.setItemName(rs.getString("item_name"));
-//            bean.setItemPhoto(rs.getBlob("item_photo"));
             bean.setItemPrice(rs.getInt("item_price"));            
             bean.setPurchaserCount(rs.getInt("purchaser_count"));
-            bean.setItemEndTime(rs.getDate("item_endtime"));
+            bean.setItemEndTime(rs.getInt("item_endtime"));
             SIlist.addElement(bean);
          }
       } catch (Exception e) {
@@ -365,29 +389,50 @@ public class AuctionMgr {
       }
       return SIlist;
    }
-   // comment 전송버튼 
-   public void commentSend(CommentBean Cbean) {
-      Connection con = null;
-      PreparedStatement pstmt = null;
-      String sql = null;
-      
-      try {
-         con = pool.getConnection();
-         sql = "insert comment(seller_id, purchaser_id, comment_itemnum, comment_content, comment_time) "
-               +"values (?, ?, ?, ?, ?)";
-         pstmt = con.prepareStatement(sql);
-         pstmt.setString(1, Cbean.getSellerId());
-         pstmt.setString(2, Cbean.getPurchaserId());
-         pstmt.setInt(3, Cbean.getCommentItemNum());
-         pstmt.setString(4, Cbean.getCommentContent());
-         pstmt.setDate(5,  Cbean.getCommentTime());
-         pstmt.executeUpdate();
-      } catch (Exception e) {
-         e.printStackTrace();
-      } finally {
-         pool.freeConnection(con, pstmt);
-      }
-   }
+   
+   //댓글저장
+   public void insertComment(String sellerId,String logId, Integer itemNum,String comment){
+	      Connection con = null;
+	      PreparedStatement pstmt = null;
+	      String sql = null;
+	      try {
+	         con = pool.getConnection();
+	         sql = "insert into comment (seller_id , purchaser_id,comment_itemnum ,"
+	         		+ "comment_content,comment_time) "
+	         		+ "values(?, ?, ?, ?, now())";
+	         pstmt = con.prepareStatement(sql);
+	         pstmt.setString(1, sellerId);
+	         pstmt.setString(2, logId);
+	         pstmt.setInt(3, itemNum);
+	         pstmt.setString(4, comment);
+	         pstmt.executeUpdate();
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }finally {
+	         pool.freeConnection(con, pstmt);
+	      }
+	   }
+ //경매참여가격저장
+   public void insertAuction(Integer itemNum, Integer itemPrice, String purchaserName){
+	      Connection con = null;
+	      PreparedStatement pstmt = null;
+	      String sql = null;
+	      try {
+	         con = pool.getConnection();
+	         sql = "insert into auction (auction_itemnum, auction_time, auction_price,auction_purchaser) "
+	         		+ "values(? ,now(), ?, ?)";
+	         pstmt = con.prepareStatement(sql);
+	         pstmt.setInt(1, itemNum);
+	         pstmt.setInt(2, itemPrice);
+	         pstmt.setString(3, purchaserName);
+	         System.out.println(itemNum);
+	         pstmt.executeUpdate();
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }finally {
+	         pool.freeConnection(con, pstmt);
+	      }
+	   }
    //comment list(댓글 - 판매상품별)
    public Vector<CommentBean> getCommentList(Integer commentItemNum){
       Connection con = null;
@@ -443,7 +488,6 @@ public class AuctionMgr {
 	}
 	
 	//카테고리리스트 가져오기
-	//TODO
 	public Vector<CategoryBean> getCategory(){
 	      Connection con = null;
 	      PreparedStatement pstmt = null;
@@ -461,10 +505,6 @@ public class AuctionMgr {
 	            cbean.setCategoryName(rs.getString("category_name"));
 	            clist.addElement(cbean);       
 	         }
-	         /*for (int i = 0; i < clist.size(); i++) {
-	        	 CategoryBean bean = clist.get(i);
-	        	 System.out.println(bean.getCategoryName());
-			}*/
 	      } catch (Exception e) {
 	         e.printStackTrace();
 	      }finally {

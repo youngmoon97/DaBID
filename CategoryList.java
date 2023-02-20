@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,97 +17,61 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-
-import ch06.ThisEx1;
 
 public class CategoryList extends JFrame
 implements ActionListener{
    
    
    JLabel logo, categoryName, memberId,itemName, itemPhoto,auctionPrice, auctionTime, purchaserCount;
-   JButton partBtn, backBtn;
+   JButton backBtn;
    JPanel listPanel,itemPanel;
    TitledBorder catagoryListTb;
    JScrollPane scroll;
-   Font f = new Font("돋움체",0,15);
    String logId;
-   String cateName;
-   public CategoryList(String logId) {
+   
+   AuctionMgr mgr;
+   
+   Font f = new Font("돋움체",0,15);
+   
+   public CategoryList(String category, String logId) {
+      
+     // mgr 가져오기
+     mgr = new AuctionMgr();
+     
+     
       Container c = getContentPane();
       setTitle("DaBID 카테고리 리스트 페이지");
+      setLocationRelativeTo(null);
        setSize(1300,900);
        setResizable(false);
-       setLocationRelativeTo(null); //가운데 출력
        setLayout(null);
        
        listPanel = new JPanel();
        listPanel.setLayout(new GridLayout(0,1, 10, 10));
-
-       int x=50;
-       int y=50;
-       int w=1050;
-       int h=200;
-
+       catagoryListTb = new TitledBorder(new LineBorder(Color.black,1,true),"카테고리 리스트");
+       catagoryListTb.setTitleFont(new Font("돋움체",0,25));
+  
        //
        scroll = new JScrollPane(listPanel);
        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
        scroll.setBounds(60, 80, 1150, 700);
-       		for (int i = 0; i < 10; i++) {
-       			itemPanel = new JPanel();
-       			itemPanel.setLayout(null);
-       			//itemPanel.setBounds(x,y,w,h);
-       			itemPanel.setPreferredSize(new Dimension(1050, 200));
-       			itemPanel.setBorder(new LineBorder(Color.black,1,true));
-       			//itempanel안에 label / 버튼 넣기
-       			itemPhoto = new JLabel("itemPhoto");
-       			itemPhoto.setBounds(0,0, 250, 200);
-       			itemPhoto.setFont(new Font("돋움체", 0, 15));
-       			itemPhoto.setBorder(new LineBorder(Color.black,1,true));
-       			//
-       			itemName = new JLabel("itemname");
-       			itemName.setBounds(300, 40, 120, 30);
-       			itemName.setFont(new Font("돋움체", 0, 15));
-       			itemName.setBorder(new LineBorder(Color.black,1,true));
-       			//
-       			auctionPrice = new JLabel("auctionPrice");
-       			auctionPrice.setBounds(300, 100, 120, 30);
-       			auctionPrice.setFont(new Font("돋움체", 0, 15));
-       			auctionPrice.setBorder(new LineBorder(Color.black,1,true));
-           //
-       			auctionTime = new JLabel("auctionTime");
-       			auctionTime.setBounds(500, 40, 120, 30);
-       			auctionTime.setFont(new Font("돋움체", 0, 15));
-       			auctionTime.setBorder(new LineBorder(Color.black,1,true));
-          //
-       			purchaserCount = new JLabel("purchaserCount");
-       			purchaserCount.setBounds(500, 100, 120, 30);
-       			purchaserCount.setFont(new Font("돋움체", 0, 15));
-       			purchaserCount.setBorder(new LineBorder(Color.black,1,true));
-          //
-       			partBtn = new JButton("참여하기");
-       			partBtn.setBounds(900, 50, 100, 100);
-       			partBtn.setFont(new Font("돋움체", 0, 15));
-       			partBtn.setBorder(new LineBorder(Color.black,1,true));
-       			partBtn.addActionListener(this);       
-           //
-       			itemPanel.add(itemName);
-           		itemPanel.add(itemPhoto);
-           		itemPanel.add(auctionPrice);
-           		itemPanel.add(auctionTime);
-           		itemPanel.add(partBtn);
-           		itemPanel.add(purchaserCount);
-           		itemPanel.setBounds(x, y + 200*i, w, h);
-          		listPanel.add(itemPanel);
-       		}
-       //
-      categoryName = new JLabel(cateName);
+       
+       
+      // main 끝나면 라벨 수정
+      categoryName = new JLabel(category);
       categoryName.setBounds(550,30,150,30);
       categoryName.setFont(new Font("돋움체", 0, 20));
+      
+      Vector<ItemBean> vc = mgr.getItemList(category);
+      System.out.println(category);
+      
       memberId = new JLabel("아이디 : " + logId);
-      memberId.setBounds(1150,20,150,30);
+      memberId.setBounds(1150,20,200,30);
       memberId.setFont(new Font("돋움체", 0, 15));
+      
       backBtn = new JButton("뒤로가기");
       backBtn.setBounds(1150, 820, 120, 30);
       backBtn.setFont(new Font("돋움체", 0, 15));
@@ -115,34 +81,123 @@ implements ActionListener{
       logo.setBounds(20,20,130,40);
       c.add(logo);
       //
+     
+      
+      
+      CreateData(vc);
       c.add(categoryName);
       c.add(logo);
       c.add(scroll);
       c.add(memberId);
       c.add(backBtn);
+      
       repaint();
       validate();
    }
    
+   public void CreateData(Vector<ItemBean> vlist) {
+
+	   listPanel.removeAll();
+
+      System.out.println(vlist.size());
+      for (int i = 0; i < vlist.size(); i++) {
+         
+         ItemBean ib = vlist.get(i);
+         
+            itemPanel = new JPanel();
+            itemPanel.setLayout(null);
+            itemPanel.setPreferredSize(new Dimension(1050, 200));
+            itemPanel.setBorder(new LineBorder(Color.black,1,true));
+            //itempanel안에 label / 버튼 넣기
+            itemPhoto = new JLabel(/*new ImageIcon(Login.class.getResource("./image/"+ib.getItemName()+".jpg"))*/);
+            itemPhoto.setBounds(0,0, 250, 200);
+            itemPhoto.setFont(new Font("돋움체", 0, 15));
+            itemPhoto.setBorder(new LineBorder(Color.black,1,true));
+            //
+            itemName = new JLabel(ib.getItemName());
+            itemName.setBounds(300, 30, 220, 50);
+            itemName.setFont(new Font("돋움체", 0, 15));
+            itemName.setHorizontalAlignment(SwingConstants.CENTER);
+            itemName.setBorder(new LineBorder(Color.black,1,true));
+            //
+            auctionPrice = new JLabel(Integer.toString(ib.getItemPrice()) + " 원");
+            auctionPrice.setBounds(300, 120, 220, 50);
+            auctionPrice.setFont(new Font("돋움체", 0, 15));
+            auctionPrice.setHorizontalAlignment(SwingConstants.CENTER);
+            auctionPrice.setBorder(new LineBorder(Color.black,1,true));
+            //
+            int time = ib.getItemEndTime();
+            
+            int hour = time / (60*60);
+            int minute = time / 60 - (hour*60);
+            int second = time % 60;
+            
+            String reHour = Integer.toString(hour);
+            String reMin = Integer.toString(minute);
+            String reSec = Integer.toString(second);
+            
+            
+            auctionTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
+            auctionTime.setBounds(600, 30, 220, 50);
+            auctionTime.setFont(new Font("돋움체", 0, 15));
+            auctionTime.setHorizontalAlignment(SwingConstants.CENTER);
+            auctionTime.setBorder(new LineBorder(Color.black,1,true));
+      //
+            purchaserCount = new JLabel(Integer.toString(ib.getPurchaserCount()) + " 명");
+            purchaserCount.setBounds(600, 120, 220, 50);
+            purchaserCount.setFont(new Font("돋움체", 0, 15));
+            purchaserCount.setHorizontalAlignment(SwingConstants.CENTER);
+            purchaserCount.setBorder(new LineBorder(Color.black,1,true));
+      //
+            JButton partBtn = new JButton("참여하기");
+            partBtn.setBounds(950, 50, 100, 100);
+            partBtn.setFont(new Font("돋움체", 0, 15));
+            partBtn.setBorder(new LineBorder(Color.black,1,true));
+            partBtn.addActionListener(this);
+            ib.setPartBtn(partBtn);
+       
+            
+       //
+       
+             itemPanel.add(itemName);
+             itemPanel.add(itemPhoto);
+             itemPanel.add(auctionPrice);
+             itemPanel.add(auctionTime);
+             itemPanel.add(partBtn);
+             itemPanel.add(purchaserCount);
+             
+             itemPanel.setBounds(50, 50 + 200*i, 1050, 200);
+             
+             listPanel.add(itemPanel);
+         }
+      
+      
+   
+}
+   
+   
+   
    @Override
    public void actionPerformed(ActionEvent e) {
-      Object obj = e.getSource();
       
       logId = memberId.getText();
       logId = logId.substring(logId.lastIndexOf(":")+1).trim();
-      
-      if(obj == backBtn) {
-    	  try {
-    		  dispose();
-    		  Main main = new Main(logId);
-    		  main.setVisible(true);
-		} catch (Exception e2) {
-			e2.printStackTrace();
-		}
-      }
-      
+        
+         Object obj = e.getSource();
+         
+         if(obj==backBtn) {
+            //TODO
+            try {
+               dispose();
+               Main main = new Main(logId);
+               main.setVisible(true);
+            } catch (Exception e2) {
+               e2.printStackTrace();
+            }
+         }
    }
+   
    public static void main(String[] args) {
-	 
+      
    }
 }
