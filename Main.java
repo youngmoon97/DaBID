@@ -33,6 +33,7 @@ import javax.swing.border.TitledBorder;
 
 import project1.ItemRegister.ImageCanvas;
 
+
 public class Main extends JFrame
 implements ActionListener{
    
@@ -72,13 +73,19 @@ implements ActionListener{
         itemPanel.setBorder(hotbidTb);   
    
         ItemBean ibean = mgr.getHotItem();
+       // itemBena ibean = mgr.getItem(1);
         //상품명레이블
         itemName = new JLabel("상품명 : " + ibean.getItemName());
         itemName.setBounds(60, 60, 400, 30);
         itemName.setFont(new Font("돋움체", 0, 17));
+        //이미지 리사이즈
+        ImageIcon icon = new ImageIcon(Login.class.getResource("./image/"+ibean.getItemName()+".jpg"));
+        Image img = icon.getImage();
+        Image changeImg = img.getScaledInstance(450, 370, Image.SCALE_SMOOTH);
+        ImageIcon changeIcon = new ImageIcon(changeImg);
         
-        itemPhoto = new JLabel(new ImageIcon(Login.class.getResource("./image/"+ibean.getItemName()+".jpg")));
-       	itemPhoto.setBorder(new LineBorder(Color.black,1,true));
+        itemPhoto = new JLabel(changeIcon);
+          itemPhoto.setBorder(new LineBorder(Color.black,1,true));
         itemPhoto.setBounds(60, 90, 450, 370);
         //상품설명
         itemMemo= new JLabel("상품 설명 : " + ibean.getItemMemo());
@@ -222,7 +229,9 @@ implements ActionListener{
 	      }else if(obj==hotBidBtn) {//경매페이지로 이동
 	         try {
 	            dispose();
-	            Auction auc = new Auction(logId);
+	            AuctionMgr mgr = new AuctionMgr();
+	            ItemBean ibean= mgr.getHotItem();
+	            Auction auc = new Auction(logId,ibean.getItemNum());
 	            auc.setVisible(true);
 	         } catch (Exception e2) {
 	            e2.printStackTrace();

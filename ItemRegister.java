@@ -226,18 +226,12 @@ public class ItemRegister extends JFrame implements ActionListener {
    class ImageCanvas extends Canvas{
       @Override
       public void paint(Graphics g) {
-         g.drawImage(img, 0, 0, this);
-         
+         g.drawImage(img, 0, 0,550,470, this);
       }
 
    }
    
-//   public static void main(String[] args) {
-//     try {
-//      itemRegister ir = new itemRegister();
-//      ir.setVisible(true);
-//   } catch (Exception e) {
-//      e.printStackTrace();
-//   }
-//   }
+   public static void main(String[] args) {
+	   
+   }
 }

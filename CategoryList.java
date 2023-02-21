@@ -5,7 +5,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
+import java.awt.Image;
+import java.awt.event.ActionEvent;	
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
@@ -44,7 +45,6 @@ implements ActionListener{
      
       Container c = getContentPane();
       setTitle("DaBID 카테고리 리스트 페이지");
-      setLocationRelativeTo(null);
        setSize(1300,900);
        setResizable(false);
        setLayout(null);
@@ -66,7 +66,6 @@ implements ActionListener{
       categoryName.setFont(new Font("돋움체", 0, 20));
       
       Vector<ItemBean> vc = mgr.getItemList(category);
-      System.out.println(category);
       
       memberId = new JLabel("아이디 : " + logId);
       memberId.setBounds(1150,20,200,30);
@@ -99,7 +98,6 @@ implements ActionListener{
 
 	   listPanel.removeAll();
 
-      System.out.println(vlist.size());
       for (int i = 0; i < vlist.size(); i++) {
          
          ItemBean ib = vlist.get(i);
@@ -108,8 +106,14 @@ implements ActionListener{
             itemPanel.setLayout(null);
             itemPanel.setPreferredSize(new Dimension(1050, 200));
             itemPanel.setBorder(new LineBorder(Color.black,1,true));
-            //itempanel안에 label / 버튼 넣기
-            itemPhoto = new JLabel(/*new ImageIcon(Login.class.getResource("./image/"+ib.getItemName()+".jpg"))*/);
+            //itempanel안에 label 
+          //이미지 리사이즈
+            ImageIcon icon = new ImageIcon(Login.class.getResource("./image/"+ib.getItemName()+".jpg"));
+            Image img = icon.getImage();
+            Image changeImg = img.getScaledInstance(250, 200, Image.SCALE_SMOOTH);
+            ImageIcon changeIcon = new ImageIcon(changeImg);
+            
+            itemPhoto = new JLabel(changeIcon);
             itemPhoto.setBounds(0,0, 250, 200);
             itemPhoto.setFont(new Font("돋움체", 0, 15));
             itemPhoto.setBorder(new LineBorder(Color.black,1,true));
@@ -125,7 +129,7 @@ implements ActionListener{
             auctionPrice.setFont(new Font("돋움체", 0, 15));
             auctionPrice.setHorizontalAlignment(SwingConstants.CENTER);
             auctionPrice.setBorder(new LineBorder(Color.black,1,true));
-            //
+            //시간 계산 
             int time = ib.getItemEndTime();
             
             int hour = time / (60*60);
@@ -135,13 +139,15 @@ implements ActionListener{
             String reHour = Integer.toString(hour);
             String reMin = Integer.toString(minute);
             String reSec = Integer.toString(second);
-            
-            
+            int ti = (int) Math.round(Math.random()*10000);
+      //
             auctionTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
             auctionTime.setBounds(600, 30, 220, 50);
             auctionTime.setFont(new Font("돋움체", 0, 15));
             auctionTime.setHorizontalAlignment(SwingConstants.CENTER);
             auctionTime.setBorder(new LineBorder(Color.black,1,true));
+            
+            timerSet ts = new timerSet(auctionTime, ti);
       //
             purchaserCount = new JLabel(Integer.toString(ib.getPurchaserCount()) + " 명");
             purchaserCount.setBounds(600, 120, 220, 50);
@@ -153,10 +159,20 @@ implements ActionListener{
             partBtn.setBounds(950, 50, 100, 100);
             partBtn.setFont(new Font("돋움체", 0, 15));
             partBtn.setBorder(new LineBorder(Color.black,1,true));
-            partBtn.addActionListener(this);
-            ib.setPartBtn(partBtn);
-       
+//            partBtn.addActionListener(this);
+            partBtn.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					logId = memberId.getText();
+				    logId = logId.substring(logId.lastIndexOf(":")+1).trim();
+					dispose();
+					Auction auction = new Auction(logId, ib.getItemNum()) ;
+					auction.setVisible(true);
+				}
+			});
             
+
        //
        
              itemPanel.add(itemName);
@@ -182,7 +198,8 @@ implements ActionListener{
       
       logId = memberId.getText();
       logId = logId.substring(logId.lastIndexOf(":")+1).trim();
-        
+      Vector<ItemBean> vlist = new Vector<ItemBean>();
+      
          Object obj = e.getSource();
          
          if(obj==backBtn) {
@@ -194,8 +211,55 @@ implements ActionListener{
             } catch (Exception e2) {
                e2.printStackTrace();
             }
-         }
+         }/*else {
+        	 for (int i = 0; i < vlist.size(); i++) {
+				ItemBean ibean = vlist.get(i);
+				if (obj == partBtn[i]) {
+		               try {
+		                  dispose();
+		                  Auction auction = new Auction(logId,ibean.getItemNum());
+		                  auction.setVisible(true);
+		               } catch (Exception e2) {
+		                  e2.printStackTrace();
+		               }
+		            }
+			}
+         }*/
    }
+   class timerSet implements Runnable{
+	      
+	      JLabel auctionTime ;
+	      int time;
+	      
+	      public timerSet(JLabel auctionTime, int time) {
+	         this.auctionTime = auctionTime;
+	         this.time = time;
+	         new Thread(this).start();
+	      }
+	      
+	      @Override
+	      public void run() {
+	         while(true) {
+	            try {
+	               time--;
+	               int hour = time / (60 * 60);
+	               int minute = time / 60 - (hour * 60);
+	               int second = time % 60;
+
+	               String reHour = Integer.toString(hour);
+	               String reMin = Integer.toString(minute);
+	               String reSec = Integer.toString(second);
+	               auctionTime.setText(reHour + ":" + reMin + ":" + reSec);
+	               Thread.sleep(1000);
+	              
+	            } catch (InterruptedException e) {
+	               // TODO Auto-generated catch block
+	               e.printStackTrace();
+	            }
+	         }
+	      }
+	      
+	   }
    
    public static void main(String[] args) {
       

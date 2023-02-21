@@ -195,7 +195,7 @@ public class AuctionMgr {
             	ibean.setItemMemo(rs.getString("item_memo"));
             	ibean.setItemPrice(rs.getInt("item_price"));
             	ibean.setPurchaserCount(rs.getInt("purchaser_count"));
-            	ibean.setItemEndTime(rs.getInt("item_endtime"));
+//            	ibean.setItemEndTime(rs.getInt());
             }
          } catch (Exception e) {
             e.printStackTrace();
@@ -204,6 +204,38 @@ public class AuctionMgr {
          }
          return ibean;
       }
+    //옥션 -  아이템 정보가져오기
+      public ItemBean getItem(Integer itemNum){
+         Connection con = null;
+         PreparedStatement pstmt = null;
+         ResultSet rs = null;
+         String sql = null;
+         ItemBean ibean = new ItemBean();
+         try {
+            con = pool.getConnection();
+            sql = "select item_seller, item_num, item_name, item_photo, item_memo, item_price, purchaser_count, item_endtime "
+            		+ "from item "
+            		+ "where item_num = ? ";
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, itemNum);
+            rs = pstmt.executeQuery();
+            if(rs.next()) {
+            	ibean.setItemSeller(rs.getString("item_seller"));
+            	ibean.setItemNum(rs.getInt("item_num"));
+            	ibean.setItemName(rs.getString("item_name"));
+            	ibean.setItemMemo(rs.getString("item_memo"));
+            	ibean.setItemPrice(rs.getInt("item_price"));
+            	ibean.setPurchaserCount(rs.getInt("purchaser_count"));
+            	//ibean.setItemEndTime(rs.getInt("item_endtime"));
+            }
+         } catch (Exception e) {
+            e.printStackTrace();
+         }finally {
+            pool.freeConnection(con, pstmt, rs);
+         }
+         return ibean;
+      }
+   
       //이미지가져오기
       public File selectImg(String itemName) {
   		Connection con = null;
@@ -272,17 +304,18 @@ public class AuctionMgr {
          Vector<ItemBean> ilist = new Vector<ItemBean>();
          try {
             con = pool.getConnection();
-            sql = "select item_name, item_price, purchaser_count,timestampdiff(second, now(), item_endtime) "
+            sql = "select item_num, item_name, item_price, purchaser_count,timestampdiff(second, now(), item_endtime) "
             		+ "from item i , category c "
             		+ "where i.item_categorynum = c.category_num "
-            		+ "	and c.category_name  = ? ";
+            		+ "and c.category_name  = ? "
+            		+ "and i.item_status = 2";
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, ItemCategoryName);
             rs = pstmt.executeQuery();
             while(rs.next()) {
                ItemBean bean = new ItemBean();
+               bean.setItemNum(rs.getInt("item_num"));
                bean.setItemName(rs.getString("item_name"));
-               System.out.println("111"+bean.getItemName());
                bean.setItemPrice(rs.getInt("item_price"));
                bean.setPurchaserCount(rs.getInt("purchaser_count"));
                bean.setItemEndTime(rs.getInt("timestampdiff(second, now(), item_endtime)"));
@@ -296,6 +329,7 @@ public class AuctionMgr {
          return ilist;
       }   
    //아이템 리스트(마이페이지 판매한 상품 - member_id = item_seller)
+      //TODO
    public Vector<ItemBean> getSellItemList(String itemSeller){
       Connection con = null;
       PreparedStatement pstmt = null;
@@ -328,6 +362,7 @@ public class AuctionMgr {
    }
    
    //아이템 리스트(마이페이지 구매한 상품 - join 필요할 것 같음)
+   //TODO
    public Vector<ItemBean> getBuyItemList(String auctionPurchaser){
       Connection con = null;
       PreparedStatement pstmt = null;
@@ -359,6 +394,7 @@ public class AuctionMgr {
    }
    
    //아이템 리스트(마이페이지 경매 참여 상품 - auction)
+   //TODO
    public Vector<ItemBean> getIngItemList(String itemPurchaser){
       Connection con = null;
       PreparedStatement pstmt = null;
@@ -419,13 +455,12 @@ public class AuctionMgr {
 	      String sql = null;
 	      try {
 	         con = pool.getConnection();
-	         sql = "insert into auction (auction_itemnum, auction_time, auction_price,auction_purchaser) "
+	         sql = "insert into auction (auction_itemnum, auction_time, auction_price, auction_purchaser) "
 	         		+ "values(? ,now(), ?, ?)";
 	         pstmt = con.prepareStatement(sql);
 	         pstmt.setInt(1, itemNum);
 	         pstmt.setInt(2, itemPrice);
 	         pstmt.setString(3, purchaserName);
-	         System.out.println(itemNum);
 	         pstmt.executeUpdate();
 	      } catch (Exception e) {
 	         e.printStackTrace();
@@ -433,7 +468,8 @@ public class AuctionMgr {
 	         pool.freeConnection(con, pstmt);
 	      }
 	   }
-   //comment list(댓글 - 판매상품별)
+   //comment가져오기(댓글 - 판매상품별)
+   //TODO
    public Vector<CommentBean> getCommentList(Integer commentItemNum){
       Connection con = null;
       PreparedStatement pstmt = null;
@@ -442,17 +478,17 @@ public class AuctionMgr {
       Vector<CommentBean> clist = new Vector<CommentBean>();
       try {
          con = pool.getConnection();
-         sql = "select seller_id, purchaser_id, comment_time, comment_content"
-               + "from comment where comment_itemnum = ?";
+         sql = "select purchaser_id, comment_content , comment_time "
+         		+ "from comment "
+         		+ "where comment_itemnum = ?";
          pstmt = con.prepareStatement(sql);
          pstmt.setInt(1, commentItemNum);
          rs = pstmt.executeQuery();
          while(rs.next()) {
             CommentBean bean = new CommentBean();
-            bean.setSellerId(rs.getString("seller_id"));
             bean.setPurchaserId(rs.getString("purchaser_id"));
-            bean.setCommentTime(rs.getDate("comment_time"));
             bean.setCommentContent(rs.getString("comment_content"));
+            bean.setCommentTime(rs.getDate("comment_time"));
             clist.addElement(bean);
          }         
       } catch (Exception e) {
@@ -512,5 +548,29 @@ public class AuctionMgr {
 	      }
 	      return clist;
 	   }
+	//카테고리리스트에서 아이템 가져오기
+	//TODO
+		/*public Vector<ItemBean> getOneItem(){
+		      Connection con = null;
+		      PreparedStatement pstmt = null;
+		      ResultSet rs = null;
+		      String sql = null;
+		      Vector<ItemBean> clist = new Vector<ItemBean>();
+		      try {
+		         con = pool.getConnection();
+		         sql = "select  "
+		               + "from item";
+		         pstmt = con.prepareStatement(sql);
+		         rs = pstmt.executeQuery();
+		         while(rs.next()) {
+		            cbean.setCategoryName(rs.getString("category_name"));
+		         }
+		      } catch (Exception e) {
+		         e.printStackTrace();
+		      }finally {
+		         pool.freeConnection(con, pstmt, rs);
+		      }
+		      return clist;
+		   }*/
 
 }

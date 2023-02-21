@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,18 +31,18 @@ implements ActionListener{
 	JButton commentBtn, auctionBtn, backBtn; 
 	TitledBorder itemTb, commentTb;
 	JOptionPane alarm = new JOptionPane();
-	String logId;
-	AuctionMgr mgr = new AuctionMgr();
-    ItemBean ibean = mgr.getHotItem();
+	String logId;	// 다음에는 전역변수로 하기
+	
     
 	Font f = new Font("돋움체",0,15);
 	
-	public Auction(String logId) {
+	public Auction(String logId, int itemNum) {
 		setTitle("DaBID 경매페이지");
 	    setSize(1300,900);
 	    setResizable(false);
 	    setLayout(null);
 	    setLocationRelativeTo(null); //가운데 출력
+	    int itemNum2 = itemNum;
 	    Container c = getContentPane();
 	    
 	    itemTb = new TitledBorder(new LineBorder(Color.black,1,true),"상품설명");
@@ -58,11 +59,14 @@ implements ActionListener{
 	    memberId = new JLabel("아이디 : "+logId);
 	    memberId.setBounds(1150,20,150,30);
         memberId.setFont(new Font("돋움체", 0, 15));
+        
+        AuctionMgr mgr = new AuctionMgr();
+        ItemBean ibean = mgr.getItem(itemNum);
 	     //상품명레이블
 	    itemName = new JLabel("상품명 : " + ibean.getItemName());
 	    itemName.setBounds(60, 60, 100, 30);
 	    itemName.setFont(new Font("돋움체", 0, 15));
-	    System.out.println(ibean.getItemName());
+	   
 	    //상품이미지
 	    itemPhoto = new JLabel(new ImageIcon(Login.class.getResource("./image/"+ibean.getItemName()+".jpg")));
 	    itemPhoto.setBorder(new LineBorder(Color.black,1,true));
@@ -93,11 +97,25 @@ implements ActionListener{
 	    commentPanel.setLayout(null);
 	    commentPanel.setBounds(660, 80, 550, 700);
 	    commentPanel.setBorder(commentTb);
-	    //textarea
+	  //textarea
 	    commentArea = new JTextArea();
 	    commentArea.setBounds(60, 90, 450, 450);
 	    commentArea.setBorder(new LineBorder(Color.black,1,true));
 	    commentArea.setEnabled(false);
+	    //이전 댓글 가져오기
+	    Vector<CommentBean> clist = mgr.getCommentList(ibean.getItemNum());
+	    for (int i = 0; i < clist.size(); i++) {
+	    	
+	    	CommentBean cbean = clist.get(i);
+	    	if(cbean.getCommentContent()==null) {
+	    		commentArea.append("이전 댓글이 없습니다.\n");
+	    	}else {
+	    		Date time = cbean.getCommentTime();
+				String purchaserId = cbean.getPurchaserId();
+				String comment = cbean.getCommentContent();
+				commentArea.append(time+"\n"+purchaserId+" : "+comment+"\n");
+	    	}
+		}
 	    //남은시간
 	    auctionTime = new JLabel("남은 시간 : ");
 	    auctionTime.setBounds(400,30,130,30);
@@ -114,7 +132,26 @@ implements ActionListener{
 	    commentBtn.setBounds(440, 540, 70, 30);
 	    commentBtn.setBorder(new LineBorder(Color.black,1,true));
 	    commentBtn.setFont(f);
-	    commentBtn.addActionListener(this);
+	    commentBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(commentTf.getText().isEmpty()) {
+					 alarm.showMessageDialog(null, "댓글을 입력하세요.");
+				 }else {
+					 String comment = commentTf.getText();
+					 LocalDate now = LocalDate.now();
+					 commentArea.append(now+"\n"+logId +" : "+comment+"\n");
+					 //댓글 저장
+					 String seller = ibean.getItemSeller();
+					 int itemNum = ibean.getItemNum();
+					 System.out.println(seller+logId+itemNum+comment);
+					 mgr.insertComment(seller, logId, itemNum, comment);
+					
+					 commentTf.setText(" ");
+				 }
+			}
+		});
 	    //입찰가격레이블
 	    auctionPriceLbl = new JLabel("입찰가격");
 	    auctionPriceLbl.setBounds(220, 600, 80, 30);
@@ -129,7 +166,30 @@ implements ActionListener{
 	    auctionBtn.setBounds(420, 600, 70, 30);
 	    auctionBtn.setBorder(new LineBorder(Color.black,1,true));
 	    auctionBtn.setFont(f);
-	    auctionBtn.addActionListener(this);
+	    auctionBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(bidpriceTf.getText()==null) {
+					alarm.showMessageDialog(null, "가격을 입력하세요.");
+				}else {
+					
+					int itemNum = ibean.getItemNum();
+					int itemPrice = Integer.parseInt(bidpriceTf.getText());
+					
+					mgr.insertAuction(itemNum, itemPrice, logId);
+					alarm.showMessageDialog(null, "입찰 성공!");
+					try {
+						dispose();
+						Main main = new Main(logId);
+						main.setVisible(true);
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+					
+				}
+			}
+		});
 	    //
 	    commentPanel.add(commentArea);
 	    commentPanel.add(auctionTime);
@@ -163,39 +223,10 @@ implements ActionListener{
 		Object obj = e.getSource();
 		
 		if(obj==commentBtn/*댓글달기*/) {
-			 if(commentTf.getText().isEmpty()) {
-				 alarm.showMessageDialog(this, "댓글을 입력하세요.");
-			 }else {
-				 String comment = commentTf.getText();
-				 LocalDate now = LocalDate.now();
-				 commentArea.append(now+"\n"+logId +" : "+comment+"\n");
-				 //댓글 저장
-				 String seller = ibean.getItemSeller();
-				 int itemNum = ibean.getItemNum();
-				 System.out.println(seller+logId+itemNum+comment);
-				 mgr.insertComment(seller, logId, itemNum, comment);
-				
-				 commentTf.setText(" ");
-			 }
+			 
 			 
 		}else if(obj==auctionBtn/*입찰하기*/){
-			if(bidpriceTf.getText()==null) {
-				alarm.showMessageDialog(this, "가격을 입력하세요.");
-			}else {
-				int itemNum = ibean.getItemNum();
-				int itemPrice = Integer.parseInt(bidpriceTf.getText());
-				
-				System.out.println(itemNum+itemPrice+logId);
-				mgr.insertAuction(itemNum, itemPrice, logId);
-				alarm.showMessageDialog(this, "입찰 성공!");
-				try {
-					Main main = new Main(logId);
-					main.setVisible(true);
-				} catch (Exception e2) {
-					// TODO: handle exception
-				}
-				
-			}
+			
 		}else if(obj==backBtn) {
 			try {
 				dispose();
@@ -209,11 +240,6 @@ implements ActionListener{
 	
 	
 	public static void main(String[] args) {
-		try {
-			Auction a= new Auction("a");
-			a.setVisible(true);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		
 	}
 }

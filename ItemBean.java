@@ -1,7 +1,6 @@
 package project1;
 
 import java.io.File;
-import java.sql.Timestamp;
 
 import javax.swing.JButton;
 
@@ -17,7 +16,7 @@ public class ItemBean {
    private int itemStartTime;
    private int itemEndTime;
    private int purchaserCount;
-   private JButton partBtn;
+
    
    public int getItemNum() {
       return itemNum;
@@ -85,12 +84,7 @@ public class ItemBean {
    public void setPurchaserCount(int purchaserCount) {
       this.purchaserCount = purchaserCount;
    }
-   public JButton getPartBtn() {
-      return partBtn;
-   }
-   public void setPartBtn(JButton partBtn) {
-      this.partBtn = partBtn;
-   }
+
    
    
 }
