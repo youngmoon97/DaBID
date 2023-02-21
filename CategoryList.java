@@ -48,7 +48,8 @@ implements ActionListener{
        setSize(1300,900);
        setResizable(false);
        setLayout(null);
-       
+       setLocationRelativeTo(null); //가운데 출력
+
        listPanel = new JPanel();
        listPanel.setLayout(new GridLayout(0,1, 10, 10));
        catagoryListTb = new TitledBorder(new LineBorder(Color.black,1,true),"카테고리 리스트");
@@ -146,7 +147,7 @@ implements ActionListener{
             auctionTime.setFont(new Font("돋움체", 0, 15));
             auctionTime.setHorizontalAlignment(SwingConstants.CENTER);
             auctionTime.setBorder(new LineBorder(Color.black,1,true));
-            
+           
             timerSet ts = new timerSet(auctionTime, ti);
       //
             purchaserCount = new JLabel(Integer.toString(ib.getPurchaserCount()) + " 명");
@@ -159,7 +160,6 @@ implements ActionListener{
             partBtn.setBounds(950, 50, 100, 100);
             partBtn.setFont(new Font("돋움체", 0, 15));
             partBtn.setBorder(new LineBorder(Color.black,1,true));
-//            partBtn.addActionListener(this);
             partBtn.addActionListener(new ActionListener() {
 				
 				@Override
@@ -171,10 +171,7 @@ implements ActionListener{
 					auction.setVisible(true);
 				}
 			});
-            
-
-       //
-       
+            //
              itemPanel.add(itemName);
              itemPanel.add(itemPhoto);
              itemPanel.add(auctionPrice);
@@ -186,9 +183,6 @@ implements ActionListener{
              
              listPanel.add(itemPanel);
          }
-      
-      
-   
 }
    
    

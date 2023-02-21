@@ -16,6 +16,8 @@ public class ItemBean {
    private int itemStartTime;
    private int itemEndTime;
    private int purchaserCount;
+   private int allCount;
+   
 
    
    public int getItemNum() {
@@ -84,6 +86,13 @@ public class ItemBean {
    public void setPurchaserCount(int purchaserCount) {
       this.purchaserCount = purchaserCount;
    }
+   public int getAllCount() {
+	  return allCount;
+   }
+   public void setAllCount(int allCount) {
+	  this.allCount = allCount;
+   }
+   
 
    
    

@@ -219,6 +219,9 @@ implements ActionListener{
 	      }else if(obj==backBtn) {//뒤로가기
 	         alarm.showMessageDialog(this, "메인 페이지입니다.");
 	      }else if(obj==myPageBtn) {//마이페이지
+	    	  mgr.getIngItemList(logId);
+	    	  mgr.getBuyItemList(logId);
+	    	  mgr.getSellItemList(logId);
 	         try {
 	            dispose();
 	            Mypage mp = new Mypage(logId);

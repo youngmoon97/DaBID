@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -44,7 +45,6 @@ implements ActionListener{
       //logolbl.setIcon(new ImageIcon(Login.class.getResource("/dabid/dabid.jpg")));
       logolbl.setHorizontalAlignment(SwingConstants.CENTER);
       logolbl.setBounds(15, 30,300,500);
-      
       
       //아이디 label
       memberId = new JLabel("아이디");

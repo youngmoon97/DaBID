@@ -16,6 +16,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Vector;
+import java.util.Locale.Category;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -40,7 +42,7 @@ public class ItemRegister extends JFrame implements ActionListener {
    JComboBox<String> categoryCombobox, timeCombobox;
    TitledBorder registerTb;
    JOptionPane alarm = new JOptionPane();
-   String[] categoryName = {"디지털기기","취미/게임/음반","가구/인테리어","스포츠/레저","생활가전","의류","반려동물용품","뷰티/미용","차량","도서"};
+   String[] categoryName = {"디지털기기", "의류","생활가전","스포츠/레저","취미/게임/음반","뷰티/미용","반려동물용품","가구/인테리어","차량","도서"};
    String[] timelist = {"60분", "10분"};
    FileDialog read;
    Image img;
@@ -129,8 +131,11 @@ public class ItemRegister extends JFrame implements ActionListener {
       imageBtn.setBounds(510, 95, 90, 20);
       imageBtn.setFont(new Font("돋움체",0,10));
       imageBtn.addActionListener(this);
+
+
       //JComboBox
-      categoryCombobox = new JComboBox<>(categoryName);
+      categoryCombobox = new JComboBox<String>(categoryName);
+    
       categoryCombobox.setBounds(750, 410, 270, 30);
       
       timeCombobox = new JComboBox<>(timelist);
