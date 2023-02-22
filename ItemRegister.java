@@ -3,6 +3,7 @@ package project1;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -79,11 +80,11 @@ public class ItemRegister extends JFrame implements ActionListener {
       memberId.setFont(new Font("맑은 고딕", 0, 15));
       
       itemName = new JLabel("상품명 :");
-      itemName.setBounds(60 ,60, 100, 30);
-      itemName.setFont(new Font("맑은 고딕", Font.BOLD , 15));
+      itemName.setBounds(60 ,63, 100, 30);
+      itemName.setFont(new Font("맑은 고딕", Font.BOLD , 17));
       
       canvas = new ImageCanvas();
-      canvas.setBounds(50, 120, 550, 470);
+      canvas.setBounds(60, 120, 510, 540);
 //      itemPhoto = new JLabel("이미지 등록");
 //      itemPhoto.setBorder(new LineBorder(Color.black, 1, true));
 //      itemPhoto.setBounds(50, 120, 550, 470);
@@ -98,7 +99,7 @@ public class ItemRegister extends JFrame implements ActionListener {
       itemprice.setFont(new Font("맑은 고딕", Font.BOLD,17));
       
       itemmemo = new JLabel("상품 설명");
-      itemmemo.setBounds(650, 80, 100, 30);
+      itemmemo.setBounds(650, 63, 100, 30);
       itemmemo.setFont(new Font("맑은 고딕", Font.BOLD, 17));
       
       won = new JLabel("원");
@@ -111,25 +112,25 @@ public class ItemRegister extends JFrame implements ActionListener {
       
       //JTextArea
       taName = new JTextField(); //상품명
-      taName.setBounds(140, 67, 430, 20);
+      taName.setBounds(140, 67, 430, 25);
       
       taMemo = new JTextArea(); //상품설명
-      taMemo.setBounds(650, 120, 450, 260);
+      taMemo.setBounds(650, 100, 450, 280);
       
       taPrice = new JTextField(); //시작 가격
       taPrice.setBounds(750, 460, 200, 30);
       
       //JButton
       registerBtn = new JButton("상품 등록");
-      registerBtn.setBounds(520, 630, 100, 40);
+      registerBtn.setBounds(1060, 680, 100, 40);
       registerBtn.setFont(new Font("맑은 고딕", Font.BOLD, 15));
       registerBtn.addActionListener(this);
       backBtn = new JButton("뒤로가기");
-      backBtn.setBounds(1150, 800, 120, 30);
+      backBtn.setBounds(1150, 820, 120, 30);
       backBtn.setFont(new Font("맑은 고딕",Font.BOLD,15));
       backBtn.addActionListener(this);
       imageBtn = new JButton("이미지등록");
-      imageBtn.setBounds(480, 95, 90, 20);
+      imageBtn.setBounds(540, 180, 90, 30);
       imageBtn.setFont(new Font("맑은 고딕",Font.BOLD,10));
       imageBtn.addActionListener(this);
 
@@ -166,6 +167,24 @@ public class ItemRegister extends JFrame implements ActionListener {
       taMemo.setBorder(javax.swing.BorderFactory.createEmptyBorder());
       taPrice.setBackground(color);
       taPrice.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+      //이미지버튼 디자인
+      imageBtn.setBackground(Color.black);
+      imageBtn.setForeground(Color.white);
+      imageBtn.setBorderPainted(false);
+      imageBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      this.add(imageBtn);
+      //상품등록버튼 디자인
+      registerBtn.setBackground(Color.black);
+      registerBtn.setForeground(Color.white);
+      registerBtn.setBorderPainted(false);
+      registerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      this.add(registerBtn);
+      //버튼 위 커서 모양 변경
+      backBtn.setBackground(Color.black);
+      backBtn.setForeground(Color.white);
+      backBtn.setBorderPainted(false);
+      backBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+      this.add(backBtn);
       //출력
       c.add(memberId);
       c.add(itemPanel);
@@ -240,7 +259,7 @@ public class ItemRegister extends JFrame implements ActionListener {
    class ImageCanvas extends Canvas{
       @Override
       public void paint(Graphics g) {
-         g.drawImage(img, 0, 0,550,470, this);
+         g.drawImage(img, 5, 20,500,500, this);
       }
 
    }
