@@ -103,7 +103,8 @@ implements ActionListener{
 	    commentArea = new JTextArea();
 	    commentArea.setBounds(60, 90, 450, 450);
 	    commentArea.setBorder(new LineBorder(Color.black,1,true));
-	    commentArea.setEnabled(false);
+	    //commentArea.setEnabled(false);
+	    
 	    //이전 댓글 가져오기
 	    Vector<CommentBean> clist = mgr.getCommentList(ibean.getItemNum());
 	    for (int i = 0; i < clist.size(); i++) {
@@ -153,12 +154,19 @@ implements ActionListener{
 					 alarm.showMessageDialog(null, "댓글을 입력하세요.");
 				 }else {
 					 String comment = commentTf.getText();
+					 String seller = ibean.getItemSeller();
+					 int itemNum = ibean.getItemNum();
+					 //TODO 댓글 사람에 따라 색상바꾸기
+					 /*if(seller == logId) {
+						 //판매자의 답글
+						 commentTf.setForeground(Color.red);
+					 }else {
+						 commentArea.setForeground(Color.blue);
+					 }*/
 					 LocalDate now = LocalDate.now();
 					 commentArea.append(now+"\n"+logId +" : "+comment+"\n");
 					 //댓글 저장
-					 String seller = ibean.getItemSeller();
-					 int itemNum = ibean.getItemNum();
-					 System.out.println(seller+logId+itemNum+comment);
+					 
 					 mgr.insertComment(seller, logId, itemNum, comment);
 					
 					 commentTf.setText(" ");
@@ -246,12 +254,7 @@ implements ActionListener{
 		
 		Object obj = e.getSource();
 		
-		if(obj==commentBtn/*댓글달기*/) {
-			 
-			 
-		}else if(obj==auctionBtn/*입찰하기*/){
-			
-		}else if(obj==backBtn) {
+		if(obj==backBtn) {
 			try {
 				dispose();
 				Main main = new Main(logId);

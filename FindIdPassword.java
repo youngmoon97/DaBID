@@ -110,9 +110,17 @@ implements ActionListener{
       findPwPanel.add(pwFindIdtxt);
       findPwPanel.add(pwFindEmailtxt);
       findPwPanel.add(findPwBtn);
-      
+      //logo
       logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
 	  logo.setBounds(270,10,130,40);
+	  //디자인
+      //배경색
+      c.setBackground(Color.white);
+      //TextField 색
+      Color txtColor = new Color(240,240,240);
+//      txt.setBackground(txtColor);
+
+	  //add
 	  c.add(logo);
       c.add(findIdPanel);
       c.add(findPwPanel);

@@ -237,6 +237,11 @@ public class ItemRegister extends JFrame implements ActionListener {
    }
    
    public static void main(String[] args) {
-	   
+	   try {
+		ItemRegister ir = new ItemRegister("aaa");
+		ir.setVisible(true);
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
    }
 }
