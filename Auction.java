@@ -170,24 +170,35 @@ implements ActionListener{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(bidpriceTf.getText()==null) {
-					alarm.showMessageDialog(null, "가격을 입력하세요.");
+				int itemNum = ibean.getItemNum();
+				if(ibean.getItemSeller().equals(logId)) {
+					alarm.showMessageDialog(null, "자신의 상품은 입찰하지 못합니다.");
 				}else {
-					
-					int itemNum = ibean.getItemNum();
-					int itemPrice = Integer.parseInt(bidpriceTf.getText());
-					
-					mgr.insertAuction(itemNum, itemPrice, logId);
-					alarm.showMessageDialog(null, "입찰 성공!");
-					try {
-						dispose();
-						Main main = new Main(logId);
-						main.setVisible(true);
-					} catch (Exception e2) {
-						// TODO: handle exception
-					}
-					
+					if(bidpriceTf.getText().equals("")) {
+			               alarm.showMessageDialog(null, "가격을 입력하세요.");
+			               bidpriceTf.requestFocus();
+			            }else {
+			               int itemPrice = Integer.parseInt(bidpriceTf.getText());
+			               if (itemPrice > ibean.getItemPrice()) {
+			                  mgr.insertAuction(itemNum, itemPrice, logId);
+			                  alarm.showMessageDialog(null, "입찰 성공!");
+			                  
+			                  try {
+			                     dispose();
+			                     Main main = new Main(logId);
+			                     main.setVisible(true);
+			                  } catch (Exception e2) {
+			                     // TODO: handle exception
+			                  }
+			               }else {
+			                  alarm.showMessageDialog(null, "가격을 현재가 이상으로 입력해주세요.");
+			                  bidpriceTf.setText("");
+			                  bidpriceTf.requestFocus();
+			               }
+			            }
 				}
+	            
+	            
 			}
 		});
 	    //

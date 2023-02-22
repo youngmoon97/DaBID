@@ -27,7 +27,7 @@ public class Admin extends JFrame implements ActionListener {
 	JTable biddingTb, bidendTb;
 	String logId;
 	String[] cbList = {"카테고리 별 통계", "금액 별 통계", "경매 log"};
-	String[] categoryNames = {"디지털기기","취미/게임/음반","가구/인테리어","스포츠/레저","생활가전","의류","반려동물용품","뷰티/미용","중고차","도서"};
+	String[] categoryNames = {"디지털기기", "의류","생활가전","스포츠/레저","취미/게임/음반","뷰티/미용","반려동물용품","가구/인테리어","차량","도서"};
 	
 	String bidding_header[] = {"상품 이름", "판매자 ID", "참여 인원", "현재 가격"};
 	String bidend_header[] = {"상품 이름", "판매자 ID", "구매자 ID", "참여 인원", "현재 가격"};

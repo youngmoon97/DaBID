@@ -584,23 +584,42 @@ public class AuctionMgr {
 	      return clist;
 	   }
 	 
-	//비밀번호 변경
-	   public boolean pwChange(String memberPwd, String memberId) {
+	//비밀번호 변경- 마이페이지
+	   public void pwChange(String memberPwd, String memberId) {
+	      Connection con = null;
+	      PreparedStatement pstmt = null;
+	      String sql = null;
+	      try {
+	         con = pool.getConnection();
+	         sql = "update `member` set member_pw = ? where member_name = ?";
+	         pstmt = con.prepareStatement(sql);
+	         pstmt.setString(1, memberPwd);
+	         pstmt.setString(2, memberId);
+	         pstmt.executeUpdate();
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }finally {
+	         pool.freeConnection(con, pstmt);
+	      }
+	   }
+	 //현재비밀번호 확인 -마이페이지
+	   public boolean pwChk(String memberPwd, String memberId) {
 	      Connection con = null;
 	      PreparedStatement pstmt = null;
 	      ResultSet rs = null;
 	      String sql = null;
 	      boolean flag = false;
-	      
 	      try {
 	         con = pool.getConnection();
-	         sql = "update `member` set member_pw = ? where member_id = ?";
+	         sql = "select count(member_pw) "
+	         		+ "from member "
+	         		+ "where member_pw = ? and member_id = ?";
 	         pstmt = con.prepareStatement(sql);
 	         pstmt.setString(1, memberPwd);
 	         pstmt.setString(2, memberId);
 	         rs = pstmt.executeQuery();
-	         if(rs.next()&&rs.getInt(2)==2)
-	            flag = true;
+	         if(rs.next()&&rs.getInt(1)==1)
+	             flag = true;
 	      } catch (Exception e) {
 	         e.printStackTrace();
 	      }finally {

@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
@@ -40,7 +41,7 @@ implements ActionListener{
    TitledBorder soonTb, buyTb, sellTb, pwTb;
    JScrollPane myPageScroll;
    String logId;
-   
+   JOptionPane alarm = new JOptionPane();
    AuctionMgr mgr;
    
    String myPageCt[] = {"경매 참여 상품", "구매한 상품", "판매한 상품", "비밀번호 변경"};
@@ -328,7 +329,7 @@ implements ActionListener{
       
    
    public void addData(int index) {
-      
+	   
          myPagePanel.removeAll();
          
          Vector<ItemBean> vlist;
@@ -350,8 +351,6 @@ implements ActionListener{
             String reHour = Integer.toString(hour);
             String reMin = Integer.toString(minute);
             String reSec = Integer.toString(second);
-            
-            
             
             ImageIcon icon = new ImageIcon(Login.class.getResource("./image/"+vlist.get(i).getItemName()+".jpg"));
             Image img = icon.getImage();
@@ -389,7 +388,7 @@ implements ActionListener{
                p = CreateBuyData(changeIcon, vlist.get(i).getItemName(), vlist.get(i).getItemPrice(),
                      vlist.get(i).getItemStatus(), reHour, reMin, reSec);
                
-               p.setPreferredSize(new Dimension(420, 50));
+               p.setPreferredSize(new Dimension(420, 300));
             myPagePanel.add(p);
             }
             
@@ -417,7 +416,7 @@ implements ActionListener{
                p = CreateSellData(changeIcon,vlist.get(i).getItemName(), vlist.get(i).getItemPrice(),
                      vlist.get(i).getItemStatus(), reHour, reMin, reSec);
                
-               p.setPreferredSize(new Dimension(420, 50));
+               p.setPreferredSize(new Dimension(420, 300));
                myPagePanel.add(p);
             }
             
@@ -425,17 +424,81 @@ implements ActionListener{
             
          } else if (index == 3) {
         	 // index 3 (비밀번호 변경)
-        	 /*String newtext;
-        	 char[] pwChk = newPw.getPassword();
-        	 for (int i = 0; i < pwChk.length; i++) {
-       		  	Character.toString(pwChk[i]);
-       		  	newtext += (newtext.equals("")) ? ""+pwChk[i]+"" : ""+pwChk[i]+"";
-             }
-        	 mgr.pwChange(newtext, logId);
-*/
+        	 itemPanel = new JPanel();
+             itemPanel.setLayout(null);
+             itemPanel.setBounds(10, 20, 940, 300);
+             itemPanel.setBorder(new LineBorder(Color.black, 1, true));
+             
+          // 현재 비밀번호, 새 비밀번호, 비밀번호 확인 label
+         	
+             nowPwlbl = new JLabel("현재 비밀번호");
+             newPwlbl = new JLabel("새 비밀번호");
+             newCheckPwlbl = new JLabel("비밀번호 확인");
+             
+             nowPwlbl.setBounds(200, 170, 190, 30);
+             newPwlbl.setBounds(200, 320, 190, 30);
+             newCheckPwlbl.setBounds(200, 470, 190, 30);
+             
+             nowPwlbl.setFont(new Font("돋움체", 1, 21));
+             newPwlbl.setFont(new Font("돋움체", 1, 21));
+             newCheckPwlbl.setFont(new Font("돋움체", 1, 21));
+             
+             // 현재 비밀번호, 새비밀번호, 비밀번호 확인 JPasswordField
+             nowPw = new JPasswordField();
+             newPw = new JPasswordField();
+             newCheckPw = new JPasswordField();
+             
+             nowPw.setBounds(390, 170, 300, 30);
+             newPw.setBounds(390, 320, 300, 30);
+             newCheckPw.setBounds(390, 470, 300, 30);
+             
+             nowPw.setFont(new Font("돋움체", 0, 21));
+             newPw.setFont(new Font("돋움체", 0, 21));
+             newCheckPw.setFont(new Font("돋움체", 0, 21));
+             
+             // save 버튼
+             saveBtn = new JButton("변경");
+             saveBtn.setBounds(850,600, 80, 30);
+             saveBtn.setFont(new Font("돋움체", 0, 20));
+             saveBtn.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(mgr.pwChk(new String(nowPw.getPassword()), logId)) {
+						//현재 비밀번호 일치
+						System.out.println(new String(newPw.getPassword())+"111");
+						System.out.println(new String(newCheckPw.getPassword())+"111");
+						if(new String(newPw.getPassword()).equals(new String(newCheckPw.getPassword())) ) {
+							//새 비밀번호 확인
+							mgr.pwChange(new String(newPw.getPassword()), logId);
+							//바꾸기
+							alarm.showMessageDialog(null, "비밀번호가 변경되었습니다.");
+							nowPw.setText("");
+							newPw.setText("");
+							newCheckPw.setText("");
+						}else {
+							alarm.showMessageDialog(null, "새로운 비밀번호를 확인하세요.");
+						}
+						
+					}else {
+						alarm.showMessageDialog(null, "현재 비밀번호를 확인하세요.");
+						nowPw.setText("");
+						nowPw.requestFocus();
+					}
+				}
+			});
+             
+             itemPanel.add(nowPwlbl);
+             itemPanel.add(newPwlbl);
+             itemPanel.add(newCheckPwlbl);
+             itemPanel.add(nowPw);
+             itemPanel.add(newPw);
+             itemPanel.add(newCheckPw);
+             itemPanel.add(saveBtn);
+             
+             myPagePanel.add(itemPanel);
          }
    }
-
+   
 @Override
    public void actionPerformed(ActionEvent e) {
 
