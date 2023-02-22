@@ -140,7 +140,6 @@ implements ActionListener{
             String reHour = Integer.toString(hour);
             String reMin = Integer.toString(minute);
             String reSec = Integer.toString(second);
-            int ti = (int) Math.round(Math.random()*10000);
       //
             auctionTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
             auctionTime.setBounds(600, 30, 220, 50);
@@ -148,9 +147,9 @@ implements ActionListener{
             auctionTime.setHorizontalAlignment(SwingConstants.CENTER);
             auctionTime.setBorder(new LineBorder(Color.black,1,true));
            
-            timerSet ts = new timerSet(auctionTime, ti);
+            timerSet ts = new timerSet(auctionTime, time);
       //
-            purchaserCount = new JLabel(Integer.toString(ib.getPurchaserCount()) + " 명");
+            purchaserCount = new JLabel("참여 인원 : "+Integer.toString(ib.getPurchaserCount()) + " 명");
             purchaserCount.setBounds(600, 120, 220, 50);
             purchaserCount.setFont(new Font("돋움체", 0, 15));
             purchaserCount.setHorizontalAlignment(SwingConstants.CENTER);
@@ -233,27 +232,30 @@ implements ActionListener{
 	      
 	      @Override
 	      public void run() {
-	         while(true) {
-	            try {
-	               time--;
-	               int hour = time / (60 * 60);
-	               int minute = time / 60 - (hour * 60);
-	               int second = time % 60;
+	    	  while(true) {
+		          try {
+		             time--;
+		             if (time < 0) {
+		            break;
+		         }
+		             int hour = time / (60 * 60);
+		             int minute = time / 60 - (hour * 60);
+		             int second = time % 60;
 
-	               String reHour = Integer.toString(hour);
-	               String reMin = Integer.toString(minute);
-	               String reSec = Integer.toString(second);
-	               auctionTime.setText(reHour + ":" + reMin + ":" + reSec);
-	               Thread.sleep(1000);
-	              
-	            } catch (InterruptedException e) {
-	               // TODO Auto-generated catch block
-	               e.printStackTrace();
-	            }
+		             String reHour = Integer.toString(hour);
+		             String reMin = Integer.toString(minute);
+		             String reSec = Integer.toString(second);
+		             
+		             auctionTime.setText("남은 시간 : " +reHour + ":" + reMin + ":" + reSec);
+		             Thread.sleep(1000);
+		            
+		          } catch (InterruptedException e) {
+		             // TODO Auto-generated catch block
+		             e.printStackTrace();
+		          }
+		       }
 	         }
 	      }
-	      
-	   }
    
    public static void main(String[] args) {
       

@@ -43,7 +43,7 @@ public class ItemRegister extends JFrame implements ActionListener {
    TitledBorder registerTb;
    JOptionPane alarm = new JOptionPane();
    String[] categoryName = {"디지털기기", "의류","생활가전","스포츠/레저","취미/게임/음반","뷰티/미용","반려동물용품","가구/인테리어","차량","도서"};
-   String[] timelist = {"60분", "10분"};
+   String[] timelist = {"5분", "60분"};
    FileDialog read;
    Image img;
    String filename;
@@ -192,10 +192,10 @@ public class ItemRegister extends JFrame implements ActionListener {
           Integer timeIdx = timeCombobox.getSelectedIndex(); //종료 시간 인덱스
           Integer time=0; //종료 시간 설정 변수
           if (timeIdx == 0) {
-             time = 60;
+             time = 5;
              mgr.insertItem(logId, categoryIdx, itName, itPrice, file, itMemo, time);
           }else if (timeIdx == 1) {
-             time = 10;
+             time = 60;
              mgr.insertItem(logId, categoryIdx, itName, itPrice, file, itMemo, time);
           }       
           alarm.showMessageDialog(null, "등록완료");

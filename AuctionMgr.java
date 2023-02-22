@@ -195,7 +195,7 @@ public class AuctionMgr {
             	ibean.setItemMemo(rs.getString("item_memo"));
             	ibean.setItemPrice(rs.getInt("item_price"));
             	ibean.setPurchaserCount(rs.getInt("purchaser_count"));
-//            	ibean.setItemEndTime(rs.getInt());
+            	ibean.setItemEndTime(rs.getInt("timestampdiff(second, now(), item_endtime)"));
             }
          } catch (Exception e) {
             e.printStackTrace();
@@ -226,7 +226,7 @@ public class AuctionMgr {
             	ibean.setItemMemo(rs.getString("item_memo"));
             	ibean.setItemPrice(rs.getInt("item_price"));
             	ibean.setPurchaserCount(rs.getInt("purchaser_count"));
-            	//ibean.setItemEndTime(rs.getInt("timestampdiff(second, now(), item_endtime)"));
+            	ibean.setItemEndTime(rs.getInt("timestampdiff(second, now(), item_endtime)"));
             }
          } catch (Exception e) {
             e.printStackTrace();
@@ -583,7 +583,67 @@ public class AuctionMgr {
 	      }
 	      return clist;
 	   }
-	 
+	   //관리자 - 경매 중인 상품
+	    public Vector<ItemBean> getAuctionIng(){
+	         Connection con = null;
+	         PreparedStatement pstmt = null;
+	         ResultSet rs = null;
+	         String sql = null;
+	         Vector<ItemBean> clist = new Vector<ItemBean>();
+	         try {
+	            con = pool.getConnection();
+	            sql = "select item_num, item_name , item_seller , purchaser_count , item_price "
+	                  + "from item "
+	                  + "where item_status = 2";
+	            pstmt = con.prepareStatement(sql);
+	            rs = pstmt.executeQuery();
+	            while(rs.next()) {
+	               ItemBean ibean = new ItemBean();
+	               ibean.setItemNum(rs.getInt("item_num"));
+	               ibean.setItemName(rs.getString("item_name"));
+	               ibean.setItemSeller(rs.getString("item_seller"));
+	               ibean.setPurchaserCount(rs.getInt("purchaser_count"));
+	               ibean.setItemPrice(rs.getInt("item_price"));
+	               clist.addElement(ibean);
+	            }         
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         }finally {
+	            pool.freeConnection(con, pstmt, rs);
+	         }
+	         return clist;
+	      }
+	    
+	   //관리자 - 경매 종료 상품
+	    public Vector<ItemBean> getAuctionEnd(){
+	         Connection con = null;
+	         PreparedStatement pstmt = null;
+	         ResultSet rs = null;
+	         String sql = null;
+	         Vector<ItemBean> clist = new Vector<ItemBean>();
+	         try {
+	            con = pool.getConnection();
+	            sql = "select item_num, item_name , item_seller , purchaser_count , item_price "
+	                  + "from item "
+	                  + "where item_status = 1";
+	            pstmt = con.prepareStatement(sql);
+	            rs = pstmt.executeQuery();
+	            while(rs.next()) {
+	               ItemBean ibean = new ItemBean();
+	               ibean.setItemNum(rs.getInt("item_num"));
+	               ibean.setItemName(rs.getString("item_name"));
+	               ibean.setItemSeller(rs.getString("item_seller"));
+	               ibean.setPurchaserCount(rs.getInt("purchaser_count"));
+	               ibean.setItemPrice(rs.getInt("item_price"));
+	               clist.addElement(ibean);
+	            }         
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         }finally {
+	            pool.freeConnection(con, pstmt, rs);
+	         }
+	         return clist;
+	      }
 	//비밀번호 변경- 마이페이지
 	   public void pwChange(String memberPwd, String memberId) {
 	      Connection con = null;

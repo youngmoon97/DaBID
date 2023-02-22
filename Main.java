@@ -32,6 +32,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import project1.ItemRegister.ImageCanvas;
+import project1.Mypage.timerSet;
 
 
 public class Main extends JFrame
@@ -85,7 +86,7 @@ implements ActionListener{
         ImageIcon changeIcon = new ImageIcon(changeImg);
         
         itemPhoto = new JLabel(changeIcon);
-          itemPhoto.setBorder(new LineBorder(Color.black,1,true));
+        itemPhoto.setBorder(new LineBorder(Color.black,1,true));
         itemPhoto.setBounds(60, 90, 450, 370);
         //상품설명
         itemMemo= new JLabel("상품 설명 : " + ibean.getItemMemo());
@@ -97,9 +98,21 @@ implements ActionListener{
         currentPrice.setBounds(60, 580, 200, 50);
         currentPrice.setFont(new Font("돋움체", 0, 17));
         //상품시간
-        itemTime = new JLabel("종료 시간 : "+ibean.getItemEndTime());
+        int time = ibean.getItemEndTime();
+        
+        int hour = time / (60*60);
+        int minute = time / 60 - (hour*60);
+        int second = time % 60;
+        
+        String reHour = Integer.toString(hour);
+        String reMin = Integer.toString(minute);
+        String reSec = Integer.toString(second);
+        
+        itemTime = new JLabel("남은 시간 : " +reHour+":"+reMin+":"+reSec);
         itemTime.setBounds(60, 630, 300, 50);
         itemTime.setFont(new Font("돋움체", 0, 16));
+        
+        timerSet ts = new timerSet(itemTime, time);
         // 현재참여인원 
         purchaserCount= new JLabel(" 현재 참여 인원 : " + ibean.getPurchaserCount()+"명");
         purchaserCount.setBorder(new LineBorder(Color.black,1,true));
@@ -208,7 +221,7 @@ implements ActionListener{
 	         if(mbean.getMemberPosition()==1) {
 	            try {
 	               dispose();
-	               Admin admin = new Admin();
+	               Admin admin = new Admin(logId);
 	               admin.setVisible(true);
 	            } catch (Exception e2) {
 	               e2.printStackTrace();
@@ -253,7 +266,44 @@ implements ActionListener{
 	         }
 	      }
    }
-   
+   class timerSet implements Runnable{
+	    
+	    JLabel itemTime;
+	    int time;
+	    
+	    public timerSet(JLabel itemTime, int time) {
+	       this.itemTime = itemTime;
+	       this.time = time;
+	       new Thread(this).start();
+	    }
+	    
+	    @Override
+	    public void run() {
+	       while(true) {
+	          try {
+	             time--;
+	             if (time < 0) {
+	            break;
+	         }
+	             int hour = time / (60 * 60);
+	             int minute = time / 60 - (hour * 60);
+	             int second = time % 60;
+
+	             String reHour = Integer.toString(hour);
+	             String reMin = Integer.toString(minute);
+	             String reSec = Integer.toString(second);
+	             
+	             itemTime.setText("남은 시간 : " +reHour + ":" + reMin + ":" + reSec);
+	             Thread.sleep(1000);
+	            
+	          } catch (InterruptedException e) {
+	             // TODO Auto-generated catch block
+	             e.printStackTrace();
+	          }
+	       }
+	    }
+	    
+	 }
    public static void main(String[] args) {
       try {
          //Main main = new Main();

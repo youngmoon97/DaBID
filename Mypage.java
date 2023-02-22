@@ -123,7 +123,7 @@ implements ActionListener{
    }
    
    // 경매 참여 상품 데이터 생성(index 0)
-   public JPanel CreateParticData(ImageIcon photo, int itemNum, String name, int price, int count, String reHour, String reMin, String reSec) {
+   public JPanel CreateParticData(ImageIcon photo, int itemNum, String name, int price, int count, String reHour, String reMin, String reSec, int time) {
       
           itemPanel = new JPanel();
           itemPanel.setLayout(null);
@@ -136,7 +136,7 @@ implements ActionListener{
           particPrice = new JLabel(Integer.toString(price));
           particCount = new JLabel(Integer.toString(count));
           particTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
-           
+          
           particPhoto.setBounds(30, 50, 250, 200);
           particName.setBounds(300, 70, 200, 60);
           particTime.setBounds(550, 70, 200, 60);
@@ -162,23 +162,23 @@ implements ActionListener{
           particPrice.setBorder(new LineBorder(Color.black,1,true));
           particCount.setBorder(new LineBorder(Color.black,1,true));
           
-
+          timerSet ts = new timerSet(particTime, time);
            
            // 상품 재참여 버튼
            itemDeleteBtn = new JButton("재참여");
            itemDeleteBtn.setBounds(780, 100, 130, 100);
            itemDeleteBtn.setFont(new Font("돋움체", 0, 16));
            itemDeleteBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				logId = memberId.getText();
-			    logId = logId.substring(logId.lastIndexOf(":")+1).trim();
-				dispose();
-				Auction auction = new Auction(logId, itemNum) ;
-				auction.setVisible(true);
-			}
-		});
+         
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            logId = memberId.getText();
+             logId = logId.substring(logId.lastIndexOf(":")+1).trim();
+            dispose();
+            Auction auction = new Auction(logId, itemNum) ;
+            auction.setVisible(true);
+         }
+      });
            
            itemPanel.add(particPhoto);
            itemPanel.add(particName);
@@ -191,7 +191,7 @@ implements ActionListener{
    }
    
 // 판매한 상품 데이터 생성(index 1)
-     public JPanel CreateBuyData(ImageIcon photo, String name, int price, int count, String reHour, String reMin, String reSec) {
+     public JPanel CreateBuyData(ImageIcon photo, String name, int price, int count, String reHour, String reMin, String reSec, int time) {
       
           itemPanel = new JPanel();
           itemPanel.setLayout(null);
@@ -227,6 +227,8 @@ implements ActionListener{
           buyTime.setBorder(new LineBorder(Color.black,1,true));
           buyPrice.setBorder(new LineBorder(Color.black,1,true));
           buyCount.setBorder(new LineBorder(Color.black,1,true));
+          
+          timerSet ts = new timerSet(buyTime, time);
            
            itemPanel.add(buyPhoto);
            itemPanel.add(buyName);
@@ -238,7 +240,7 @@ implements ActionListener{
   }
    
       // 판매한 상품 데이터 생성(index 2)
-      public JPanel CreateSellData(ImageIcon photo, String name, int price, int count, String reHour, String reMin, String reSec) {
+      public JPanel CreateSellData(ImageIcon photo, String name, int price, int count, String reHour, String reMin, String reSec, int time) {
       
           itemPanel = new JPanel();
           itemPanel.setLayout(null);
@@ -251,7 +253,7 @@ implements ActionListener{
           sellTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
           sellPrice = new JLabel(Integer.toString(price));
           sellCount = new JLabel(Integer.toString(count));
-           
+          
           sellPhoto.setBounds(30, 50, 250, 200);
           sellName.setBounds(300, 70, 200, 60);
           sellTime.setBounds(550, 70, 200, 60);
@@ -274,6 +276,8 @@ implements ActionListener{
           sellTime.setBorder(new LineBorder(Color.black,1,true));
           sellPrice.setBorder(new LineBorder(Color.black,1,true));
           sellCount.setBorder(new LineBorder(Color.black,1,true));
+          
+          timerSet ts = new timerSet(sellTime, time);
            
           itemPanel.add(sellPhoto);
           itemPanel.add(sellName);
@@ -285,14 +289,14 @@ implements ActionListener{
    }
      
       public JPanel CreateChangePwData(String id, String pw) {
-    	  
-    	  itemPanel = new JPanel();
+         
+         itemPanel = new JPanel();
           itemPanel.setLayout(null);
           itemPanel.setBounds(10, 20, 940, 300);
           itemPanel.setBorder(new LineBorder(Color.black, 1, true));
           
        // 현재 비밀번호, 새 비밀번호, 비밀번호 확인 label
-      	
+         
           nowPwlbl = new JLabel("현재 비밀번호");
           newPwlbl = new JLabel("새 비밀번호");
           newCheckPwlbl = new JLabel("비밀번호 확인");
@@ -324,12 +328,12 @@ implements ActionListener{
           saveBtn.setFont(new Font("돋움체", 0, 20));
           
           return itemPanel;
-    	  
+         
       }
       
    
    public void addData(int index) {
-	   
+      
          myPagePanel.removeAll();
          
          Vector<ItemBean> vlist;
@@ -344,37 +348,51 @@ implements ActionListener{
                
                int time = vlist.get(i).getItemEndTime();
                
-               int hour = time / (60 * 60);
-            int minute = time / 60 - (hour * 60);
-            int second = time % 60;
-
-            String reHour = Integer.toString(hour);
-            String reMin = Integer.toString(minute);
-            String reSec = Integer.toString(second);
+               if (time < 0) {
+                  time = 0;
+               }
+               
+               int hour = time / (60*60);
+               int minute = time / 60 - (hour*60);
+               int second = time % 60;
+               
+               String reHour = Integer.toString(hour);
+               String reMin = Integer.toString(minute);
+               String reSec = Integer.toString(second);
+               
+               System.out.println(reHour);
+               System.out.println(reMin);
+               System.out.println(reSec);
             
-            ImageIcon icon = new ImageIcon(Login.class.getResource("./image/"+vlist.get(i).getItemName()+".jpg"));
-            Image img = icon.getImage();
-            Image changeImg = img.getScaledInstance(250, 200, Image.SCALE_SMOOTH);
-            ImageIcon changeIcon = new ImageIcon(changeImg);
+               ImageIcon icon = new ImageIcon(Login.class.getResource("./image/"+vlist.get(i).getItemName()+".jpg"));
+               Image img = icon.getImage();
+               Image changeImg = img.getScaledInstance(250, 200, Image.SCALE_SMOOTH);
+               ImageIcon changeIcon = new ImageIcon(changeImg);
             
                p = CreateParticData(changeIcon, vlist.get(i).getItemNum() ,vlist.get(i).getItemName(), vlist.get(i).getItemPrice(),
-                     vlist.get(i).getItemStatus(), reHour, reMin, reSec);
+                     vlist.get(i).getItemStatus(), reHour, reMin, reSec, time);
                
-               p.setPreferredSize(new Dimension(420, 300));
+               p.setPreferredSize(new Dimension(420, 260));
               myPagePanel.add(p);
             }
             //
          } else if (index == 1) {
             vlist = mgr.getBuyItemList(logId);
             
+            System.out.println(vlist.size());
+            
             for (int i = 0; i < vlist.size(); i++) {
                JPanel p;
                
                int time = vlist.get(i).getItemEndTime();
                
+               if (time < 0) {
+                  time = 0;
+               }
+               
                int hour = time / (60 * 60);
-            int minute = time / 60 - (hour * 60);
-            int second = time % 60;
+               int minute = time / 60 - (hour * 60);
+               int second = time % 60;
 
             String reHour = Integer.toString(hour);
             String reMin = Integer.toString(minute);
@@ -386,23 +404,28 @@ implements ActionListener{
             ImageIcon changeIcon = new ImageIcon(changeImg);
             
                p = CreateBuyData(changeIcon, vlist.get(i).getItemName(), vlist.get(i).getItemPrice(),
-                     vlist.get(i).getItemStatus(), reHour, reMin, reSec);
+                     vlist.get(i).getItemStatus(), reHour, reMin, reSec, time);
                
-               p.setPreferredSize(new Dimension(420, 300));
+               p.setPreferredSize(new Dimension(420, 260));
             myPagePanel.add(p);
             }
             
          } else if (index == 2) {
             vlist = mgr.getSellItemList(logId);
             
+            System.out.println(vlist.size());
             for (int i = 0; i < vlist.size(); i++) {
                JPanel p;
                
                int time = vlist.get(i).getItemEndTime();
                
+               if (time < 0) {
+                  time = 0;
+               }
+               
                int hour = time / (60 * 60);
-            int minute = time / 60 - (hour * 60);
-            int second = time % 60;
+               int minute = time / 60 - (hour * 60);
+               int second = time % 60;
 
             String reHour = Integer.toString(hour);
             String reMin = Integer.toString(minute);
@@ -414,9 +437,9 @@ implements ActionListener{
             ImageIcon changeIcon = new ImageIcon(changeImg);
             
                p = CreateSellData(changeIcon,vlist.get(i).getItemName(), vlist.get(i).getItemPrice(),
-                     vlist.get(i).getItemStatus(), reHour, reMin, reSec);
+                     vlist.get(i).getItemStatus(), reHour, reMin, reSec, time);
                
-               p.setPreferredSize(new Dimension(420, 300));
+               p.setPreferredSize(new Dimension(420, 260));
                myPagePanel.add(p);
             }
             
@@ -499,6 +522,7 @@ implements ActionListener{
          }
    }
    
+
 @Override
    public void actionPerformed(ActionEvent e) {
 
@@ -523,6 +547,44 @@ implements ActionListener{
          }
       }
    }
+
+class timerSet implements Runnable{
+    
+    JLabel particTime;
+    int time;
+    
+    public timerSet(JLabel particTime, int time) {
+       this.particTime = particTime;
+       this.time = time;
+       new Thread(this).start();
+    }
+    
+    @Override
+    public void run() {
+       while(true) {
+          try {
+             time--;
+             if (time < 0) {
+            break;
+         }
+             int hour = time / (60 * 60);
+             int minute = time / 60 - (hour * 60);
+             int second = time % 60;
+
+             String reHour = Integer.toString(hour);
+             String reMin = Integer.toString(minute);
+             String reSec = Integer.toString(second);
+             particTime.setText(reHour + ":" + reMin + ":" + reSec);
+             Thread.sleep(1000);
+            
+          } catch (InterruptedException e) {
+             // TODO Auto-generated catch block
+             e.printStackTrace();
+          }
+       }
+    }
+    
+ }
 
    public static void main(String[] args) {
       

@@ -42,7 +42,7 @@ public class Admin extends JFrame implements ActionListener {
 			{"아이디ㅍㅍ", "ccc", "aaa", "6", "19000"}
 	};
 	
-	public Admin() {
+	public Admin(String logId) {
 		
 		setTitle("DaBID 관리자 페이지");
 		setSize(1300, 900);

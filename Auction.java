@@ -21,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import project1.CategoryList.timerSet;
+
 public class Auction extends JFrame
 implements ActionListener{
 	
@@ -116,11 +118,22 @@ implements ActionListener{
 				commentArea.append(time+"\n"+purchaserId+" : "+comment+"\n");
 	    	}
 		}
-	    //남은시간
-	    auctionTime = new JLabel("남은 시간 : ");
-	    auctionTime.setBounds(400,30,130,30);
+	  //시간 계산 
+        int time = ibean.getItemEndTime();
+        
+        int hour = time / (60*60);
+        int minute = time / 60 - (hour*60);
+        int second = time % 60;
+        
+        String reHour = Integer.toString(hour);
+        String reMin = Integer.toString(minute);
+        String reSec = Integer.toString(second);
+  //
+        auctionTime = new JLabel("남은 시간 : " +reHour + ":" + reMin + ":" + reSec);
+	    auctionTime.setBounds(340,30,180,30);
 	    auctionTime.setBorder(new LineBorder(Color.black,1,true));
 	    auctionTime.setFont(f);
+	    timerSet ts = new timerSet(auctionTime, time);
 	    //comment댓글입력
 	    commentTf = new JTextField();
 	    commentTf.setBounds(60, 540, 380, 30);
@@ -248,7 +261,44 @@ implements ActionListener{
 			}
 		}
 	}
-	
+class timerSet implements Runnable{
+	    
+	    JLabel itemTime;
+	    int time;
+	    
+	    public timerSet(JLabel itemTime, int time) {
+	       this.itemTime = itemTime;
+	       this.time = time;
+	       new Thread(this).start();
+	    }
+	    
+	    @Override
+	    public void run() {
+	       while(true) {
+	          try {
+	             time--;
+	             if (time < 0) {
+	            break;
+	         }
+	             int hour = time / (60 * 60);
+	             int minute = time / 60 - (hour * 60);
+	             int second = time % 60;
+
+	             String reHour = Integer.toString(hour);
+	             String reMin = Integer.toString(minute);
+	             String reSec = Integer.toString(second);
+	             
+	             itemTime.setText("남은 시간 : " +reHour + ":" + reMin + ":" + reSec);
+	             Thread.sleep(1000);
+	            
+	          } catch (InterruptedException e) {
+	             // TODO Auto-generated catch block
+	             e.printStackTrace();
+	          }
+	       }
+	    }
+	    
+	 }
 	
 	public static void main(String[] args) {
 		
