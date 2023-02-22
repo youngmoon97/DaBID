@@ -42,7 +42,7 @@ implements ActionListener{
         Container c = getContentPane();
         
       //logo¿ÃπÃ¡ˆ
-      logolbl = new JLabel(new ImageIcon(Login.class.getResource("./image/fullshot.png")));
+      logolbl = new JLabel(new ImageIcon(Login.class.getResource("./image/dabid.png")));
       //logolbl.setIcon(new ImageIcon(Login.class.getResource("/dabid/dabid.jpg")));
       logolbl.setHorizontalAlignment(SwingConstants.CENTER);
       logolbl.setBounds(15, 30,300,500);

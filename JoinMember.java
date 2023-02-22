@@ -100,8 +100,11 @@ implements ActionListener{
         joinAt = new JLabel("@");
         joinAt.setHorizontalAlignment(SwingConstants.CENTER);
         joinAt.setBounds(430, 415, 20, 30);
-        joinAt.setFont(new Font("¸¼Àº °íµñ", 0, 20));
-        emailCb.setBackground(new Color(255, 255, 255));
+        joinAt.setFont(new Font("¸¼Àº °íµñ", Font.BOLD , 20));
+        //ÀÌ¸ÞÀÏ ÄÞº¸¹Ú½º
+        emailCb.setBounds(450,415,110,30);
+        emailCb.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 15));
+        
         //ÀÌ¸ÞÀÏ ÄÞº¸¹Ú½º
         emailCb.setBounds(450,415,110,30);
         emailCb.setFont(new Font("¸¼Àº °íµñ", 0, 15));

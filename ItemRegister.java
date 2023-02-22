@@ -53,6 +53,7 @@ public class ItemRegister extends JFrame implements ActionListener {
    FileReader reader;
    AuctionMgr mgr = new AuctionMgr();
    String logId;
+   Color color = new Color(240,240,240);
    
    public ItemRegister(String logId) {
       setTitle("DaBID ªÛ«∞µÓ∑œ ∆‰¿Ã¡ˆ");
@@ -68,49 +69,49 @@ public class ItemRegister extends JFrame implements ActionListener {
       itemPanel.setLayout(null);
       
       //TitledBorder
-      registerTb = new TitledBorder(new LineBorder(Color.black, 1, true), "ªÛ«∞ µÓ∑œ");
-      registerTb.setTitleFont(new Font("µ∏øÚ√º", 0, 25));
+      registerTb = new TitledBorder(new LineBorder(Color.black, 2, true), "ªÛ«∞ µÓ∑œ");
+      registerTb.setTitleFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 25));
       itemPanel.setBorder(registerTb);
       
       //JLabel
       memberId = new JLabel("æ∆¿Ãµ : " + logId);
       memberId.setBounds(1150, 20, 150, 30);
-      memberId.setFont(new Font("µ∏øÚ√º", 0, 15));
+      memberId.setFont(new Font("∏º¿∫ ∞ÌµÒ", 0, 15));
       
       itemName = new JLabel("ªÛ«∞∏Ì :");
       itemName.setBounds(60 ,60, 100, 30);
-      itemName.setFont(new Font("µ∏øÚ√º", 0, 15));
+      itemName.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD , 15));
       
       canvas = new ImageCanvas();
       canvas.setBounds(50, 120, 550, 470);
 //      itemPhoto = new JLabel("¿ÃπÃ¡ˆ µÓ∑œ");
 //      itemPhoto.setBorder(new LineBorder(Color.black, 1, true));
 //      itemPhoto.setBounds(50, 120, 550, 470);
-//      itemPhoto.setFont(new Font("µ∏øÚ√º", 0, 20));
+//      itemPhoto.setFont(new Font("∏º¿∫ ∞ÌµÒ", 0, 20));
       
       itemCategory = new JLabel("ƒ´≈◊∞Ì∏Æ :");
       itemCategory.setBounds(650, 410, 100, 30);
-      itemCategory.setFont(new Font("µ∏øÚ√º", 0, 17));
+      itemCategory.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 17));
       
       itemprice = new JLabel("Ω√¿€ ∞°∞› :");
       itemprice.setBounds(650, 460, 100, 30);
-      itemprice.setFont(new Font("µ∏øÚ√º", 0, 17));
+      itemprice.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD,17));
       
       itemmemo = new JLabel("ªÛ«∞ º≥∏Ì");
       itemmemo.setBounds(650, 80, 100, 30);
-      itemmemo.setFont(new Font("µ∏øÚ√º", 0, 17));
+      itemmemo.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 17));
       
       won = new JLabel("ø¯");
       won.setBounds(970, 460, 40, 30);
-      won.setFont(new Font("µ∏øÚ√º", 0, 17));
+      won.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 17));
       
       endtime = new JLabel("¡æ∑· Ω√∞£ :");
       endtime.setBounds(650, 510, 100, 30);
-      endtime.setFont(new Font("µ∏øÚ√º", 0, 17));
+      endtime.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 17));
       
       //JTextArea
       taName = new JTextField(); //ªÛ«∞∏Ì
-      taName.setBounds(140, 65, 430, 20);
+      taName.setBounds(140, 67, 430, 20);
       
       taMemo = new JTextArea(); //ªÛ«∞º≥∏Ì
       taMemo.setBounds(650, 120, 450, 260);
@@ -121,23 +122,20 @@ public class ItemRegister extends JFrame implements ActionListener {
       //JButton
       registerBtn = new JButton("ªÛ«∞ µÓ∑œ");
       registerBtn.setBounds(520, 630, 100, 40);
-      registerBtn.setFont(new Font("µ∏øÚ√º", 0, 15));
+      registerBtn.setFont(new Font("∏º¿∫ ∞ÌµÒ", Font.BOLD, 15));
       registerBtn.addActionListener(this);
       backBtn = new JButton("µ⁄∑Œ∞°±‚");
       backBtn.setBounds(1150, 800, 120, 30);
-      backBtn.setFont(new Font("µ∏øÚ√º",0,15));
+      backBtn.setFont(new Font("∏º¿∫ ∞ÌµÒ",Font.BOLD,15));
       backBtn.addActionListener(this);
       imageBtn = new JButton("¿ÃπÃ¡ˆµÓ∑œ");
-      imageBtn.setBounds(510, 95, 90, 20);
-      imageBtn.setFont(new Font("µ∏øÚ√º",0,10));
+      imageBtn.setBounds(480, 95, 90, 20);
+      imageBtn.setFont(new Font("∏º¿∫ ∞ÌµÒ",Font.BOLD,10));
       imageBtn.addActionListener(this);
-
 
       //JComboBox
       categoryCombobox = new JComboBox<String>(categoryName);
-    
       categoryCombobox.setBounds(750, 410, 270, 30);
-      
       timeCombobox = new JComboBox<>(timelist);
       timeCombobox.setBounds(750, 510, 100, 30);
 
@@ -157,6 +155,17 @@ public class ItemRegister extends JFrame implements ActionListener {
       itemPanel.add(timeCombobox);
       itemPanel.add(imageBtn);
       itemPanel.add(canvas);
+      //µ¿⁄¿Œ
+      //πË∞Êªˆ
+      c.setBackground(Color.white);
+      itemPanel.setBackground(Color.white);
+      //textField µ¿⁄¿Œ
+      taName.setBackground(color);
+      taName.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+      taMemo.setBackground(color);
+      taMemo.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+      taPrice.setBackground(color);
+      taPrice.setBorder(javax.swing.BorderFactory.createEmptyBorder());
       //√‚∑¬
       c.add(memberId);
       c.add(itemPanel);

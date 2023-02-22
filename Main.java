@@ -4,6 +4,7 @@ import java.awt.Button;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -55,6 +56,7 @@ implements ActionListener{
    File file;
    FileReader reader;
    FileDialog read;
+   Color color = new Color(240,240,240);
    
    public Main(String logId) {
         setTitle("DaBID 메인페이지");
@@ -63,10 +65,10 @@ implements ActionListener{
         setLocationRelativeTo(null); //가운데 출력
         setLayout(null);
         Container c = getContentPane();
-        hotbidTb = new TitledBorder(new LineBorder(Color.black,1,true),"HOT BID");
-        commentTb = new TitledBorder(new LineBorder(Color.black,1,true),"카테고리");
-        hotbidTb.setTitleFont(new Font("돋움체",0,25));
-        commentTb.setTitleFont(new Font("돋움체",0,25));
+        hotbidTb = new TitledBorder(new LineBorder(Color.black,2,true),"HOT BID");
+        commentTb = new TitledBorder(new LineBorder(Color.black,2,true),"카테고리");
+        hotbidTb.setTitleFont(new Font("맑은 고딕",Font.BOLD,25));
+        commentTb.setTitleFont(new Font("맑은 고딕",Font.BOLD,25));
         //왼쪽 패널 ( 상품 정보)
         itemPanel = new JPanel();
         itemPanel.setLayout(null);
@@ -74,29 +76,30 @@ implements ActionListener{
         itemPanel.setBorder(hotbidTb);   
    
         ItemBean ibean = mgr.getHotItem();
-       // itemBena ibean = mgr.getItem(1);
-        //상품명레이블
+        // 상품명레이블
         itemName = new JLabel("상품명 : " + ibean.getItemName());
         itemName.setBounds(60, 60, 400, 30);
-        itemName.setFont(new Font("돋움체", 0, 17));
+        itemName.setFont(new Font("맑은 고딕", Font.BOLD, 17));
         //이미지 리사이즈
         ImageIcon icon = new ImageIcon(Login.class.getResource("./image/"+ibean.getItemName()+".jpg"));
         Image img = icon.getImage();
-        Image changeImg = img.getScaledInstance(450, 370, Image.SCALE_SMOOTH);
+        Image changeImg = img.getScaledInstance(430, 370, Image.SCALE_SMOOTH);
         ImageIcon changeIcon = new ImageIcon(changeImg);
         
         itemPhoto = new JLabel(changeIcon);
         itemPhoto.setBorder(new LineBorder(Color.black,1,true));
-        itemPhoto.setBounds(60, 90, 450, 370);
+        itemPhoto.setBounds(60, 90, 430, 370);
         //상품설명
         itemMemo= new JLabel("상품 설명 : " + ibean.getItemMemo());
         itemMemo.setBorder(new LineBorder(Color.black,1,true));
-        itemMemo.setBounds(60, 470, 450, 100);
+        itemMemo.setBounds(60, 470, 430, 100);
+        itemMemo.setFont(new Font("맑은 고딕",Font.BOLD,13));
+
         // 상품현재입찰가
         currentPrice= new JLabel(" 현재 가격 : " + ibean.getItemPrice()+" 원");
         currentPrice.setBorder(new LineBorder(Color.black,1,true));
         currentPrice.setBounds(60, 580, 200, 50);
-        currentPrice.setFont(new Font("돋움체", 0, 17));
+        currentPrice.setFont(new Font("맑은 고딕", Font.BOLD, 15));
         //상품시간
         int time = ibean.getItemEndTime();
         
@@ -110,18 +113,18 @@ implements ActionListener{
         
         itemTime = new JLabel("남은 시간 : " +reHour+":"+reMin+":"+reSec);
         itemTime.setBounds(60, 630, 300, 50);
-        itemTime.setFont(new Font("돋움체", 0, 16));
+        itemTime.setFont(new Font("맑은 고딕", Font.BOLD, 17));
         
         timerSet ts = new timerSet(itemTime, time);
         // 현재참여인원 
         purchaserCount= new JLabel(" 현재 참여 인원 : " + ibean.getPurchaserCount()+"명");
         purchaserCount.setBorder(new LineBorder(Color.black,1,true));
         purchaserCount.setBounds(280, 580, 210, 50);
-        purchaserCount.setFont(new Font("돋움체", 0, 17));
-        //핫한경매 참여버튼 
+        purchaserCount.setFont(new Font("맑은 고딕",Font.BOLD, 15));
+      //핫한경매 참여버튼 
         hotBidBtn = new JButton("참여하기");
-        hotBidBtn.setBounds(410, 645, 100, 30);
-        hotBidBtn.setFont(new Font("돋움체", 0, 17));
+        hotBidBtn.setBounds(440, 725, 110, 30);
+        hotBidBtn.setFont(new Font("맑은 고딕", Font.BOLD, 13));
         hotBidBtn.addActionListener(this);
         ////
         itemPanel.add(itemName);
@@ -143,18 +146,22 @@ implements ActionListener{
        for (int i = 0; i < clist.size(); i++) {
          CategoryBean cbean = clist.get(i);
          categoryNameBtn[i] = new Button(cbean.getCategoryName());
-         int x=30;
-          int y=40;
+         int x=33;
+          int y=65;
           int  w= 140; //고정
           int h = 40; //고정
            categoryNameBtn[i].setBounds(x+(i%3)*(w+x),y+(i/3)*70,w,h);
-           categoryNameBtn[i].setFont(new Font("돋움체", 0, 15));
+           categoryNameBtn[i].setFont(new Font("맑은 고딕", Font.BOLD, 15));
            categoryNameBtn[i].addActionListener(this);
-           categoryPanel.add(categoryNameBtn[i]);       
+           categoryNameBtn[i].setBackground(color);
+           categoryNameBtn[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
+           //add
+           this.add(categoryNameBtn[i]);
+           categoryPanel.add(categoryNameBtn[i]);     
         }
         //버튼 2개+이름레이블
         manegerBtn = new JButton("관리자모드");
-        backBtn = new JButton("뒤로가기");
+        backBtn = new JButton("나가기");
         registerBtn = new JButton("상품등록");
         memberId = new JLabel("아이디 : " + logId);
         
@@ -163,11 +170,11 @@ implements ActionListener{
         registerBtn.setBounds(1000, 20, 100, 30);
         memberId.setBounds(1150,20,150,30);
         
-        manegerBtn.setFont(new Font("돋움체", 0, 15));
-        backBtn.setFont(new Font("돋움체", 0, 15));
-        registerBtn.setFont(new Font("돋움체", 0, 15));
+        manegerBtn.setFont(new Font("맑은 고딕", Font.BOLD, 13));
+        backBtn.setFont(new Font("맑은 고딕", Font.BOLD, 13));
+        registerBtn.setFont(new Font("맑은 고딕", Font.BOLD, 13));
         memberId.setBounds(1150,20,150,30);
-        memberId.setFont(new Font("돋움체", 0, 15));
+        memberId.setFont(new Font("맑은 고딕", 0, 15));
         
         manegerBtn.addActionListener(this);
         backBtn.addActionListener(this);
@@ -175,12 +182,46 @@ implements ActionListener{
         //logo
         logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
         logo.setBounds(20,20,130,40);
-        //logo.setFont(new Font("돋움체", 1, 25));
+        
         //mypagebtn
         myPageBtn = new JButton("마이페이지");
-        myPageBtn.setBounds(1150   , 50, 100,30);
-        myPageBtn.setFont(new Font("돋움체",0,12));
+        myPageBtn.setBounds(1140, 55, 100,30);
+        myPageBtn.setFont(new Font("맑은 고딕",Font.BOLD,12));
         myPageBtn.addActionListener(this);
+      //디자인
+        c.setBackground(Color.white);
+        itemPanel.setBackground(color.white);
+        categoryPanel.setBackground(color.white);
+        //마이페이지 버튼 디자인
+        myPageBtn.setBackground(Color.black);
+        myPageBtn.setForeground(Color.white);
+        myPageBtn.setBorderPainted(false);
+        myPageBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.add(myPageBtn);
+        //상품등록 버튼 디자인
+        registerBtn.setBackground(Color.black);
+        registerBtn.setForeground(Color.white);
+        registerBtn.setBorderPainted(false);
+        registerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.add(registerBtn);
+        //관리자모드 버튼 디자인
+        manegerBtn.setBackground(Color.black);
+        manegerBtn.setForeground(Color.white);
+        manegerBtn.setBorderPainted(false);
+        manegerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.add(manegerBtn);
+        //뒤로가기 버튼 디자인
+        backBtn.setBackground(Color.black);
+        backBtn.setForeground(Color.white);
+        backBtn.setBorderPainted(false);
+        backBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.add(backBtn);
+        //핫한 경매 참여하기 버튼 디자인
+        hotBidBtn.setBackground(Color.black);
+        hotBidBtn.setForeground(Color.white);
+        hotBidBtn.setBorderPainted(false);
+        hotBidBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.add(hotBidBtn);
         //add
         c.add(myPageBtn);
         c.add(logo);
@@ -230,7 +271,16 @@ implements ActionListener{
 	            alarm.showMessageDialog(null, "권한이 없습니다.");
 	         }
 	      }else if(obj==backBtn) {//뒤로가기
-	         alarm.showMessageDialog(this, "메인 페이지입니다.");
+	    	  int yesOrNo  = JOptionPane.showConfirmDialog(null, "메인페이지입니다.\n로그인 창으로 나가시겠습니까?","나가기", JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+	         if(yesOrNo==0) {
+	        	 try {
+	        		 dispose();
+					Login login = new Login();
+					login.setVisible(true);
+				} catch (Exception e2) {
+					// TODO: handle exception
+				}
+	         }
 	      }else if(obj==myPageBtn) {//마이페이지
 	    	  mgr.getIngItemList(logId);
 	    	  mgr.getBuyItemList(logId);
