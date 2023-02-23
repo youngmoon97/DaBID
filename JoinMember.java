@@ -36,6 +36,7 @@ implements ActionListener{
    AuctionMgr mgr = new AuctionMgr();
    JOptionPane alarm = new JOptionPane();
    DBConnectionMgr con;
+   LineBorder lb = new LineBorder(Color.black,1,true);
    
    public JoinMember() {
         setTitle("DaBID 회원가입");
@@ -167,6 +168,7 @@ implements ActionListener{
         //이메일 콤보 박스 색깔
         emailCb.setBackground(txtColor);
         emailCb.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        emailCb.setBorder(lb);
         //add
         joinPanel.add(joinName);
         joinPanel.add(joinId);

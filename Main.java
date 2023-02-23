@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.PublicKey;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,6 +58,7 @@ implements ActionListener{
    FileReader reader;
    FileDialog read;
    Color color = new Color(240,240,240);
+   Color lightGray = new Color(0,0,0);
    
    public Main(String logId) {
         setTitle("DaBID 메인페이지");
@@ -87,22 +89,21 @@ implements ActionListener{
         ImageIcon changeIcon = new ImageIcon(changeImg);
         
         itemPhoto = new JLabel(changeIcon);
-        itemPhoto.setBorder(new LineBorder(Color.black,1,true));
         itemPhoto.setBounds(60, 90, 430, 370);
         //상품설명
-        itemMemo= new JLabel("상품 설명 : " + ibean.getItemMemo());
+        itemMemo= new JLabel(ibean.getItemMemo());
         itemMemo.setBorder(new LineBorder(Color.black,1,true));
+        itemMemo.setHorizontalAlignment(JLabel.CENTER);
         itemMemo.setBounds(60, 470, 430, 100);
-        itemMemo.setFont(new Font("맑은 고딕",Font.BOLD,13));
+        itemMemo.setFont(new Font("맑은 고딕",Font.BOLD,12));
 
         // 상품현재입찰가
         currentPrice= new JLabel(" 현재 가격 : " + ibean.getItemPrice()+" 원");
-        currentPrice.setBorder(new LineBorder(Color.black,1,true));
+        currentPrice.setHorizontalAlignment(JLabel.CENTER);
         currentPrice.setBounds(60, 580, 200, 50);
         currentPrice.setFont(new Font("맑은 고딕", Font.BOLD, 15));
         //상품시간
         int time = ibean.getItemEndTime();
-        
         int hour = time / (60*60);
         int minute = time / 60 - (hour*60);
         int second = time % 60;
@@ -118,7 +119,7 @@ implements ActionListener{
         timerSet ts = new timerSet(itemTime, time);
         // 현재참여인원 
         purchaserCount= new JLabel(" 현재 참여 인원 : " + ibean.getPurchaserCount()+"명");
-        purchaserCount.setBorder(new LineBorder(Color.black,1,true));
+        purchaserCount.setHorizontalAlignment(JLabel.CENTER);
         purchaserCount.setBounds(280, 580, 210, 50);
         purchaserCount.setFont(new Font("맑은 고딕",Font.BOLD, 15));
       //핫한경매 참여버튼 
@@ -192,6 +193,13 @@ implements ActionListener{
         c.setBackground(Color.white);
         itemPanel.setBackground(color.white);
         categoryPanel.setBackground(color.white);
+        //라벨 디자인
+        purchaserCount.setOpaque(true);
+        purchaserCount.setBackground(color);
+        purchaserCount.setForeground(lightGray);
+        currentPrice.setOpaque(true);
+        currentPrice.setBackground(color);
+        currentPrice.setForeground(lightGray);
         //마이페이지 버튼 디자인
         myPageBtn.setBackground(Color.black);
         myPageBtn.setForeground(Color.white);
@@ -355,12 +363,6 @@ implements ActionListener{
 	    
 	 }
    public static void main(String[] args) {
-      try {
-         //Main main = new Main();
-         //main.setVisible(true);
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
    }
    
 

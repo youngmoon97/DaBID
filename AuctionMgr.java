@@ -592,9 +592,9 @@ public class AuctionMgr {
 	         Vector<ItemBean> clist = new Vector<ItemBean>();
 	         try {
 	            con = pool.getConnection();
-	            sql = "select item_num, item_name , item_seller , purchaser_count , item_price "
-	                  + "from item "
-	                  + "where item_status = 2";
+	            sql = "select distinct item_num, item_name , item_seller , purchaser_count , item_price "
+	            		+ "from item  "
+	            		+ " where item_status = 2 ";
 	            pstmt = con.prepareStatement(sql);
 	            rs = pstmt.executeQuery();
 	            while(rs.next()) {
@@ -604,6 +604,7 @@ public class AuctionMgr {
 	               ibean.setItemSeller(rs.getString("item_seller"));
 	               ibean.setPurchaserCount(rs.getInt("purchaser_count"));
 	               ibean.setItemPrice(rs.getInt("item_price"));
+//	               System.out.println(ibean.getItemName()+"22");
 	               clist.addElement(ibean);
 	            }         
 	         } catch (Exception e) {
@@ -623,18 +624,20 @@ public class AuctionMgr {
 	         Vector<ItemBean> clist = new Vector<ItemBean>();
 	         try {
 	            con = pool.getConnection();
-	            sql = "select item_num, item_name , item_seller , purchaser_count , item_price "
-	                  + "from item "
-	                  + "where item_status = 1";
+	            sql = "select a.auction_purchaser ,i.item_num, i.item_name , i.item_seller , i.purchaser_count , i.item_price "
+	            		+ "from item i, auction a "
+	            		+ "where i.item_num = a.auction_itemnum "
+	            		+ "	and i.item_status = 1";
 	            pstmt = con.prepareStatement(sql);
 	            rs = pstmt.executeQuery();
 	            while(rs.next()) {
 	               ItemBean ibean = new ItemBean();
-	               ibean.setItemNum(rs.getInt("item_num"));
-	               ibean.setItemName(rs.getString("item_name"));
-	               ibean.setItemSeller(rs.getString("item_seller"));
-	               ibean.setPurchaserCount(rs.getInt("purchaser_count"));
-	               ibean.setItemPrice(rs.getInt("item_price"));
+	               ibean.setItemPurchaser(rs.getString("a.auction_purchaser"));
+	               ibean.setItemNum(rs.getInt("i.item_num"));
+	               ibean.setItemName(rs.getString("i.item_name"));
+	               ibean.setItemSeller(rs.getString("i.item_seller"));
+	               ibean.setPurchaserCount(rs.getInt("i.purchaser_count"));
+	               ibean.setItemPrice(rs.getInt("i.item_price"));
 	               clist.addElement(ibean);
 	            }         
 	         } catch (Exception e) {

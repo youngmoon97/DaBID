@@ -12,6 +12,7 @@ public class ItemBean {
    private int itemPrice;
    private String itemPhoto;
    private String itemMemo;
+   private String itemPurchaser;
    private int itemStatus;
    private int itemStartTime;
    private int itemEndTime;
@@ -31,6 +32,12 @@ public class ItemBean {
    }
    public void setItemSeller(String itemSeller) {
       this.itemSeller = itemSeller;
+   }
+   public String getItemPurchaser() {
+	      return itemPurchaser;
+   }
+   public void setItemPurchaser(String itemPurchaser) {
+	      this.itemSeller = itemPurchaser;
    }
    public int getCategoryNum() {
       return CategoryNum;

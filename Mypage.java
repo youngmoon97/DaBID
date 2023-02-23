@@ -2,6 +2,7 @@ package project1;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -22,9 +23,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-
 import project1.CategoryList.timerSet;
 
 public class Mypage extends JFrame
@@ -43,11 +44,13 @@ implements ActionListener{
    String logId;
    JOptionPane alarm = new JOptionPane();
    AuctionMgr mgr;
-   
    String myPageCt[] = {"경매 참여 상품", "구매한 상품", "판매한 상품", "비밀번호 변경"};
-   
    JComboBox<String> myPageCb = new JComboBox<String>(myPageCt);
-
+   Color txtColor = new Color(240,240,240); //배경 색상 선언
+   Font f = new Font("맑은 고딕", 0, 18);
+   Font f1 = new Font("맑은 고딕",0,15);
+   LineBorder lb = new LineBorder(Color.black,1,true);
+   Color lightGray = new Color(0,0,0);
    
    public Mypage(String logId) {
       
@@ -59,38 +62,44 @@ implements ActionListener{
         setLocationRelativeTo(null); //가운데 출력
         getContentPane().setLayout(null);
         Container c = getContentPane();
+
+        c.setBackground(Color.WHITE);
         
         //panel 지정
         myPagePanel = new JPanel();
 //        myPagePanel.setBounds(180, 70, 1000, 700);
         myPagePanel.setLayout(new GridLayout(0,1, 10, 10));
 //        myPagePanel.setLayout(null);
+        myPagePanel.setBackground(txtColor);
         
         // border 지정
         soonTb = new TitledBorder(new LineBorder(Color.black,1,true),"판매 예정");
-        soonTb.setTitleFont(new Font("돋움체",0,15));
+        soonTb.setTitleFont(f1);
         
         buyTb = new TitledBorder(new LineBorder(Color.black,1,true),"구매 완료");
-        buyTb.setTitleFont(new Font("돋움체",0,15));
+        buyTb.setTitleFont(f1);
         
         sellTb = new TitledBorder(new LineBorder(Color.black,1,true),"판매 완료");
-        sellTb.setTitleFont(new Font("돋움체",0,15));
+        sellTb.setTitleFont(f1);
         
         pwTb = new TitledBorder(new LineBorder(Color.black,1,true),"비밀번호 변경");
-        pwTb.setTitleFont(new Font("돋움체",0,15));
+        pwTb.setTitleFont(f1);
         
         
         // 마이페이지 콤보박스 combobox 
-        myPageCb.setBounds(20, 85, 150, 40);
-        myPageCb.setFont(new Font("돋움체",0,17));
+        myPageCb.setBounds(40, 85, 150, 40);
+        myPageCb.setFont(new Font("맑은 고딕",Font.BOLD,17));
         myPageCb.addActionListener(this);
+        myPageCb.setBackground(txtColor);
+        myPageCb.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        myPageCb.setBorder(lb);
         
        
         // 마이페이지 스크롤 myPageScroll
        myPageScroll = new JScrollPane(myPagePanel);
        myPageScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-       myPageScroll.setBounds(180, 70, 1000, 700);
-        
+       myPageScroll.setBounds(200, 85, 1000, 700);
+        myPageScroll.setBorder(lb);
         
        
         // 기본
@@ -103,17 +112,20 @@ implements ActionListener{
         //id
         memberId = new JLabel("아이디 : "+ logId);
         memberId.setBounds(1150, 20, 150, 30);
-        memberId.setFont(new Font("돋움체", 0, 15));
+        memberId.setFont(f1);
         
         // back버튼
         backBtn = new JButton("뒤로가기");
-        backBtn.setBounds(1150,800, 100, 30);
-        backBtn.setFont(new Font("돋움체", 0, 15));
+        backBtn.setBounds(1150, 820, 120, 30);
+        backBtn.setFont(new Font("맑은 고딕", Font.BOLD, 15));
         backBtn.addActionListener(this);
+        backBtn.setBackground(Color.black);
+        backBtn.setForeground(Color.white);
+        backBtn.setBorderPainted(false);
+        backBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));  
        
         //add
         c.add(myPageScroll);
-       
         c.add(myPageCb);
         c.add(memberId);
         c.add(backBtn);
@@ -128,7 +140,8 @@ implements ActionListener{
           itemPanel = new JPanel();
           itemPanel.setLayout(null);
           itemPanel.setBounds(10, 20, 940, 300);
-          itemPanel.setBorder(new LineBorder(Color.black, 1, true));
+          itemPanel.setBorder(new LineBorder(Color.black, 2, true));
+          itemPanel.setBackground(Color.white);
          
           // 상품 정보 label
           particPhoto = new JLabel(photo);
@@ -143,31 +156,44 @@ implements ActionListener{
           particPrice.setBounds(300, 170, 200, 60);
           particCount.setBounds(550, 170, 200, 60);
            
-           
-          particPhoto.setFont(new Font("돋움체", 0, 18));
-          particName.setFont(new Font("돋움체", 0, 18));
-          particTime.setFont(new Font("돋움체", 0, 18));
-          particPrice.setFont(new Font("돋움체", 0, 18));
-          particCount.setFont(new Font("돋움체", 0, 18));
+          particPhoto.setFont(new Font("맑은 고딕", Font.BOLD,15));
+          particName.setFont(new Font("맑은 고딕", Font.BOLD,15));
+          particTime.setFont(new Font("맑은 고딕", Font.BOLD,15));
+          particPrice.setFont(new Font("맑은 고딕", Font.BOLD,15));
+          particCount.setFont(new Font("맑은 고딕", Font.BOLD,15));
           
           particName.setHorizontalAlignment(SwingConstants.CENTER);
           particTime.setHorizontalAlignment(SwingConstants.CENTER);
           particPrice.setHorizontalAlignment(SwingConstants.CENTER);
           particCount.setHorizontalAlignment(SwingConstants.CENTER);
           
-           
-          particPhoto.setBorder(new LineBorder(Color.black,1,true));
-          particName.setBorder(new LineBorder(Color.black,1,true));
-          particTime.setBorder(new LineBorder(Color.black,1,true));
-          particPrice.setBorder(new LineBorder(Color.black,1,true));
-          particCount.setBorder(new LineBorder(Color.black,1,true));
+          particName.setOpaque(true);
+          particTime.setOpaque(true);
+          particPrice.setOpaque(true);
+          particCount.setOpaque(true);
+          
+          particName.setBackground(txtColor);
+          particTime.setBackground(txtColor);
+          particPrice.setBackground(txtColor);
+          particCount.setBackground(txtColor);
+          
+          particName.setForeground(lightGray);          
+          particTime.setForeground(lightGray);          
+          particPrice.setForeground(lightGray);          
+          particCount.setForeground(lightGray);          
           
           timerSet ts = new timerSet(particTime, time);
            
            // 상품 재참여 버튼
            itemDeleteBtn = new JButton("재참여");
            itemDeleteBtn.setBounds(780, 100, 130, 100);
-           itemDeleteBtn.setFont(new Font("돋움체", 0, 16));
+           itemDeleteBtn.setFont(new Font("맑은 고딕",Font.BOLD, 16));
+           //버튼 디자인
+           itemDeleteBtn.setBackground(Color.BLACK);
+           itemDeleteBtn.setForeground(Color.white);
+           itemDeleteBtn.setBorderPainted(false);
+           itemDeleteBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));       
+           //버튼 액션
            itemDeleteBtn.addActionListener(new ActionListener() {
          
          @Override
@@ -196,7 +222,8 @@ implements ActionListener{
           itemPanel = new JPanel();
           itemPanel.setLayout(null);
           itemPanel.setBounds(10, 20, 940, 300);
-          itemPanel.setBorder(new LineBorder(Color.black, 1, true));
+          itemPanel.setBorder(new LineBorder(Color.black, 2, true));
+          itemPanel.setBackground(txtColor);
           
           // 상품 정보 label
           buyPhoto = new JLabel(photo);
@@ -211,11 +238,11 @@ implements ActionListener{
           buyPrice.setBounds(300, 170, 200, 60);
           buyCount.setBounds(550, 170, 200, 60);
            
-          buyPhoto.setFont(new Font("돋움체", 0, 18));
-          buyName.setFont(new Font("돋움체", 0, 18));
-          buyTime.setFont(new Font("돋움체", 0, 18));
-          buyPrice.setFont(new Font("돋움체", 0, 18));
-          buyCount.setFont(new Font("돋움체", 0, 18));
+          buyPhoto.setFont(new Font("맑은 고딕", Font.BOLD,15));
+          buyName.setFont(new Font("맑은 고딕", Font.BOLD,15));
+          buyTime.setFont(new Font("맑은 고딕", Font.BOLD,15));
+          buyPrice.setFont(new Font("맑은 고딕", Font.BOLD,15));
+          buyCount.setFont(new Font("맑은 고딕", Font.BOLD,15));
           
           buyName.setHorizontalAlignment(SwingConstants.CENTER);
           buyTime.setHorizontalAlignment(SwingConstants.CENTER);
@@ -245,7 +272,7 @@ implements ActionListener{
           itemPanel = new JPanel();
           itemPanel.setLayout(null);
           itemPanel.setBounds(10, 20, 940, 300);
-          itemPanel.setBorder(new LineBorder(Color.black, 1, true));
+          itemPanel.setBorder(new LineBorder(Color.black, 2, true));
           
           // 상품 정보 label
           sellPhoto = new JLabel(photo);
@@ -260,11 +287,11 @@ implements ActionListener{
           sellPrice.setBounds(300, 170, 200, 60);
           sellCount.setBounds(550, 170, 200, 60);
            
-          sellPhoto.setFont(new Font("돋움체", 0, 18));
-          sellName.setFont(new Font("돋움체", 0, 18));
-          sellTime.setFont(new Font("돋움체", 0, 18));
-          sellPrice.setFont(new Font("돋움체", 0, 18));
-          sellCount.setFont(new Font("돋움체", 0, 18));
+          sellPhoto.setFont(f);
+          sellName.setFont(f);
+          sellTime.setFont(f);
+          sellPrice.setFont(f);
+          sellCount.setFont(f);
           
           sellName.setHorizontalAlignment(SwingConstants.CENTER);
           sellTime.setHorizontalAlignment(SwingConstants.CENTER);
@@ -294,6 +321,7 @@ implements ActionListener{
           itemPanel.setLayout(null);
           itemPanel.setBounds(10, 20, 940, 300);
           itemPanel.setBorder(new LineBorder(Color.black, 1, true));
+          itemPanel.setBackground(txtColor);
           
        // 현재 비밀번호, 새 비밀번호, 비밀번호 확인 label
          
@@ -305,9 +333,9 @@ implements ActionListener{
           newPwlbl.setBounds(200, 320, 190, 30);
           newCheckPwlbl.setBounds(200, 470, 190, 30);
           
-          nowPwlbl.setFont(new Font("돋움체", 1, 21));
-          newPwlbl.setFont(new Font("돋움체", 1, 21));
-          newCheckPwlbl.setFont(new Font("돋움체", 1, 21));
+          nowPwlbl.setFont(new Font("맑은 고딕", 1, 21));
+          newPwlbl.setFont(new Font("맑은 고딕", 1, 21));
+          newCheckPwlbl.setFont(new Font("맑은 고딕", 1, 21));
           
           // 현재 비밀번호, 새비밀번호, 비밀번호 확인 JPasswordField
           nowPw = new JPasswordField();
@@ -318,14 +346,14 @@ implements ActionListener{
           newPw.setBounds(390, 320, 300, 30);
           newCheckPw.setBounds(390, 470, 300, 30);
           
-          nowPw.setFont(new Font("돋움체", 0, 21));
-          newPw.setFont(new Font("돋움체", 0, 21));
-          newCheckPw.setFont(new Font("돋움체", 0, 21));
+          nowPw.setFont(new Font("맑은 고딕", 0, 21));
+          newPw.setFont(new Font("맑은 고딕", 0, 21));
+          newCheckPw.setFont(new Font("맑은 고딕", 0, 21));
           
           // save 버튼
           saveBtn = new JButton("변경");
           saveBtn.setBounds(850,600, 80, 30);
-          saveBtn.setFont(new Font("돋움체", 0, 20));
+          saveBtn.setFont(new Font("맑은 고딕", 0, 20));
           
           return itemPanel;
          
@@ -446,69 +474,77 @@ implements ActionListener{
             
             
          } else if (index == 3) {
-        	 // index 3 (비밀번호 변경)
-        	 itemPanel = new JPanel();
+            // index 3 (비밀번호 변경)
+            itemPanel = new JPanel();
              itemPanel.setLayout(null);
              itemPanel.setBounds(10, 20, 940, 300);
              itemPanel.setBorder(new LineBorder(Color.black, 1, true));
              
           // 현재 비밀번호, 새 비밀번호, 비밀번호 확인 label
-         	
+            
              nowPwlbl = new JLabel("현재 비밀번호");
              newPwlbl = new JLabel("새 비밀번호");
              newCheckPwlbl = new JLabel("비밀번호 확인");
              
-             nowPwlbl.setBounds(200, 170, 190, 30);
-             newPwlbl.setBounds(200, 320, 190, 30);
-             newCheckPwlbl.setBounds(200, 470, 190, 30);
+             nowPwlbl.setBounds(260, 150, 190, 30);
+             newPwlbl.setBounds(260, 300, 190, 30);
+             newCheckPwlbl.setBounds(260, 450, 190, 30);
              
-             nowPwlbl.setFont(new Font("돋움체", 1, 21));
-             newPwlbl.setFont(new Font("돋움체", 1, 21));
-             newCheckPwlbl.setFont(new Font("돋움체", 1, 21));
+             nowPwlbl.setFont(new Font("맑은 고딕", 1, 21));
+             newPwlbl.setFont(new Font("맑은 고딕", 1, 21));
+             newCheckPwlbl.setFont(new Font("맑은 고딕", 1, 21));
              
              // 현재 비밀번호, 새비밀번호, 비밀번호 확인 JPasswordField
              nowPw = new JPasswordField();
+             nowPw.setBorder(javax.swing.BorderFactory.createEmptyBorder());
              newPw = new JPasswordField();
+             newPw.setBorder(javax.swing.BorderFactory.createEmptyBorder());
              newCheckPw = new JPasswordField();
+             newCheckPw.setBorder(javax.swing.BorderFactory.createEmptyBorder());
              
-             nowPw.setBounds(390, 170, 300, 30);
-             newPw.setBounds(390, 320, 300, 30);
-             newCheckPw.setBounds(390, 470, 300, 30);
+             nowPw.setBounds(450, 150, 300, 30);
+             newPw.setBounds(450, 300, 300, 30);
+             newCheckPw.setBounds(450, 450, 300, 30);
              
-             nowPw.setFont(new Font("돋움체", 0, 21));
-             newPw.setFont(new Font("돋움체", 0, 21));
-             newCheckPw.setFont(new Font("돋움체", 0, 21));
+             nowPw.setFont(new Font("맑은 고딕", 0, 21));
+             newPw.setFont(new Font("맑은 고딕", 0, 21));
+             newCheckPw.setFont(new Font("맑은 고딕", 0, 21));
              
              // save 버튼
              saveBtn = new JButton("변경");
-             saveBtn.setBounds(850,600, 80, 30);
-             saveBtn.setFont(new Font("돋움체", 0, 20));
+             saveBtn.setBounds(450,580, 100, 40);
+             saveBtn.setFont(new Font("맑은 고딕", Font.BOLD, 17));
+             saveBtn.setBackground(Color.black);
+             saveBtn.setForeground(Color.white);
+             saveBtn.setBorderPainted(false);
+             saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
              saveBtn.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					if(mgr.pwChk(new String(nowPw.getPassword()), logId)) {
-						//현재 비밀번호 일치
-						System.out.println(new String(newPw.getPassword())+"111");
-						System.out.println(new String(newCheckPw.getPassword())+"111");
-						if(new String(newPw.getPassword()).equals(new String(newCheckPw.getPassword())) ) {
-							//새 비밀번호 확인
-							mgr.pwChange(new String(newPw.getPassword()), logId);
-							//바꾸기
-							alarm.showMessageDialog(null, "비밀번호가 변경되었습니다.");
-							nowPw.setText("");
-							newPw.setText("");
-							newCheckPw.setText("");
-						}else {
-							alarm.showMessageDialog(null, "새로운 비밀번호를 확인하세요.");
-						}
-						
-					}else {
-						alarm.showMessageDialog(null, "현재 비밀번호를 확인하세요.");
-						nowPw.setText("");
-						nowPw.requestFocus();
-					}
-				}
-			});
+                
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               if(mgr.pwChk(new String(nowPw.getPassword()), logId)) {
+                  //현재 비밀번호 일치
+                  System.out.println(new String(newPw.getPassword())+"111");
+                  System.out.println(new String(newCheckPw.getPassword())+"111");
+                  if(new String(newPw.getPassword()).equals(new String(newCheckPw.getPassword())) ) {
+                     //새 비밀번호 확인
+                     mgr.pwChange(new String(newPw.getPassword()), logId);
+                     //바꾸기
+                     alarm.showMessageDialog(null, "비밀번호가 변경되었습니다.");
+                     nowPw.setText("");
+                     newPw.setText("");
+                     newCheckPw.setText("");
+                  }else {
+                     alarm.showMessageDialog(null, "새로운 비밀번호를 확인하세요.");
+                  }
+                  
+               }else {
+                  alarm.showMessageDialog(null, "현재 비밀번호를 확인하세요.");
+                  nowPw.setText("");
+                  nowPw.requestFocus();
+               }
+            }
+         });
              
              itemPanel.add(nowPwlbl);
              itemPanel.add(newPwlbl);
@@ -587,7 +623,12 @@ class timerSet implements Runnable{
  }
 
    public static void main(String[] args) {
-      
+            try {
+      Mypage mypage = new Mypage("aaa");
+      mypage.setVisible(true);
+   } catch (Exception e) {
+      e.printStackTrace();
+   }
    }
 
 }

@@ -21,6 +21,7 @@ import java.util.Vector;
 import java.util.Locale.Category;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -55,6 +56,7 @@ public class ItemRegister extends JFrame implements ActionListener {
    AuctionMgr mgr = new AuctionMgr();
    String logId;
    Color color = new Color(240,240,240);
+   LineBorder lb = new LineBorder(Color.black,1,true);
    
    public ItemRegister(String logId) {
       setTitle("DaBID »óÇ°µî·Ï ÆäÀÌÁö");
@@ -68,6 +70,10 @@ public class ItemRegister extends JFrame implements ActionListener {
       itemPanel = new JPanel();
       itemPanel.setBounds(60, 80, 1150, 700);
       itemPanel.setLayout(null);
+      
+      //logo
+      logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
+      logo.setBounds(20,20,130,40);
       
       //TitledBorder
       registerTb = new TitledBorder(new LineBorder(Color.black, 2, true), "»óÇ° µî·Ï");
@@ -91,11 +97,11 @@ public class ItemRegister extends JFrame implements ActionListener {
 //      itemPhoto.setFont(new Font("¸¼Àº °íµñ", 0, 20));
       
       itemCategory = new JLabel("Ä«Å×°í¸® :");
-      itemCategory.setBounds(650, 410, 100, 30);
+      itemCategory.setBounds(650, 420, 100, 30);
       itemCategory.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 17));
       
       itemprice = new JLabel("½ÃÀÛ °¡°Ý :");
-      itemprice.setBounds(650, 460, 100, 30);
+      itemprice.setBounds(650, 470, 100, 30);
       itemprice.setFont(new Font("¸¼Àº °íµñ", Font.BOLD,17));
       
       itemmemo = new JLabel("»óÇ° ¼³¸í");
@@ -103,22 +109,24 @@ public class ItemRegister extends JFrame implements ActionListener {
       itemmemo.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 17));
       
       won = new JLabel("¿ø");
-      won.setBounds(970, 460, 40, 30);
+      won.setBounds(970, 470, 40, 30);
       won.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 17));
       
       endtime = new JLabel("Á¾·á ½Ã°£ :");
-      endtime.setBounds(650, 510, 100, 30);
+      endtime.setBounds(650, 520, 100, 30);
       endtime.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 17));
       
       //JTextArea
       taName = new JTextField(); //»óÇ°¸í
       taName.setBounds(140, 67, 430, 25);
-      
+      taName.setFont(new Font("¸¼Àº °íµñ",0,15));
       taMemo = new JTextArea(); //»óÇ°¼³¸í
-      taMemo.setBounds(650, 100, 450, 280);
-      
+      taMemo.setBounds(650, 100, 450, 290);
+      taMemo.setFont(new Font("¸¼Àº °íµñ",0,15));      
       taPrice = new JTextField(); //½ÃÀÛ °¡°Ý
-      taPrice.setBounds(750, 460, 200, 30);
+      taPrice.setBounds(750, 470, 200, 30);
+      taPrice.setFont(new Font("¸¼Àº °íµñ",0,15));
+
       
       //JButton
       registerBtn = new JButton("»óÇ° µî·Ï");
@@ -136,11 +144,14 @@ public class ItemRegister extends JFrame implements ActionListener {
 
       //JComboBox
       categoryCombobox = new JComboBox<String>(categoryName);
-      categoryCombobox.setBounds(750, 410, 270, 30);
+      categoryCombobox.setBounds(750, 420, 270, 30);
+      categoryCombobox.setFont(new Font("¸¼Àº °íµñ",Font.BOLD,15));
       timeCombobox = new JComboBox<>(timelist);
-      timeCombobox.setBounds(750, 510, 100, 30);
-
+      timeCombobox.setBounds(750, 520, 100, 30);
+      timeCombobox.setFont(new Font("¸¼Àº °íµñ",Font.BOLD,15));
+      
       //ÆÐ³Î¿¡ Ãß°¡
+      c.add(logo);
       itemPanel.add(itemmemo);
       itemPanel.add(itemName);
 //      itemPanel.add(itemPhoto);
@@ -185,6 +196,12 @@ public class ItemRegister extends JFrame implements ActionListener {
       backBtn.setBorderPainted(false);
       backBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
       this.add(backBtn);
+      //ÄÞº¸ ¹Ú½º µðÀÚÀÎ
+      categoryCombobox.setBackground(color);
+      categoryCombobox.setBorder(lb);
+      timeCombobox.setBackground(color);
+      timeCombobox.setBorder(lb);
+
       //Ãâ·Â
       c.add(memberId);
       c.add(itemPanel);
@@ -265,11 +282,5 @@ public class ItemRegister extends JFrame implements ActionListener {
    }
    
    public static void main(String[] args) {
-	   try {
-		ItemRegister ir = new ItemRegister("aaa");
-		ir.setVisible(true);
-	} catch (Exception e) {
-		// TODO: handle exception
-	}
    }
 }
