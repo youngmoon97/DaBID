@@ -86,7 +86,7 @@ implements ActionListener{
       backBtn.addActionListener(this);
       //
       logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
-      logo.setBounds(20,20,130,40);
+      logo.setBounds(20,25,130,40);
       c.add(logo);
       //
      

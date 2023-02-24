@@ -66,10 +66,10 @@ implements ActionListener{
        //memberid
        memberId = new JLabel("아이디 : "+logId);
        memberId.setBounds(1150,20,150,30);
-        memberId.setFont(new Font("맑은 고딕", 0, 15));
+       memberId.setFont(new Font("맑은 고딕", 0, 15));
         
-        AuctionMgr mgr = new AuctionMgr();
-        ItemBean ibean = mgr.getItem(itemNum);
+       AuctionMgr mgr = new AuctionMgr();
+       ItemBean ibean = mgr.getItem(itemNum);
         //상품명레이블
        itemName = new JLabel("상품명 : " + ibean.getItemName());
        itemName.setBounds(60, 60, 180, 30);
@@ -229,7 +229,7 @@ implements ActionListener{
        auctionBtn.setBackground(Color.black);
        auctionBtn.setBorderPainted(false);
        auctionBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-auctionBtn.addActionListener(new ActionListener() {
+       auctionBtn.addActionListener(new ActionListener() {
          
          @Override
          public void actionPerformed(ActionEvent e) {
@@ -268,25 +268,25 @@ auctionBtn.addActionListener(new ActionListener() {
        commentPanel.add(commentArea);
        commentPanel.add(auctionTime);
        commentPanel.add(commentTf);
-      commentPanel.add(commentBtn); 
-      commentPanel.add(auctionBtn);
-      commentPanel.add(auctionPriceLbl); 
-      commentPanel.add(bidpriceTf);
-      //
-      logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
-       logo.setBounds(20,20,130,40);
+       commentPanel.add(commentBtn); 
+       commentPanel.add(auctionBtn);
+       commentPanel.add(auctionPriceLbl); 
+       commentPanel.add(bidpriceTf);
+       //
+       logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
+       logo.setBounds(20,25,130,40);
        //
        backBtn = new JButton("뒤로가기");
-      backBtn.setBounds(1150, 820, 120, 30);
+       backBtn.setBounds(1150, 820, 120, 30);
        backBtn.setBorder(new LineBorder(Color.black,1,true));
-      backBtn.setFont(f);
-      backBtn.setForeground(txtColor);
-      backBtn.setBackground(Color.black);
+       backBtn.setFont(f);
+       backBtn.setForeground(txtColor);
+       backBtn.setBackground(Color.black);
        backBtn.setBorderPainted(false);
        backBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-      backBtn.addActionListener(this);
+       backBtn.addActionListener(this);
        //
-      c.add(memberId);
+       c.add(memberId);
        c.add(logo);
        c.add(itemPanel);
        c.add(commentPanel);

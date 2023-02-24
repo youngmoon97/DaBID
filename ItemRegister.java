@@ -73,7 +73,7 @@ public class ItemRegister extends JFrame implements ActionListener {
       
       //logo
       logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
-      logo.setBounds(20,20,130,40);
+      logo.setBounds(20,25,130,40);
       
       //TitledBorder
       registerTb = new TitledBorder(new LineBorder(Color.black, 2, true), "상품 등록");
@@ -144,10 +144,10 @@ public class ItemRegister extends JFrame implements ActionListener {
 
       //JComboBox
       categoryCombobox = new JComboBox<String>(categoryName);
-      categoryCombobox.setBounds(750, 420, 270, 30);
+      categoryCombobox.setBounds(810, 502, 270, 30);
       categoryCombobox.setFont(new Font("맑은 고딕",Font.BOLD,15));
       timeCombobox = new JComboBox<>(timelist);
-      timeCombobox.setBounds(750, 520, 100, 30);
+      timeCombobox.setBounds(810, 602, 100, 30);
       timeCombobox.setFont(new Font("맑은 고딕",Font.BOLD,15));
       
       //패널에 추가
@@ -190,7 +190,7 @@ public class ItemRegister extends JFrame implements ActionListener {
       registerBtn.setBorderPainted(false);
       registerBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
       this.add(registerBtn);
-      //버튼 위 커서 모양 변경
+      //뒤로가기버튼 디자인
       backBtn.setBackground(Color.black);
       backBtn.setForeground(Color.white);
       backBtn.setBorderPainted(false);
@@ -199,9 +199,10 @@ public class ItemRegister extends JFrame implements ActionListener {
       //콤보 박스 디자인
       categoryCombobox.setBackground(color);
       categoryCombobox.setBorder(lb);
+      this.add(categoryCombobox);
       timeCombobox.setBackground(color);
       timeCombobox.setBorder(lb);
-
+      this.add(timeCombobox);
       //출력
       c.add(memberId);
       c.add(itemPanel);

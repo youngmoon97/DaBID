@@ -47,10 +47,11 @@ implements ActionListener{
    String myPageCt[] = {"경매 참여 상품", "구매한 상품", "판매한 상품", "비밀번호 변경"};
    JComboBox<String> myPageCb = new JComboBox<String>(myPageCt);
    Color txtColor = new Color(240,240,240); //배경 색상 선언
-   Font f = new Font("맑은 고딕", 0, 18);
+   Font f = new Font("맑은 고딕", Font.BOLD, 18);
    Font f1 = new Font("맑은 고딕",0,15);
    LineBorder lb = new LineBorder(Color.black,1,true);
    Color lightGray = new Color(0,0,0);
+   Color color = new Color(240,240,240);
    
    public Mypage(String logId) {
       
@@ -100,12 +101,13 @@ implements ActionListener{
        myPageScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
        myPageScroll.setBounds(200, 85, 1000, 700);
         myPageScroll.setBorder(lb);
+        myPageScroll.setBackground(Color.white);
         
        
         // 기본
         // logo
         logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
-          logo.setBounds(20,20,130,40);
+          logo.setBounds(20,25,130,40);
           c.add(logo);
        
  
@@ -146,15 +148,15 @@ implements ActionListener{
           // 상품 정보 label
           particPhoto = new JLabel(photo);
           particName = new JLabel(name);
-          particPrice = new JLabel(Integer.toString(price));
-          particCount = new JLabel(Integer.toString(count));
+          particPrice = new JLabel(Integer.toString(price) + " 원");
+          particCount = new JLabel(Integer.toString(count) + " 명");
           particTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
           
-          particPhoto.setBounds(30, 50, 250, 200);
-          particName.setBounds(300, 70, 200, 60);
-          particTime.setBounds(550, 70, 200, 60);
-          particPrice.setBounds(300, 170, 200, 60);
-          particCount.setBounds(550, 170, 200, 60);
+          particPhoto.setBounds(30, 30, 250, 200);
+          particName.setBounds(350, 50, 200, 60);
+          particTime.setBounds(600, 50, 200, 60);
+          particPrice.setBounds(350, 150, 200, 60);
+          particCount.setBounds(600, 150, 200, 60);
            
           particPhoto.setFont(new Font("맑은 고딕", Font.BOLD,15));
           particName.setFont(new Font("맑은 고딕", Font.BOLD,15));
@@ -167,26 +169,24 @@ implements ActionListener{
           particPrice.setHorizontalAlignment(SwingConstants.CENTER);
           particCount.setHorizontalAlignment(SwingConstants.CENTER);
           
+          //디자인
+          itemPanel.setBackground(Color.white);
+          
           particName.setOpaque(true);
           particTime.setOpaque(true);
           particPrice.setOpaque(true);
           particCount.setOpaque(true);
           
-          particName.setBackground(txtColor);
-          particTime.setBackground(txtColor);
-          particPrice.setBackground(txtColor);
-          particCount.setBackground(txtColor);
-          
-          particName.setForeground(lightGray);          
-          particTime.setForeground(lightGray);          
-          particPrice.setForeground(lightGray);          
-          particCount.setForeground(lightGray);          
+          particName.setBackground(color);
+          particTime.setBackground(color);
+          particPrice.setBackground(color);
+          particCount.setBackground(color);
           
           timerSet ts = new timerSet(particTime, time);
            
            // 상품 재참여 버튼
            itemDeleteBtn = new JButton("재참여");
-           itemDeleteBtn.setBounds(780, 100, 130, 100);
+           itemDeleteBtn.setBounds(830, 90, 110, 80);
            itemDeleteBtn.setFont(new Font("맑은 고딕",Font.BOLD, 16));
            //버튼 디자인
            itemDeleteBtn.setBackground(Color.BLACK);
@@ -229,14 +229,14 @@ implements ActionListener{
           buyPhoto = new JLabel(photo);
           buyName = new JLabel(name);
           buyTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
-          buyPrice = new JLabel(Integer.toString(price));
-          buyCount = new JLabel(Integer.toString(count));
+          buyPrice = new JLabel(Integer.toString(price) + " 원");
+          buyCount = new JLabel(Integer.toString(count) + " 명");
            
-          buyPhoto.setBounds(30, 50, 250, 200);
-          buyName.setBounds(300, 70, 200, 60);
-          buyTime.setBounds(550, 70, 200, 60);
-          buyPrice.setBounds(300, 170, 200, 60);
-          buyCount.setBounds(550, 170, 200, 60);
+          buyPhoto.setBounds(30, 30, 250, 200);
+          buyName.setBounds(350, 50, 200, 60);
+          buyTime.setBounds(650, 50, 200, 60);
+          buyPrice.setBounds(350, 150, 200, 60);
+          buyCount.setBounds(650, 150, 200, 60);
            
           buyPhoto.setFont(new Font("맑은 고딕", Font.BOLD,15));
           buyName.setFont(new Font("맑은 고딕", Font.BOLD,15));
@@ -248,12 +248,6 @@ implements ActionListener{
           buyTime.setHorizontalAlignment(SwingConstants.CENTER);
           buyPrice.setHorizontalAlignment(SwingConstants.CENTER);
           buyCount.setHorizontalAlignment(SwingConstants.CENTER);
-           
-          buyPhoto.setBorder(new LineBorder(Color.black,1,true));
-          buyName.setBorder(new LineBorder(Color.black,1,true));
-          buyTime.setBorder(new LineBorder(Color.black,1,true));
-          buyPrice.setBorder(new LineBorder(Color.black,1,true));
-          buyCount.setBorder(new LineBorder(Color.black,1,true));
           
           timerSet ts = new timerSet(buyTime, time);
            
@@ -262,6 +256,21 @@ implements ActionListener{
            itemPanel.add(buyTime);
            itemPanel.add(buyPrice);
            itemPanel.add(buyCount);
+           
+           //디자인
+           itemPanel.setBackground(Color.white);
+           
+           buyName.setOpaque(true);
+           buyPrice.setOpaque(true);
+           buyCount.setOpaque(true);
+           buyTime.setOpaque(true);
+           
+           buyName.setBackground(color);
+           buyPrice.setBackground(color);
+           buyPrice.setBackground(color);
+           buyTime.setBackground(color);
+           
+           
            
            return itemPanel;
   }
@@ -278,14 +287,14 @@ implements ActionListener{
           sellPhoto = new JLabel(photo);
           sellName = new JLabel(name);
           sellTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
-          sellPrice = new JLabel(Integer.toString(price));
-          sellCount = new JLabel(Integer.toString(count));
+          sellPrice = new JLabel(Integer.toString(price) + " 원");
+          sellCount = new JLabel(Integer.toString(count) + " 명");
           
-          sellPhoto.setBounds(30, 50, 250, 200);
-          sellName.setBounds(300, 70, 200, 60);
-          sellTime.setBounds(550, 70, 200, 60);
-          sellPrice.setBounds(300, 170, 200, 60);
-          sellCount.setBounds(550, 170, 200, 60);
+          sellPhoto.setBounds(30, 30, 250, 200);
+          sellName.setBounds(350, 50, 200, 60);
+          sellTime.setBounds(650, 50, 200, 60);
+          sellPrice.setBounds(350, 150, 200, 60);
+          sellCount.setBounds(650, 150, 200, 60);
            
           sellPhoto.setFont(f);
           sellName.setFont(f);
@@ -297,12 +306,19 @@ implements ActionListener{
           sellTime.setHorizontalAlignment(SwingConstants.CENTER);
           sellPrice.setHorizontalAlignment(SwingConstants.CENTER);
           sellCount.setHorizontalAlignment(SwingConstants.CENTER);
-           
-          sellPhoto.setBorder(new LineBorder(Color.black,1,true));
-          sellName.setBorder(new LineBorder(Color.black,1,true));
-          sellTime.setBorder(new LineBorder(Color.black,1,true));
-          sellPrice.setBorder(new LineBorder(Color.black,1,true));
-          sellCount.setBorder(new LineBorder(Color.black,1,true));
+          
+          //디자인
+          itemPanel.setBackground(Color.white);
+          
+          sellName.setOpaque(true);
+          sellCount.setOpaque(true);
+          sellPrice.setOpaque(true);
+          sellTime.setOpaque(true);
+          
+          sellName.setBackground(color);
+          sellCount.setBackground(color);
+          sellPrice.setBackground(color);
+          sellTime.setBackground(color);
           
           timerSet ts = new timerSet(sellTime, time);
            

@@ -3,6 +3,7 @@ package project1;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -35,9 +36,12 @@ public class Admin extends JFrame implements ActionListener {
    JProgressBar categoryJpb;
    JTable biddingTb, bidendTb;
    JScrollPane biddingScrollPane, bidendScrollPane;
+   Color color = new Color(240,240,240);
+   LineBorder lb = new LineBorder(Color.black,1,true);
+   LineBorder lb1 = new LineBorder(Color.white,0,true);
    
    String logId;
- //상품 이름", "판매자 ID","참여 인원","최종 가격"
+   //상품 이름", "판매자 ID","참여 인원","최종 가격"
    String[] cbList = {"카테고리 별 판매량", "경매 log"};
    String[] categoryNames = {"디지털기기", "의류","생활가전","스포츠/레저","취미/게임/음반","뷰티/미용","반려동물용품","가구/인테리어","차량","도서"};
    
@@ -58,32 +62,48 @@ public class Admin extends JFrame implements ActionListener {
       adminCategoryPanel = new JPanel();
       adminCategoryPanel.setLayout(new GridLayout(0, 1, 10, 10));
       //
-      adminCategoryPanel.setBounds(50, 130, 1200, 350);
+      adminCategoryPanel.setBounds(150, 140, 1000, 350);
       // index 1 log Panel
       adminLogPanel = new JPanel();
       adminLogPanel.setLayout(null);
-      adminLogPanel.setBounds(40, 120, 1200, 670);
+      adminLogPanel.setBounds(60, 120, 1160, 670);
       // JComboBox
       //adminCb (관리자 콤보박스)
       adminCb = new JComboBox<>(cbList);
       adminCb.setBounds(60, 80, 200, 34);
-      adminCb.setFont(new Font("돋움체", 0, 17));
+      adminCb.setFont(new Font("맑은 고딕", Font.BOLD, 17));
       adminCb.addActionListener(this);
       //backBtn (뒤로가기)
-       backBtn = new JButton("뒤로가기");
-       backBtn.setBounds(1150, 820, 120, 30);
-       backBtn.setFont(new Font("돋움체", 0, 15));
-       backBtn.addActionListener(this);
-    // memberId (멤버 아이디 라벨)
-       memberId = new JLabel("아이디 : "+logId);
-       memberId.setBounds(1150, 20, 100, 30);
-       memberId.setFont(new Font("돋움체", 0, 15));
+      backBtn = new JButton("뒤로가기");
+      backBtn.setBounds(1150, 820, 120, 30);
+      backBtn.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+      backBtn.addActionListener(this);
+      // memberId (멤버 아이디 라벨)
+      memberId = new JLabel("아이디 : "+logId);
+      memberId.setBounds(1150,20,150,30);
+      memberId.setFont(new Font("맑은 고딕", 0, 15));
        // logo (메인 로고)
-        logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
-       logo.setBounds(20, 20, 130, 40);
-      //Panel
-       	itemPanel = new JPanel();
-      	itemPanel.setLayout(null);
+      logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
+      logo.setBounds(20, 25, 130, 40);
+       
+       //디자인
+       //뒤로가기 버튼 디자인
+       backBtn.setBackground(Color.black);
+       backBtn.setForeground(Color.white);
+       backBtn.setBorderPainted(false);
+       backBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+       this.add(backBtn);
+       //콤보 박스 디자인
+       adminCb.setBackground(color);
+       adminCb.setBorder(lb);
+       adminCb.setCursor(new Cursor(Cursor.HAND_CURSOR));
+       this.add(adminCb);
+       //배경
+       c.setBackground(Color.white);
+       adminCategoryPanel.setBackground(Color.white);
+       //Panel
+      itemPanel = new JPanel();
+      itemPanel.setLayout(null);
       c.add(adminCb);
       c.add(memberId);
       c.add(logo);
@@ -100,17 +120,21 @@ public class Admin extends JFrame implements ActionListener {
 	            
 	      // 카테고리 이름
 	      categoryName = new JLabel(categoryNames[num]);
-	      categoryName.setFont(new Font("돋움체", 0, 17));
+	      categoryName.setFont(new Font("맑은 고딕", Font.BOLD, 17));
 	      categoryName.setHorizontalAlignment(SwingConstants.CENTER);
-	      categoryName.setBounds(5, 15, 160, 30);
+	      categoryName.setBounds(5, 5, 160, 30);
 	            
 	      // 카테고리 그래프
 	      JProgressBar categoryJpb = new JProgressBar();
-	      categoryJpb.setBounds(180, 10, 800, 35);
+	      categoryJpb.setBounds(190, 0, 800, 40);
 	      categoryJpb.setValue(values);
 	      
 	      itemPanel.add(categoryName);
 	      itemPanel.add(categoryJpb);
+	      
+	      //디자인
+	      itemPanel.setBackground(Color.white);
+	      categoryJpb.setForeground(Color.black);
 	      
 	      return itemPanel;
 	   }
@@ -140,8 +164,7 @@ public class Admin extends JFrame implements ActionListener {
 	      } else if (index == 1) {
 	    	  //상품 이름", "판매자 ID","참여 인원","최종 가격"
 	    	   //Object[][] listData = new Object[subjectList.size()][12];
-	    	  
-		      c.remove(adminCategoryPanel);
+	    	  c.remove(adminCategoryPanel);
 		     
 	    	  String ing_header[] = {"상품 이름", "판매자 ID","참여 인원","판매 가격"};
 	    	  String end_header[] = {"상품 이름", "판매자 ID","참여 인원","최종 가격"};
@@ -151,13 +174,35 @@ public class Admin extends JFrame implements ActionListener {
 	    	  DefaultTableModel endModel = new DefaultTableModel(end_header, 0);
 	    	  mgr.getAuctionIng(ingModel);
 	    	  mgr.getAuctionEnd(endModel);
-	    	  
+	    	 
 	    	  biddingTb = new JTable(ingModel);
 	    	  bidendTb = new JTable(endModel);
 	    	  biddingScrollPane  = new JScrollPane(biddingTb);
-	    	  biddingScrollPane.setBounds(60,20,500,600);
+	    	  biddingScrollPane.setBounds(65,30,500,600);
+	    	  biddingScrollPane.setFont(new Font("맑은고딕",0,20));
 	    	  bidendScrollPane = new JScrollPane(bidendTb);
-	    	  bidendScrollPane.setBounds(590,20,500,600);
+	    	  bidendScrollPane.setBounds(595,30,500,600);
+	    	  
+	     	  //디자인
+	    	  adminLogPanel.setBackground(Color.white);
+	    	  biddingTb.setBackground(Color.white);
+	    	  biddingScrollPane.setBorder(lb1);
+	    	  bidendScrollPane.setBorder(lb1);
+	    	  biddingTb.getColumn("상품 이름").setPreferredWidth(200);
+	    	  bidendTb.getColumn("상품 이름").setPreferredWidth(200);
+	    	  biddingTb.setRowHeight(30);
+	    	  bidendTb.setRowHeight(30);
+	    	  biddingTb.setBorder(lb);
+	    	  bidendTb.setBorder(lb);
+	    	  biddingTb.getTableHeader().setBackground(Color.black);
+	    	  biddingTb.getTableHeader().setFont(new Font("맑은 고딕", Font.BOLD, 15));
+	    	  biddingTb.getTableHeader().setForeground(Color.white);
+	    	  biddingTb.setFont(new Font("맑은 고딕", 0, 12));
+	    	  bidendTb.getTableHeader().setBackground(Color.black);
+	    	  bidendTb.getTableHeader().setFont(new Font("맑은 고딕", Font.BOLD, 15));
+	    	  bidendTb.getTableHeader().setForeground(Color.white);
+	    	  bidendTb.setFont(new Font("맑은 고딕", 0, 12));
+	    	  
 	    	  adminLogPanel.add(biddingScrollPane);
 	    	  adminLogPanel.add(bidendScrollPane);
 	    	  c.add(adminLogPanel);
@@ -166,6 +211,7 @@ public class Admin extends JFrame implements ActionListener {
 	      repaint();
 	      validate();
 	   }
+	   
 
 	   @Override
 	   public void actionPerformed(ActionEvent e) {
