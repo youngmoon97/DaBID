@@ -75,7 +75,7 @@ public class Admin extends JFrame implements ActionListener {
        backBtn.setFont(new Font("돋움체", 0, 15));
        backBtn.addActionListener(this);
     // memberId (멤버 아이디 라벨)
-       memberId = new JLabel("아이디 : aaa");
+       memberId = new JLabel("아이디 : "+logId);
        memberId.setBounds(1150, 20, 100, 30);
        memberId.setFont(new Font("돋움체", 0, 15));
        // logo (메인 로고)
@@ -190,7 +190,6 @@ public class Admin extends JFrame implements ActionListener {
 	   }
 	   
 	   public static void main(String[] args) {
-	         Admin AdminChange = new Admin("logId");
-	         AdminChange.setVisible(true);
+	         
 	   }
 	}
