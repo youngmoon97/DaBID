@@ -2,6 +2,7 @@ package project1;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.image.IndexColorModel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,6 +23,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class AuctionMgr {
    
+	
    private DBConnectionMgr pool;
    
    public AuctionMgr() {
@@ -190,20 +192,21 @@ public class AuctionMgr {
          ItemBean ibean = new ItemBean();
          try {
             con = pool.getConnection();
-            sql = "select item_seller, item_num, item_name, item_photo, item_memo, item_price, purchaser_count, timestampdiff(second, now(), item_endtime) "
-            		+ "from item "
-            		+ "where purchaser_count = (select max(purchaser_count) from item where item_status=2) "
+            sql = "select i1.item_seller, i1.item_status , i1.item_num, i1.item_name, i1.item_photo, i1.item_memo, i1.item_price, i1.purchaser_count, timestampdiff(second, now(), i1.item_endtime) "
+            		+ "from item i1 "
+            		+ "where timestampdiff(second, now(), i1.item_endtime) > 0 "
+            		+ "	and purchaser_count = (select max(purchaser_count) from item i where i.item_status =2) "
             		+ "order by item_price desc limit 1";
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
             if(rs.next()) {
-            	ibean.setItemSeller(rs.getString("item_seller"));
-            	ibean.setItemNum(rs.getInt("item_num"));
-            	ibean.setItemName(rs.getString("item_name"));
-            	ibean.setItemMemo(rs.getString("item_memo"));
-            	ibean.setItemPrice(rs.getInt("item_price"));
-            	ibean.setPurchaserCount(rs.getInt("purchaser_count"));
-            	ibean.setItemEndTime(rs.getInt("timestampdiff(second, now(), item_endtime)"));
+            	ibean.setItemSeller(rs.getString("i1.item_seller"));
+            	ibean.setItemNum(rs.getInt("i1.item_num"));
+            	ibean.setItemName(rs.getString("i1.item_name"));
+            	ibean.setItemMemo(rs.getString("i1.item_memo"));
+            	ibean.setItemPrice(rs.getInt("i1.item_price"));
+            	ibean.setPurchaserCount(rs.getInt("i1.purchaser_count"));
+            	ibean.setItemEndTime(rs.getInt("timestampdiff(second, now(), i1.item_endtime)"));
             }
          } catch (Exception e) {
             e.printStackTrace();
@@ -592,12 +595,11 @@ public class AuctionMgr {
 	      return clist;
 	   }
 	   //관리자 - 경매 중인 상품
-	    public Vector<ItemBean> getAuctionIng(){
+	    public void getAuctionIng(DefaultTableModel ingModel){
 	         Connection con = null;
 	         PreparedStatement pstmt = null;
 	         ResultSet rs = null;
 	         String sql = null;
-	         Vector<ItemBean> clist = new Vector<ItemBean>();
 	         try {
 	            con = pool.getConnection();
 	            sql = "select distinct item_num, item_name , item_seller , purchaser_count , item_price "
@@ -606,30 +608,26 @@ public class AuctionMgr {
 	            pstmt = con.prepareStatement(sql);
 	            rs = pstmt.executeQuery();
 	            while(rs.next()) {
-	               ItemBean ibean = new ItemBean();
-	               ibean.setItemNum(rs.getInt("item_num"));
-	               ibean.setItemName(rs.getString("item_name"));
-	               ibean.setItemSeller(rs.getString("item_seller"));
-	               ibean.setPurchaserCount(rs.getInt("purchaser_count"));
-	               ibean.setItemPrice(rs.getInt("item_price"));
-//	               System.out.println(ibean.getItemName()+"22");
-	               clist.addElement(ibean);
+	            	Vector<Object> data = new Vector<>();
+	               data.add(rs.getString("item_name"));
+	               data.add(rs.getString("item_seller"));
+	               data.add(rs.getString("purchaser_count"));
+	               data.add(rs.getString("item_price"));
+	               ingModel.addRow(data);
 	            }         
 	         } catch (Exception e) {
 	            e.printStackTrace();
 	         }finally {
 	            pool.freeConnection(con, pstmt, rs);
 	         }
-	         return clist;
 	      }
 	    
 	   //관리자 - 경매 종료 상품
-	    public Vector<ItemBean> getAuctionEnd(){
+	    public void getAuctionEnd(DefaultTableModel endModel){
 	         Connection con = null;
 	         PreparedStatement pstmt = null;
 	         ResultSet rs = null;
 	         String sql = null;
-	         Vector<ItemBean> clist = new Vector<ItemBean>();
 	         try {
 	            con = pool.getConnection();
 	            sql = "select a.auction_purchaser ,i.item_num, i.item_name , i.item_seller , i.purchaser_count , i.item_price "
@@ -639,21 +637,18 @@ public class AuctionMgr {
 	            pstmt = con.prepareStatement(sql);
 	            rs = pstmt.executeQuery();
 	            while(rs.next()) {
-	               ItemBean ibean = new ItemBean();
-	               ibean.setItemPurchaser(rs.getString("a.auction_purchaser"));
-	               ibean.setItemNum(rs.getInt("i.item_num"));
-	               ibean.setItemName(rs.getString("i.item_name"));
-	               ibean.setItemSeller(rs.getString("i.item_seller"));
-	               ibean.setPurchaserCount(rs.getInt("i.purchaser_count"));
-	               ibean.setItemPrice(rs.getInt("i.item_price"));
-	               clist.addElement(ibean);
+		            Vector<Object> data = new Vector<>();
+	            	data.add(rs.getString("item_name"));
+	            	data.add(rs.getString("item_seller"));
+	            	data.add(rs.getString("purchaser_count"));
+	            	data.add(rs.getString("item_price"));
+	            	endModel.addRow(data);
 	            }         
 	         } catch (Exception e) {
 	            e.printStackTrace();
 	         }finally {
 	            pool.freeConnection(con, pstmt, rs);
 	         }
-	         return clist;
 	      }
 	//비밀번호 변경- 마이페이지
 	   public void pwChange(String memberPwd, String memberId) {

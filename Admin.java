@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 public class Admin extends JFrame implements ActionListener {
@@ -40,7 +41,7 @@ public class Admin extends JFrame implements ActionListener {
    String[] cbList = {"카테고리 별 판매량", "경매 log"};
    String[] categoryNames = {"디지털기기", "의류","생활가전","스포츠/레저","취미/게임/음반","뷰티/미용","반려동물용품","가구/인테리어","차량","도서"};
    
-   
+   Container c = getContentPane();
    AuctionMgr mgr;
    
    public Admin(String logId) {
@@ -53,21 +54,15 @@ public class Admin extends JFrame implements ActionListener {
       setResizable(false);
       setLayout(null);
       setLocationRelativeTo(null);
-      
-      Container c = getContentPane();
-      
       // 
       adminCategoryPanel = new JPanel();
       adminCategoryPanel.setLayout(new GridLayout(0, 1, 10, 10));
-      
       //
       adminCategoryPanel.setBounds(50, 130, 1200, 350);
-      
       // index 1 log Panel
       adminLogPanel = new JPanel();
-      adminLogPanel.setLayout(new GridLayout(1, 0, 10, 10));
-      adminLogPanel.setBounds(40, 120, 610, 670);
-      
+      adminLogPanel.setLayout(null);
+      adminLogPanel.setBounds(40, 120, 1200, 670);
       // JComboBox
       //adminCb (관리자 콤보박스)
       adminCb = new JComboBox<>(cbList);
@@ -79,30 +74,20 @@ public class Admin extends JFrame implements ActionListener {
        backBtn.setBounds(1150, 820, 120, 30);
        backBtn.setFont(new Font("돋움체", 0, 15));
        backBtn.addActionListener(this);
-      
     // memberId (멤버 아이디 라벨)
        memberId = new JLabel("아이디 : aaa");
        memberId.setBounds(1150, 20, 100, 30);
        memberId.setFont(new Font("돋움체", 0, 15));
-       
        // logo (메인 로고)
         logo = new JLabel(new ImageIcon(Login.class.getResource("./image/logo.png")));
        logo.setBounds(20, 20, 130, 40);
-      
       //Panel
        	itemPanel = new JPanel();
       	itemPanel.setLayout(null);
-//      itemPanel.setBounds(40, 120, 610, 670);
-//      c.add(itemPanel);
-      
-
-      
       c.add(adminCb);
       c.add(memberId);
       c.add(logo);
       c.add(backBtn);
-      c.add(adminCategoryPanel);
-      addData(0);
       validate();
    }
    
@@ -121,7 +106,7 @@ public class Admin extends JFrame implements ActionListener {
 	            
 	      // 카테고리 그래프
 	      JProgressBar categoryJpb = new JProgressBar();
-	      categoryJpb.setBounds(180, 10, 870, 35);
+	      categoryJpb.setBounds(180, 10, 800, 35);
 	      categoryJpb.setValue(values);
 	      
 	      itemPanel.add(categoryName);
@@ -132,45 +117,50 @@ public class Admin extends JFrame implements ActionListener {
 
 	   public void addData(int index) {
 	      
-	      adminCategoryPanel.removeAll();
-	      adminLogPanel.removeAll();
-	      
+	   
 	      Vector<ItemBean> vlist;
-	      
+	      vlist = mgr.getAdminCategory();
+	      ItemBean ibean;
+	      for (int i = 0; i < vlist.size(); i++) {
+			ibean = vlist.get(i);
+		}
 	      if (index == 0) {
+	    	 c.remove(adminLogPanel);
 	         
-	         vlist = mgr.getAdminCategory();         
 	         
 	         for (int i = 0; i < vlist.size(); i++) {
 	            JPanel p;
-	            
-	            p = statisticsData(vlist.get(i).getCategoryNum(),vlist.get(i).getAllCount());
+	        	ibean = vlist.get(i);
+	            p = statisticsData(ibean.getCategoryNum(),vlist.get(i).getAllCount());
 	            
 	            p.setPreferredSize(new Dimension(10, 20));
 	            adminCategoryPanel.add(p);
+	            c.add(adminCategoryPanel);
 	         }
 	      } else if (index == 1) {
 	    	  //상품 이름", "판매자 ID","참여 인원","최종 가격"
 	    	   //Object[][] listData = new Object[subjectList.size()][12];
 	    	  
+		      c.remove(adminCategoryPanel);
+		     
 	    	  String ing_header[] = {"상품 이름", "판매자 ID","참여 인원","판매 가격"};
 	    	  String end_header[] = {"상품 이름", "판매자 ID","참여 인원","최종 가격"};
+	    	  //Vector<String> ing_data = new Vector<>();
 	    	  
 	    	  DefaultTableModel ingModel = new DefaultTableModel(ing_header, 0);
 	    	  DefaultTableModel endModel = new DefaultTableModel(end_header, 0);
-	    	   
-	    	 vlist = mgr.getAuctionIng();
-	   	   	 Object[][] contents;
-	    	 Vector<Object> data = new Vector<Object>();
-	         for (int i = 0; i < vlist.size(); i++) {
-	        	 	ItemBean ibean = vlist.get(i);
-	        	 	data.addElement(ibean.getItemName());
-					data.add(ibean.getItemSeller());
-					data.add(Integer.toString(ibean.getPurchaserCount()));
-					data.add(Integer.toString(ibean.getItemPrice()));
-					ingModel.addRow(data);
-			}
-	        
+	    	  mgr.getAuctionIng(ingModel);
+	    	  mgr.getAuctionEnd(endModel);
+	    	  
+	    	  biddingTb = new JTable(ingModel);
+	    	  bidendTb = new JTable(endModel);
+	    	  biddingScrollPane  = new JScrollPane(biddingTb);
+	    	  biddingScrollPane.setBounds(60,20,500,600);
+	    	  bidendScrollPane = new JScrollPane(bidendTb);
+	    	  bidendScrollPane.setBounds(590,20,500,600);
+	    	  adminLogPanel.add(biddingScrollPane);
+	    	  adminLogPanel.add(bidendScrollPane);
+	    	  c.add(adminLogPanel);
 	      }
 	      
 	      repaint();

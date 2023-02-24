@@ -89,7 +89,7 @@ implements ActionListener{
         ImageIcon changeIcon = new ImageIcon(changeImg);
         
         itemPhoto = new JLabel(changeIcon);
-        itemPhoto.setBounds(60, 90, 430, 370);
+       itemPhoto.setBounds(60, 90, 430, 370);
         //상품설명
         itemMemo= new JLabel(ibean.getItemMemo());
         itemMemo.setBorder(new LineBorder(Color.black,1,true));

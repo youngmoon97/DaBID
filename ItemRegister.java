@@ -37,7 +37,7 @@ import javax.swing.border.TitledBorder;
 public class ItemRegister extends JFrame implements ActionListener {
 
    JPanel itemPanel;
-   JLabel logo,memberId, itemName, itemPhoto, itemCategory,itemmemo, itemprice, won, endtime;
+   JLabel logo, getItemName ,memberId, itemName, itemPhoto, itemCategory,itemmemo, itemprice, won, endtime;
    JTextField taName, taPrice;
    JTextArea taMemo;
    JButton registerBtn, backBtn, imageBtn;
