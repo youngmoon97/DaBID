@@ -339,6 +339,31 @@ public class AuctionMgr {
          }
          return ilist;
       }   
+      //seller체크
+      public boolean sellerChk(String memberId, String memberPwd) {
+          Connection con = null;
+          PreparedStatement pstmt = null;
+          ResultSet rs = null;
+          String sql = null;
+          boolean flag = false;
+          
+          try {
+             con = pool.getConnection();
+             sql = "select count(member_ID) from member "
+                   +"where member_ID = ? and member_PW = ?";
+             pstmt = con.prepareStatement(sql);
+             pstmt.setString(1, memberId);
+             pstmt.setString(2, memberPwd);
+             rs = pstmt.executeQuery();
+             if(rs.next()&&rs.getInt(1)==1)
+                flag = true;
+          } catch (Exception e) {
+             e.printStackTrace();
+          }finally {
+             pool.freeConnection(con, pstmt, rs);
+          }
+          return flag;
+       }
    //경매참여 상품(마이페이지 판매한 상품 - member_id = item_seller)
    public Vector<ItemBean> getIngItemList(String itemSeller){
       Connection con = null;
@@ -475,7 +500,7 @@ public class AuctionMgr {
       Vector<CommentBean> clist = new Vector<CommentBean>();
       try {
          con = pool.getConnection();
-         sql = "select purchaser_id, comment_content , comment_time "
+         sql = "select seller_id, purchaser_id, comment_content , comment_time "
          		+ "from comment "
          		+ "where comment_itemnum = ?";
          pstmt = con.prepareStatement(sql);
@@ -483,6 +508,7 @@ public class AuctionMgr {
          rs = pstmt.executeQuery();
          while(rs.next()) {
             CommentBean bean = new CommentBean();
+            bean.setSellerId(rs.getString("seller_id"));
             bean.setPurchaserId(rs.getString("purchaser_id"));
             bean.setCommentContent(rs.getString("comment_content"));
             bean.setCommentTime(rs.getDate("comment_time"));

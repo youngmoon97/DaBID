@@ -18,8 +18,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -31,6 +33,8 @@ implements ActionListener{
    JPanel itemPanel,commentPanel;
    JLabel logo, memberId, itemName, itemPhoto, itemMemo, currentPrice, purchaserCount, auctionPriceLbl, auctionTime;
    JTextArea commentArea;
+   JScrollPane commentScroll;
+   JTextPane commentPane;
    JTextField commentTf, bidpriceTf;
    JButton commentBtn, auctionBtn, backBtn; 
    TitledBorder itemTb, commentTb;
@@ -121,24 +125,42 @@ implements ActionListener{
        commentPanel.setBounds(660, 80, 550, 700);
        commentPanel.setBorder(commentTb);
        commentPanel.setBackground(Color.white);
-     //textarea
-       commentArea = new JTextArea();
+       //
+       commentPane = new JTextPane();
+       commentPane.setEditable(false);
+       commentPane.setContentType("text/html");
+       commentScroll = new JScrollPane(commentPane);
+       commentScroll.setBounds(60, 90, 430, 450);
+       commentScroll.setBorder(new LineBorder(lightGray,1,true));       
+
+       commentPanel.add(commentScroll);
+       //textarea
+       
+       /*commentArea = new JTextArea();
        commentArea.setBounds(60, 90, 430, 450);
        commentArea.setBorder(new LineBorder(lightGray,1,true));       
        commentArea.setEnabled(false);
-       
+       */
        //이전 댓글 가져오기
        Vector<CommentBean> clist = mgr.getCommentList(ibean.getItemNum());
+       
        for (int i = 0; i < clist.size(); i++) {
           
           CommentBean cbean = clist.get(i);
           if(cbean.getCommentContent()==null) {
              commentArea.append("이전 댓글이 없습니다.\n");
           }else {
-             Date time = cbean.getCommentTime();
+            Date time = cbean.getCommentTime();
             String purchaserId = cbean.getPurchaserId();
+            String sellerId = cbean.getSellerId();
             String comment = cbean.getCommentContent();
-            commentArea.append(time+"\n"+purchaserId+" : "+comment+"\n");
+            String color = "black";
+
+            if(purchaserId.equals(sellerId)) { //판매자
+            	color = "blue";
+            }
+            String str = "<font color='" + color + "'>" + purchaserId + " : "+comment + "</font><br>";
+            commentPane.setText(editStr(commentPane.getText()+str));
           }
       }
      //시간 계산 
@@ -167,6 +189,7 @@ implements ActionListener{
        commentTf.setBorder(new LineBorder(txtColor,1,true));
        commentTf.setFont(new Font("맑은 고딕", 0, 13));
        commentTf.setBackground(txtColor);
+       commentTf.addActionListener(this);
        commentTf.requestFocus();
        //comment버튼전송
        commentBtn = new JButton("전송");
@@ -188,15 +211,14 @@ implements ActionListener{
                 String comment = commentTf.getText();
                 String seller = ibean.getItemSeller();
                 int itemNum = ibean.getItemNum();
-                //TODO 댓글 사람에 따라 색상바꾸기
-                /*if(seller == logId) {
-                   //판매자의 답글
-                   commentTf.setForeground(Color.red);
-                }else {
-                   commentArea.setForeground(Color.blue);
-                }*/
+                String color  = "black";
+                if(seller.equals(logId)) {
+                	color="blue";
+                }           
+                String str = "<font color='" + color + "'>" + logId + " : "+ comment + "</font><br>";
                 LocalDate now = LocalDate.now();
-                commentArea.append(now+"\n"+logId +" : "+comment+"\n");
+                commentPane.setText(editStr(commentPane.getText()+str));
+                //commentArea.append(now+"\n"+logId +" : "+comment+"\n");
                 //댓글 저장
                 
                 mgr.insertComment(seller, logId, itemNum, comment);
@@ -265,7 +287,7 @@ implements ActionListener{
          }
       });
        //
-       commentPanel.add(commentArea);
+       //commentPanel.add(commentArea);
        commentPanel.add(auctionTime);
        commentPanel.add(commentTf);
        commentPanel.add(commentBtn); 
@@ -310,6 +332,16 @@ implements ActionListener{
          }
       }
    }
+   public String editStr(String str) {
+		str =  str.replace("<html>", "");
+		str =  str.replace("<head>", "");
+		str =  str.replace("</head>", "");
+		str =  str.replace("<body>", "");
+		str =  str.replace("</body>", "");
+		str =  str.replace("</html>", "");
+		System.out.println(str);
+		return str;
+	}
 class timerSet implements Runnable{
        
        JLabel itemTime;
@@ -350,5 +382,9 @@ class timerSet implements Runnable{
     }
    
    public static void main(String[] args) {
+		/*
+		 * try { Auction a = new Auction("aaa", 65); a.setVisible(true); } catch
+		 * (Exception e) { // TODO: handle exception }
+		 */
    }
 }
