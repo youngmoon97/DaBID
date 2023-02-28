@@ -319,7 +319,7 @@ public class AuctionMgr {
             		+ "from item i , category c "
             		+ "where i.item_categorynum = c.category_num "
             		+ "and c.category_name  = ? "
-            		+ "and i.item_status = 2";
+            		+ "and timestampdiff(second, now(), item_endtime) > 0";
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, ItemCategoryName);
             rs = pstmt.executeQuery();
@@ -352,7 +352,7 @@ public class AuctionMgr {
          		+ "from item i , auction a "
          		+ "where i.item_num = a.auction_itemnum "
          		+ "	and a.auction_purchaser = ? "
-         		+ "	and i.item_status = 2";
+         		+ "	and timestampdiff(second, now(), item_endtime) > 0";
          pstmt = con.prepareStatement(sql);
          pstmt.setString(1, itemSeller);
          rs = pstmt.executeQuery();

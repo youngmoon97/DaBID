@@ -120,16 +120,16 @@ implements ActionListener{
           //ÀÌ¹ÌÁö ¸®»çÀÌÁî
             ImageIcon icon = new ImageIcon(Login.class.getResource("./image/"+ib.getItemName()+".jpg"));
             Image img = icon.getImage();
-            Image changeImg = img.getScaledInstance(250, 200, Image.SCALE_SMOOTH);
+            Image changeImg = img.getScaledInstance(250, 180, Image.SCALE_SMOOTH);
             ImageIcon changeIcon = new ImageIcon(changeImg);
             
             itemPhoto = new JLabel(changeIcon);
-            itemPhoto.setBounds(50,45, 250, 200);
+            itemPhoto.setBounds(50,5, 250, 200);
             itemPhoto.setFont(new Font("¸¼Àº °íµñ", Font.BOLD,15));
 //            itemPhoto.setBorder(new LineBorder(Color.black,1,true));
             //
             itemName = new JLabel(ib.getItemName());
-            itemName.setBounds(370, 75, 220, 50);
+            itemName.setBounds(370, 25, 220, 50);
             itemName.setFont(new Font("¸¼Àº °íµñ", Font.BOLD,15));
             itemName.setHorizontalAlignment(SwingConstants.CENTER);
             itemName.setOpaque(true);
@@ -138,7 +138,7 @@ implements ActionListener{
 
             //
             auctionPrice = new JLabel(Integer.toString(ib.getItemPrice()) + " ¿ø");
-            auctionPrice.setBounds(370, 165, 220, 50);
+            auctionPrice.setBounds(370, 115, 220, 50);
             auctionPrice.setFont(new Font("¸¼Àº °íµñ", Font.BOLD,15));
             auctionPrice.setHorizontalAlignment(SwingConstants.CENTER);
             auctionPrice.setOpaque(true);
@@ -157,7 +157,7 @@ implements ActionListener{
             String reSec = Integer.toString(second);
       //
             auctionTime = new JLabel(reHour + ":" + reMin + ":" + reSec);
-            auctionTime.setBounds(660, 75, 220, 50);
+            auctionTime.setBounds(660, 25, 220, 50);
             auctionTime.setFont(new Font("¸¼Àº °íµñ", Font.BOLD,15));
             auctionTime.setHorizontalAlignment(SwingConstants.CENTER);
             auctionTime.setOpaque(true);
@@ -168,7 +168,7 @@ implements ActionListener{
             timerSet ts = new timerSet(auctionTime, time);
       //
             purchaserCount = new JLabel("Âü¿© ÀÎ¿ø : "+Integer.toString(ib.getPurchaserCount()) + " ¸í");
-            purchaserCount.setBounds(660, 165, 220, 50);
+            purchaserCount.setBounds(660, 115, 220, 50);
             purchaserCount.setFont(new Font("¸¼Àº °íµñ", Font.BOLD,15));
             purchaserCount.setHorizontalAlignment(SwingConstants.CENTER);
             purchaserCount.setOpaque(true);
@@ -176,7 +176,7 @@ implements ActionListener{
             purchaserCount.setForeground(lightGray);
       //
             JButton partBtn = new JButton("Âü¿©ÇÏ±â");
-            partBtn.setBounds(960, 90, 100, 100);
+            partBtn.setBounds(960, 50, 100, 100);
             partBtn.setFont(new Font("¸¼Àº °íµñ", Font.BOLD, 15));
             partBtn.setForeground(txtColor);
             partBtn.setBackground(Color.black);
