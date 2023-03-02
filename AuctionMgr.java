@@ -194,9 +194,8 @@ public class AuctionMgr {
             con = pool.getConnection();
             sql = "select i1.item_seller, i1.item_status , i1.item_num, i1.item_name, i1.item_photo, i1.item_memo, i1.item_price, i1.purchaser_count, timestampdiff(second, now(), i1.item_endtime) "
             		+ "from item i1 "
-            		+ "where timestampdiff(second, now(), i1.item_endtime) > 0 "
-            		+ "	and purchaser_count = (select max(purchaser_count) from item i where i.item_status =2) "
-            		+ "order by item_price desc limit 1";
+            		+ "where purchaser_count = (select max(purchaser_count) from item i where timestampdiff(second, now(), i.item_endtime) > 0 ) "
+            		+ "order by item_price desc limit 1;";
             pstmt = con.prepareStatement(sql);
             rs = pstmt.executeQuery();
             if(rs.next()) {

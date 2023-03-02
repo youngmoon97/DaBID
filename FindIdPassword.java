@@ -68,7 +68,7 @@ implements ActionListener{
       idFindEmailtxt.setBounds(190,115,100,25);
       //아이디찾기버튼
       findIdBtn = new JButton("아이디찾기");
-      findIdBtn.setBounds(310,75,110,65);
+      findIdBtn.setBounds(310,75,115,65);
       findIdBtn.addActionListener(this);
       //이름 아이디 이메일 -->비밀번호찾기 
       pwFindName = new JLabel("이 름");
@@ -89,7 +89,7 @@ implements ActionListener{
       pwFindEmailtxt.setBounds(190,150,100,25);
       //비밀번호찾기 버튼
       findPwBtn = new JButton("비밀번호 찾기");
-      findPwBtn.setBounds(310,70,110,105);
+      findPwBtn.setBounds(310,70,115,105);
       findPwBtn.addActionListener(this);
       //뒤로가기btn
       backBtn = new JButton("뒤로가기");
@@ -192,7 +192,10 @@ implements ActionListener{
     		  memEmail = pwFindEmailtxt.getText();
     		  MemberBean mbean = mgr.getMemberPw(memName, memId, memEmail);
     		  String memPw = mbean.getMemberPwd();
-    		  alarm.showMessageDialog(null, memPw);
+    		  alarm.showMessageDialog(null, "비밀번호 : "+memPw);
+    		  dispose();
+    		  Login login = new Login();
+    		  login.setVisible(true);
     	  }
       }
    }

@@ -92,10 +92,12 @@ implements ActionListener{
       memberIdtxt = new JTextField();
       memberIdtxt.setFont(new Font("¸¼Àº °íµñ", 0, 15));
       memberIdtxt.setBounds(370, 220, 158, 34);
+      memberIdtxt.addActionListener(this);
       //ºñ¹Ð¹øÈ£ ÀÔ·ÂÄ­
       memberPwtxt = new JPasswordField();
       memberPwtxt.setFont(new Font("¸¼Àº °íµñ", 0, 15));
       memberPwtxt.setBounds(370, 280, 158, 34);
+      memberPwtxt.addActionListener(this);
       //È¸¿ø°¡ÀÔ ¹öÆ°
       joinMemberBtn = new JButton("È¸¿ø°¡ÀÔ");
       joinMemberBtn.setFont(new Font("¸¼Àº °íµñ",Font.BOLD, 13));
@@ -140,6 +142,7 @@ implements ActionListener{
       memberPwtxt.setBackground(txtColor);
       memberPwtxt.setBorder(javax.swing.BorderFactory.createEmptyBorder());
       //add      
+      
       c.add(loginBtn);
       c.add(logolbl);
 

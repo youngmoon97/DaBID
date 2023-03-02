@@ -41,7 +41,7 @@ public class Main extends JFrame
 implements ActionListener{
    
    JPanel itemPanel,categoryPanel,imagePanel;
-   JLabel logo, memberId, itemName, itemPhoto, itemMemo, currentPrice, purchaserCount, itemTime;
+   JLabel logo, memberId, itemName, itemPhoto, itemMemo, currentPrice, purchaserCount, itemTime /*,hammer*/;
    JTextArea catagoryArea;
    JButton manegerBtn, registerBtn, backBtn,myPageBtn, hotBidBtn; //frame
    TitledBorder hotbidTb, commentTb;
@@ -138,8 +138,17 @@ implements ActionListener{
         //오른쪽 패널(카테고리)
         categoryPanel = new JPanel();
         categoryPanel.setLayout(null);
-        categoryPanel.setBounds(660, 80, 550, 350);
+        categoryPanel.setBounds(660, 80, 550, 700);
         categoryPanel.setBorder(commentTb);
+        //hammer
+        /*ImageIcon icon2 = new ImageIcon(Login.class.getResource("./image/dabid3.png"));
+        Image img2 = icon2.getImage();
+        Image changeImg2 = img2.getScaledInstance(500, 500, Image.SCALE_SMOOTH);
+        ImageIcon changeIcon2 = new ImageIcon(changeImg2);
+        
+        hammer = new JLabel(changeIcon2);
+        hammer.setBounds(660,430,550,350);
+        */
         //카테고리 넣기
         
        Vector<CategoryBean> clist = mgr.getCategory();
@@ -231,6 +240,7 @@ implements ActionListener{
         hotBidBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.add(hotBidBtn);
         //add
+        //c.add(hammer);
         c.add(myPageBtn);
         c.add(logo);
         c.add(memberId);

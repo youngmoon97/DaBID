@@ -30,7 +30,7 @@ implements ActionListener{
    JLabel logo, joinName, joinId, joinPw, joinPwCheck, joinEmail, joinAt, joinUseIdlbl, joinUsePwlbl;
    JTextField joinNametxt, joinIdtxt, joinEmailtxt;
    JPasswordField joinPwtxt, joinPwChecktxt;
-   JButton joinBtn, idCheckBtn, pwCheckBtn;
+   JButton joinBtn, idCheckBtn, pwCheckBtn,backBtn;
    String joinOk[] = {"사용 가능한 아이디입니다.", "사용 중인 아이디입니다."};
    JComboBox<String> emailCb = new JComboBox<String>();
    AuctionMgr mgr = new AuctionMgr();
@@ -82,7 +82,7 @@ implements ActionListener{
         joinNametxt.setBounds(328, 110, 232, 30);
         joinNametxt.setFont(new Font("맑은 고딕", 0, 15));
         //아이디 입력칸
-        joinIdtxt = new JTextField("아이디");
+        joinIdtxt = new JTextField("");
         joinIdtxt.setBounds(328, 185, 150, 30);
         joinIdtxt.setFont(new Font("맑은 고딕", 0, 15));
         //비밀번호 확인 입력칸
@@ -115,7 +115,7 @@ implements ActionListener{
         //회원가입 버튼
         joinBtn = new JButton("회원가입");
         joinBtn.setBackground(new Color(255, 255, 255));
-        joinBtn.setBounds(300,500,100,30);
+        joinBtn.setBounds(240,500,100,30);
         joinBtn.setFont(new Font("맑은 고딕", Font.BOLD, 15));
         joinBtn.addActionListener(this);
         //아이디중복확인 버튼
@@ -169,7 +169,19 @@ implements ActionListener{
         emailCb.setBackground(txtColor);
         emailCb.setCursor(new Cursor(Cursor.HAND_CURSOR));
         emailCb.setBorder(lb);
+        //
+        backBtn = new JButton("뒤로가기");
+        backBtn.setBackground(new Color(255, 255, 255));
+        backBtn.setBounds(360,500,100,30);
+        backBtn.setFont(new Font("맑은 고딕", Font.BOLD, 15));
+        backBtn.addActionListener(this);
+        
+        backBtn.setBackground(Color.black);
+        backBtn.setForeground(Color.white);
+        backBtn.setBorderPainted(false);
+        backBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         //add
+        joinPanel.add(backBtn);
         joinPanel.add(joinName);
         joinPanel.add(joinId);
         joinPanel.add(joinPw);
@@ -272,18 +284,26 @@ implements ActionListener{
               	joinUsePwlbl.setText("비밀번호가 불일치합니다.");
               }
     	  }
+      }else if(obj == backBtn) {
+    	  try {
+			dispose();
+			Login login = new Login();
+			login.setVisible(true);
+		} catch (Exception e2) {
+			// TODO: handle exception
+		}
       }
       
    }
    
    public static void main(String[] args) {
-     try {
+     /*try {
        JoinMember jm = new JoinMember();
        
        jm.setVisible(true);
    } catch (Exception e) {
       // TODO: handle exception
-   } 
+   } */
      
       
    }

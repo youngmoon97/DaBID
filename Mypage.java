@@ -99,6 +99,7 @@ implements ActionListener{
         // 마이페이지 스크롤 myPageScroll
        myPageScroll = new JScrollPane(myPagePanel);
        myPageScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+       myPageScroll.getVerticalScrollBar().setUnitIncrement(16);
        myPageScroll.setBounds(200, 85, 1000, 700);
         myPageScroll.setBorder(lb);
         myPageScroll.setBackground(Color.white);
@@ -414,7 +415,7 @@ implements ActionListener{
                ImageIcon changeIcon = new ImageIcon(changeImg);
             
                p = CreateParticData(changeIcon, vlist.get(i).getItemNum() ,vlist.get(i).getItemName(), vlist.get(i).getItemPrice(),
-                     vlist.get(i).getItemStatus(), reHour, reMin, reSec, time);
+                     vlist.get(i).getPurchaserCount(), reHour, reMin, reSec, time);
                
                p.setPreferredSize(new Dimension(420, 260));
               myPagePanel.add(p);
@@ -448,7 +449,7 @@ implements ActionListener{
             ImageIcon changeIcon = new ImageIcon(changeImg);
             
                p = CreateBuyData(changeIcon, vlist.get(i).getItemName(), vlist.get(i).getItemPrice(),
-                     vlist.get(i).getItemStatus(), reHour, reMin, reSec, time);
+                     vlist.get(i).getPurchaserCount(), reHour, reMin, reSec, time);
                
                p.setPreferredSize(new Dimension(420, 260));
             myPagePanel.add(p);
@@ -481,7 +482,7 @@ implements ActionListener{
             ImageIcon changeIcon = new ImageIcon(changeImg);
             
                p = CreateSellData(changeIcon,vlist.get(i).getItemName(), vlist.get(i).getItemPrice(),
-                     vlist.get(i).getItemStatus(), reHour, reMin, reSec, time);
+                     vlist.get(i).getPurchaserCount(), reHour, reMin, reSec, time);
                
                p.setPreferredSize(new Dimension(420, 260));
                myPagePanel.add(p);
@@ -546,10 +547,11 @@ implements ActionListener{
                      //새 비밀번호 확인
                      mgr.pwChange(new String(newPw.getPassword()), logId);
                      //바꾸기
-                     alarm.showMessageDialog(null, "비밀번호가 변경되었습니다.");
-                     nowPw.setText("");
-                     newPw.setText("");
-                     newCheckPw.setText("");
+                     alarm.showMessageDialog(null, "비밀번호가 변경되었습니다.\n다시 로그인해주세요.");
+                     dispose();
+                     Login login = new Login();
+                     login.setVisible(true);
+                    
                   }else {
                      alarm.showMessageDialog(null, "새로운 비밀번호를 확인하세요.");
                   }

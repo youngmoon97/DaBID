@@ -127,6 +127,7 @@ public class Admin extends JFrame implements ActionListener {
 	      // 카테고리 그래프
 	      JProgressBar categoryJpb = new JProgressBar();
 	      categoryJpb.setBounds(190, 0, 800, 40);
+	      categoryJpb.setStringPainted(true);
 	      categoryJpb.setValue(values);
 	      
 	      itemPanel.add(categoryName);

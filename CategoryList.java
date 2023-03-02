@@ -62,6 +62,7 @@ implements ActionListener{
        //
        scroll = new JScrollPane(listPanel);
        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+       scroll.getVerticalScrollBar().setUnitIncrement(16);
        scroll.setBounds(60, 80, 1150, 700);
        scroll.setBorder(lb);
        

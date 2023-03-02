@@ -205,7 +205,7 @@ implements ActionListener{
          
          @Override
          public void actionPerformed(ActionEvent e) {
-            if(commentTf.getText().isEmpty()) {
+            if(commentTf.getText().equals("")) {
                 alarm.showMessageDialog(null, "댓글을 입력하세요.");
              }else {
                 String comment = commentTf.getText();
@@ -222,8 +222,8 @@ implements ActionListener{
                 //댓글 저장
                 
                 mgr.insertComment(seller, logId, itemNum, comment);
-               
-                commentTf.setText(" ");
+                
+               commentTf.setText("");
              }
          }
       });
